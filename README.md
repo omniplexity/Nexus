@@ -2,11 +2,11 @@
 
 <div align="center">
 
-# ✨ Nexus
+# Nexus
 
-### Intelligent AI Chat with Autonomous Cognition
+> **Cognitive Operating System for AI Orchestration**
 
-_A full-stack AI chat application featuring advanced cognitive capabilities — planning, memory, retrieval, reflection, and tool execution — running entirely on your local machine._
+A local-first, high-performance AI interface framework that replaces the linear prompt→response loop with a graph-based execution architecture.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-%23FF6B6B.svg?style=flat-square)](#license)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?logo=typescript&style=flat-square)](#)
@@ -21,309 +21,197 @@ _A full-stack AI chat application featuring advanced cognitive capabilities — 
 
 ---
 
-## 🚀 Features
+## Overview
 
-<div align="center">
-
-| 🤖 AI Chat | 🧠 Cognition | 🔐 Security | 💻 Developer Experience |
-|:----------:|:------------:|:-----------:|:-----------------------:|
-| Real-time streaming responses | Autonomous planning & reasoning | JWT authentication | Docker Compose deployment |
-| Model selection via LM Studio | Persistent memory system | bcrypt password hashing | Hot module replacement |
-| Chat history & persistence | Semantic retrieval | Rate limiting (Redis) | Circuit breaker pattern |
-| Dark/Light theme support | Self-reflection & revision | CSRF protection | Retry with exponential backoff |
-
-</div>
-
-### 🧠 Cognition System
-
-Nexus implements a sophisticated cognitive architecture that enables autonomous reasoning:
-
-| Component | Description |
-|-----------|-------------|
-| **📝 Planner** | Breaks complex tasks into executable sub-tasks |
-| **🧠 Memory** | Maintains conversation history with summarization |
-| **🔍 Retrieval** | Semantic search through past conversations |
-| **💭 Reflection** | Self-critique and response revision |
-| **🛠️ Tools** | Built-in tools for math, time, and system operations |
+Nexus is not a chatbot. It is a **Cognitive Operating System (COS)** that orchestrates reasoning, amplifies user cognition, and executes structured work — running entirely on your local machine. The system replaces the traditional linear prompt→response loop with a Directed Acyclic Graph (DAG)-based execution architecture, enabling parallel tool execution, deterministic orchestration, and reusable execution graphs.
 
 ---
 
-## 🏗️ Architecture Overview
+## Key Features
+
+### Cognitive Architecture
+
+Acts as the "brain above the model" through four core subsystems:
+- **Intent Compiler** — Converts user input into structured task graphs
+- **Task Decomposer** — Breaks tasks into atomic operations
+- **Strategy Selector** — Chooses optimal model, tools, and execution path
+- **Constraint Engine** — Enforces token limits, latency budgets, and resource usage
+
+### Context Engine
+
+Eliminates context window limitations through intelligent memory management:
+- **Context Router** — Determines what information is needed
+- **Context Compressor** — Reduces token footprint
+- **Context Prioritizer** — Orders relevance
+- **Context Cache** — Stores reusable fragments
+- **Memory Types** — Ephemeral (current task), Session (conversation), Persistent (long-term), Derived (generated summaries)
+
+### Capability Fabric
+
+A unified system of capabilities exposed as composable units:
+- **Cognitive Capabilities** — Summarization, planning, analysis
+- **Operational Capabilities** — File manipulation, code execution
+- **External Capabilities** — APIs, web access
+- **Capability Composition** — Analyze → Retrieve → Transform → Execute → Validate
+
+### Model Abstraction
+
+Model-agnostic, hot-swappable architecture supporting multi-model orchestration:
+- **Fast Model** — Low latency tasks
+- **Reasoning Model** — Complex reasoning tasks
+- **Specialized Model** — Domain-specific tasks
+- **Routing Strategy** — Based on task complexity, cost constraints, and latency targets
+
+### Performance Optimization
+
+Hyper-efficient architecture targeting minimal latency and token usage:
+- **Token Efficiency** — Context compression, selective memory injection, execution-level reasoning
+- **Latency Reduction** — Parallel DAG execution, precomputation, cached reasoning artifacts
+- **Compute Optimization** — Local model preference, incremental computation, result caching
+
+### Local-First Runtime
+
+All processing occurs on your local machine:
+- **Backend** — Node.js with Express
+- **Frontend** — Electron + React + Web UI
+- **AI Runtime** — Local LLM via LM Studio
+- **Isolation** — Separate processes for tools, AI execution, and core logic
+
+---
+
+## System Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                              Nexus Architecture                          │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                          │
-│   ┌──────────────┐     ┌──────────────┐     ┌──────────────────────┐   │
-│   │   Frontend   │────▶│   Backend    │────▶│     LM Studio       │   │
-│   │   (React)    │     │  (Express)   │     │  (Local AI Models)   │   │
-│   └──────────────┘     └──────────────┘     └──────────────────────┘   │
-│          │                    │                                               │
-│          │              ┌─────┴─────┐                                       │
-│          │              │           │                                       │
-│          │         ┌────▼────┐  ┌───▼────┐                                  │
-│          │         │PostgreSQL│  │ Redis  │                                  │
-│          │         │ Database │  │ Cache  │                                  │
-│          │         └──────────┘  └────────┘                                  │
-│          │                                                                   │
-│   ┌──────▼──────┐                                                           │
-│   │   Zustand   │                                                           │
-│   │    Store    │                                                           │
-│   └─────────────┘                                                           │
-│                                                                          │
-└─────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         HIGH-LEVEL LAYERS                                   │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ┌─────────────────────────────────────────────────────────────────────┐     │
+│  │                    🎨 Experience Layer                               │     │
+│  │         Command Surface, Execution Timeline, Workspace Grid        │     │
+│  └─────────────────────────────────────────────────────────────────────┘     │
+│                                    │                                          │
+│                                    ▼                                          │
+│  ┌─────────────────────────────────────────────────────────────────────┐     │
+│  │               🧠 Cognitive Control Layer                             │     │
+│  │      Intent Compiler, Task Decomposer, Strategy Selector           │     │
+│  └─────────────────────────────────────────────────────────────────────┘     │
+│                                    │                                          │
+│                                    ▼                                          │
+│  ┌─────────────────────────────────────────────────────────────────────┐     │
+│  │              🔀 Orchestration Graph Layer                            │     │
+│  │                   DAG-Based Execution Engine                        │     │
+│  └─────────────────────────────────────────────────────────────────────┘     │
+│                                    │                                          │
+│                                    ▼                                          │
+│  ┌─────────────────────────────────────────────────────────────────────┐     │
+│  │                🧵 Capability Fabric Layer                           │     │
+│  │        Cognitive, Operational, External Capabilities               │     │
+│  └─────────────────────────────────────────────────────────────────────┘     │
+│                                    │                                          │
+│                                    ▼                                          │
+│  ┌─────────────────────────────────────────────────────────────────────┐     │
+│  │                 📦 Context Engine Layer                              │     │
+│  │       Router, Compressor, Prioritizer, Cache, Memory              │     │
+│  └─────────────────────────────────────────────────────────────────────┘     │
+│                                    │                                          │
+│                                    ▼                                          │
+│  ┌─────────────────────────────────────────────────────────────────────┐     │
+│  │               🤖 Model Abstraction Layer                            │     │
+│  │            Model-agnostic, Hot-swappable, Multi-model             │     │
+│  └─────────────────────────────────────────────────────────────────────┘     │
+│                                    │                                          │
+│                                    ▼                                          │
+│  ┌─────────────────────────────────────────────────────────────────────┐     │
+│  │              ⚙️ Runtime & Infrastructure                             │     │
+│  │              Electron + Express + Local LLM                        │     │
+│  └─────────────────────────────────────────────────────────────────────┘     │
+│                                                                              │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## Execution Model
 
-### Frontend
+Nexus replaces linear pipelines with Directed Acyclic Graphs (DAGs):
 
-| Technology | Purpose |
-|------------|---------|
-| [React 18](https://react.dev/) | UI framework with concurrent rendering |
-| [TypeScript](https://www.typescriptlang.org/) | Type-safe development |
-| [Vite](https://vitejs.dev/) | Next-generation build tool |
-| [Tailwind CSS](https://tailwindcss.com/) | Utility-first CSS framework |
-| [Zustand](https://github.com/pmndrs/zustand) | Lightweight state management |
-| [React Router](https://reactrouter.com/) | Client-side routing |
+```
+Task
+ │
+ ├── Node A (LLM) ──────────────┐
+ │                               │
+ ├── Node B (Tool) ────────┐     │
+ │                         │     │
+ ├── Node C (Memory Fetch)├─────┼──▶ Node D (Aggregation)
+ │                         │     │
+ ├── Node E (Transform)───┘     │
+ │                               │
+ └── Node F (Validation)─────────┘
+```
 
-### Backend
-
-| Technology | Purpose |
-|------------|---------|
-| [Node.js 20](https://nodejs.org/) | JavaScript runtime |
-| [Express](https://expressjs.com/) | Web application framework |
-| [TypeScript](https://www.typescriptlang.org/) | Type-safe development |
-| [PostgreSQL](https://www.postgresql.org/) | Primary database |
-| [JWT](https://jwt.io/) | Secure authentication |
-| [bcrypt](https://github.com/kelektiv/node.bcrypt.js) | Password hashing |
-| [Redis](https://redis.io/) | Rate limiting & caching |
-
-### Infrastructure
-
-| Technology | Purpose |
-|------------|---------|
-| [Docker](https://www.docker.com/) | Container platform |
-| [LM Studio](https://lmstudio.ai/) | Local AI model inference |
+**Node Types:**
+- **Reasoning Node** — LLM call with structured prompt execution
+- **Tool Node** — External/internal function execution
+- **Memory Node** — Retrieval or storage operations
+- **Control Node** — Conditional branching, looping, retry logic
 
 ---
 
-## ⚡ Quick Start
+## Tech Stack (Planned)
 
-### Prerequisites
-
-| Tool | Version | Installation |
-|------|---------|--------------|
-| Node.js | 20.x+ | [nodejs.org](https://nodejs.org/) |
-| Docker | 24.x+ | [docker.com](https://www.docker.com/) |
-| LM Studio | Latest | [lmstudio.ai](https://lmstudio.ai/) |
-| PostgreSQL | 15+ | [postgresql.org](https://www.postgresql.org/download/) |
-
-### 1. Clone & Setup
-
-```bash
-git clone https://github.com/yourusername/nexus.git
-cd nexus
-```
-
-### 2. Configure Environment
-
-Create the required environment files:
-
-```bash
-# Backend configuration
-cp backend/.env.example backend/.env
-
-# Frontend configuration
-cp frontend/.env.example frontend/.env
-```
-
-### 3. Start with Docker Compose
-
-```bash
-# Production
-docker-compose up -d
-
-# Development (with hot reload)
-docker-compose -f docker-compose.dev.yml up -d
-```
-
-### 4. Access the Application
-
-| Service | URL |
-|---------|-----|
-| Frontend | [http://localhost:5173](http://localhost:5173) |
-| Backend API | [http://localhost:3001](http://localhost:3001) |
+| Layer | Technology |
+|-------|------------|
+| **Frontend** | React 18, TypeScript, Vite, Tailwind CSS, Zustand |
+| **Backend** | Node.js 20, Express, TypeScript, PostgreSQL |
+| **AI Runtime** | LM Studio (Local LLM), Model-agnostic architecture |
+| **Runtime** | Electron + Web UI |
+| **Database** | SQLite → PostgreSQL, Vector DB for embeddings |
 
 ---
 
-## 🔧 Manual Setup
-
-### Backend Setup
-
-```bash
-cd backend
-
-# Install dependencies
-npm install
-
-# Configure environment
-cp .env.example .env
-# Edit .env with your settings
-
-# Run in development mode
-npm run dev
-
-# Or build and run for production
-npm run build
-npm start
-```
-
-### Frontend Setup
-
-```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Configure environment
-cp .env.example .env
-# Edit .env with your settings
-
-# Run in development mode
-npm run dev
-
-# Build for production
-npm run build
-npm run preview
-```
-
-### LM Studio Setup
-
-1. Download and install [LM Studio](https://lmstudio.ai/)
-2. Open LM Studio and download your preferred model
-3. Start the local server (default: `http://localhost:1234`)
-4. Select the model in Nexus' model selector
-
----
-
-## ⚙️ Environment Variables
-
-### Backend Variables
-
-| Variable | Default | Required | Description |
-|----------|---------|:--------:|-------------|
-| `PORT` | `3001` | No | Server port number |
-| `NODE_ENV` | `development` | No | Environment (development/production) |
-| `DATABASE_URL` | — | ✅ | PostgreSQL connection string |
-| `REDIS_URL` | — | ❌ | Redis connection string (optional) |
-| `JWT_SECRET` | — | ✅ | Secret key for JWT signing |
-| `JWT_EXPIRES_IN` | `24h` | No | JWT token expiration |
-| `LM_STUDIO_URL` | `http://localhost:1234` | No | LM Studio API endpoint |
-| `RATE_LIMIT_WINDOW_MS` | `60000` | No | Rate limit window (ms) |
-| `RATE_LIMIT_MAX_REQUESTS` | `100` | No | Max requests per window |
-
-### Frontend Variables
-
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `VITE_API_URL` | `http://localhost:3001` | Backend API URL |
-| `VITE_WS_URL` | `ws://localhost:3001` | WebSocket URL (for streaming) |
-
----
-
-## 📚 API Overview
-
-### Authentication Endpoints
-
-| Method | Endpoint | Description |
-|:------:|-----------|-------------|
-| `POST` | `/api/auth/register` | Create a new user account |
-| `POST` | `/api/auth/login` | Authenticate and receive JWT |
-| `POST` | `/api/auth/logout` | Invalidate current session |
-| `GET` | `/api/auth/verify` | Verify JWT token validity |
-
-### Chat Endpoints
-
-| Method | Endpoint | Description |
-|:------:|-----------|-------------|
-| `GET` | `/api/chats` | List all conversations |
-| `POST` | `/api/chats` | Create a new conversation |
-| `GET` | `/api/chats/:id` | Get conversation messages |
-| `PATCH` | `/api/chats/:id` | Rename conversation |
-| `DELETE` | `/api/chats/:id` | Delete conversation |
-| `POST` | `/api/chats/:id/messages` | Send message (streaming) |
-
-### Model Endpoints
-
-| Method | Endpoint | Description |
-|:------:|-----------|-------------|
-| `GET` | `/api/models` | List available models |
-| `GET` | `/api/models/:id` | Get model details |
-| `POST` | `/api/models/:id/load` | Load model into memory |
-| `POST` | `/api/models/:id/unload` | Unload model from memory |
-
-### Dashboard Endpoints
-
-| Method | Endpoint | Description |
-|:------:|-----------|-------------|
-| `GET` | `/api/dashboard/status` | System status |
-| `GET` | `/api/dashboard/config` | Application configuration |
-| `POST` | `/api/dashboard/config` | Update configuration |
-| `GET` | `/api/dashboard/stats` | Usage statistics |
-
-> 📖 **Full API Documentation**: See [`backend/src/routes/README.md`](backend/src/routes/README.md)
-
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 nexus/
 ├── backend/                          # Express.js API server
 │   ├── src/
-│   │   ├── cognition/               # 🤖 Cognitive processing
-│   │   │   ├── context/             #   Context building & compression
-│   │   │   ├── memory/              #   Persistent memory management
-│   │   │   ├── pipeline/            #   Processing pipeline
-│   │   │   ├── planning/            #   Task planning
-│   │   │   ├── reflection/          #   Self-reflection & revision
-│   │   │   ├── retrieval/           #   Semantic retrieval
-│   │   │   └── tools/               #   Tool execution
-│   │   ├── db/                       #   Database layer
-│   │   ├── errors/                  #   Error handling
-│   │   ├── lib/                      #   Utilities
-│   │   ├── middleware/               #   Express middleware
-│   │   ├── routes/                   #   API endpoints
-│   │   ├── services/                 #   Business logic
-│   │   └── types/                    #   TypeScript definitions
-│   ├── tests/                        #   Unit & integration tests
+│   │   ├── cognitive-control/        # 🧠 Cognitive Control Layer
+│   │   │   ├── intent-compiler/     #   Intent → structured task graph
+│   │   │   ├── task-decomposer/     #   Break tasks into atomic operations
+│   │   │   ├── strategy-selector/   #   Model/tools/execution path selection
+│   │   │   └── constraint-engine/  #   Token limits, latency budgets
+│   │   ├── orchestration-graph/     # 🔀 Orchestration Graph Layer
+│   │   │   ├── dag-engine/          #   DAG execution system
+│   │   │   ├── node-types/          #   Reasoning, Tool, Memory, Control nodes
+│   │   │   └── executor/            #   Parallel execution, dependency resolution
+│   │   ├── capability-fabric/       # 🧵 Capability Fabric Layer
+│   │   │   ├── cognitive/           #   Summarization, planning, analysis
+│   │   │   ├── operational/         #   File manipulation, code execution
+│   │   │   └── external/            #   APIs, web access
+│   │   ├── context-engine/          # 📦 Context Engine Layer
+│   │   │   ├── router/              #   Determines needed information
+│   │   │   ├── compressor/          #   Reduces token footprint
+│   │   │   ├── prioritizer/         #   Orders relevance
+│   │   │   ├── cache/               #   Stores reusable fragments
+│   │   │   └── memory/              #   Ephemeral, Session, Persistent, Derived
+│   │   ├── model-abstraction/       # 🤖 Model Abstraction Layer
+│   │   │   ├── adapters/            #   Model-agnostic interfaces
+│   │   │   ├── router/              #   Task-based model routing
+│   │   │   └── pool/                #   Multi-model orchestration
+│   │   ├── experience/              # 🎨 Experience Layer (UI)
+│   │   ├── db/                      #   Database layer
+│   │   ├── routes/                  #   API endpoints
+│   │   └── services/                #   Business logic
 │   └── package.json
 │
 ├── frontend/                         # React application
 │   ├── src/
 │   │   ├── components/              #   UI components
-│   │   │   ├── ChatInput.tsx
-│   │   │   ├── ChatMessage.tsx
-│   │   │   ├── Header.tsx
-│   │   │   ├── Sidebar.tsx
-│   │   │   └── ...
 │   │   ├── pages/                   #   Route pages
-│   │   │   └── Dashboard.tsx
 │   │   ├── services/                #   API client
-│   │   ├── stores/                  #   Zustand state
-│   │   └── types/                    #   TypeScript definitions
-│   ├── tests/                       #   E2E tests (Playwright)
+│   │   └── stores/                  #   Zustand state
 │   └── package.json
-│
-├── plans/                            # Project planning docs
-│   ├── ARCHITECTURE.md
-│   ├── DEVELOPMENT_ROADMAP.md
-│   └── UI_UPGRADE_PLAN.md
 │
 ├── docker-compose.yml               # Production compose
 ├── docker-compose.dev.yml           # Development compose
@@ -333,39 +221,102 @@ nexus/
 
 ---
 
-## 🔒 Security
+## Development Roadmap
+
+| Phase | Focus | Deliverables |
+|:-----:|-------|--------------|
+| **Phase 0** | Kernel | Minimal orchestrator, Direct LLM call |
+| **Phase 1** | Graph Engine | DAG execution system with parallel node execution |
+| **Phase 2** | Context Engine | Memory + retrieval with hybrid embedding/symbolic indexing |
+| **Phase 3** | Capability Fabric | Tool system with plugin architecture |
+| **Phase 4** | UI Control Surface | Workspace with command surface, timeline, panels |
+| **Phase 5** | Optimization Layer | Caching, compression, latency minimization |
+
+*Each phase must be runnable, testable, and measurable.*
+
+---
+
+## Design Principles
+
+- **Replace, don't augment** — The system replaces the model as the primary orchestrator
+- **Local-first** — All processing occurs on your machine
+- **Deterministic orchestration** — Predictable execution through DAG-based flows
+- **Composable capabilities** — Reusable, chainable execution units
+- **Token efficiency** — Context compression and selective memory injection
+- **Model agnostic** — Hot-swappable model adapters
+
+---
+
+## Performance Goals
+
+| Metric | Target | Technique |
+|--------|--------|-----------|
+| **Latency** | < 500ms per node | Parallel DAG execution, precomputation |
+| **Token Usage** | 40-60% reduction | Context slicing, prompt templating, memory referencing |
+| **Memory** | < 2GB base | Incremental computation, result caching |
+| **Local Execution** | 100% offline capable | LM Studio integration |
+
+---
+
+## Observability
+
+Nexus provides comprehensive observability for debugging and optimization:
+
+- **Execution Graph Traces** — Full DAG visualization with node-level inspection
+- **Token Usage Metrics** — Per-node and cumulative token consumption
+- **Latency Tracking** — Time per node with bottlenecks identified
+- **Failure Rates** — Node-level success/failure tracking
+- **Replay System** — Ability to replay and analyze past executions
+- **Debug Mode** — Inspect internal state at any execution point
+
+---
+
+## Security
 
 Nexus implements multiple layers of security:
 
 | Feature | Implementation |
 |---------|----------------|
+| **Local Security** | Sandboxed tool execution, file access control |
+| **API Security** | Strict CORS, rate limiting, input validation |
 | **Authentication** | JWT tokens with HTTP-only cookies |
 | **Password Storage** | bcrypt with salt rounds |
-| **Rate Limiting** | Redis-backed with in-memory fallback |
-| **Input Validation** | Zod schema validation |
-| **API Security** | Helmet.js headers, CORS configuration |
 | **Error Handling** | Safe error messages, no stack traces in production |
-| **Circuit Breaker** | Prevents cascade failures from LM Studio |
+| **Circuit Breaker** | Prevents cascade failures from external services |
 
 ---
 
-## 🧪 Testing
+## Getting Started (Planned)
+
+> 📋 Detailed setup instructions coming in Phase 4+
+
+### Prerequisites
+
+| Tool | Version |
+|------|---------|
+| Node.js | 20.x+ |
+| Docker | 24.x+ |
+| LM Studio | Latest |
+| PostgreSQL | 15+ |
+
+### Quick Setup
 
 ```bash
-# Backend tests
-cd backend
-npm test              # Run all tests
-npm run test:watch   # Watch mode
-npm run test:coverage # Coverage report
+# Clone repository
+git clone https://github.com/yourusername/nexus.git
+cd nexus
 
-# Frontend tests
-cd ../frontend
-npm test             # Run Playwright tests
+# Configure environment
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+
+# Start with Docker
+docker-compose up -d
 ```
 
 ---
 
-## 🤝 Contributing
+## Contribution Guidelines
 
 We welcome contributions! Please follow these steps:
 
@@ -375,64 +326,30 @@ We welcome contributions! Please follow these steps:
 4. **Push** to the branch (`git push origin feature/amazing-feature`)
 5. **Open** a Pull Request
 
-> 📋 For detailed guidelines, see [`CONTRIBUTING.md`](CONTRIBUTING.md)
+For detailed guidelines, see [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ---
 
-## 📄 License
+## Vision
+
+Nexus is a **cognitive amplifier**, a **task execution engine**, a **multi-model orchestrator**, and a **local-first AI OS**. Using Nexus should feel like high-speed, precise, controlled, and powerful cognition augmentation.
+
+The system makes models powerful — not by relying on larger models, but by orchestrating them within an intelligent architecture that minimizes token usage, maximizes parallel execution, and keeps all processing local.
+
+---
+
+## License
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
-```
-MIT License
+---
 
-Copyright (c) 2024 Nexus AI Chat
+## Status
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+**Early Architecture Phase**
 
 ---
 
-## 🙏 Acknowledgments
-
-<div align="center">
-
-| | |
-|:--|:--|
-| **[LM Studio](https://lmstudio.ai/)** | Local AI model inference |
-| **[React](https://react.dev/)** | UI framework |
-| **[Express](https://expressjs.com/)** | Web framework |
-| **[PostgreSQL](https://www.postgresql.org/)** | Database |
-| **[Tailwind CSS](https://tailwindcss.com/)** | Styling |
-
-**Built with ❤️ for the local AI community**
-
-</div>
-
----
-
-<div align="center">
-
-[![GitHub stars](https://img.shields.io/github/stars/yourusername/nexus?style=social)](https://github.com/yourusername/nexus/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/yourusername/nexus?style=social)](https://github.com/yourusername/nexus/network)
-[![GitHub issues](https://img.shields.io/github/issues/yourusername/nexus?style=social)](https://github.com/yourusername/nexus/issues)
-
-</div>
+> "The model is not the system. Nexus is the system that makes models powerful."
 
 <!-- markdownlint-enable MD033 MD041 -->

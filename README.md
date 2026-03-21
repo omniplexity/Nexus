@@ -97,49 +97,49 @@ Nexus is not a chatbot. It is a **Cognitive Operating System (COS)** that orches
 ├──────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │   ╭─────────────────────╮                                                    │
-│   │   🎨 EXPERIENCE      │  Command Surface • Execution Timeline            │
-│   │      LAYER           │  Workspace Grid • State Surface                  │
+│   │   🎨 EXPERIENCE    │  Command Surface • Execution Timeline              │
+│   │      LAYER          │  Workspace Grid • State Surface                    │
 │   ╰──────────┬──────────╯                                                    │
-│              │                                                                │
-│              ▼                                                                │
+│              │                                                               │
+│              ▼                                                               │
 │   ╭─────────────────────╮                                                    │
-│   │   🧠 COGNITIVE       │  Intent Compiler → Task Decomposer                 │
-│   │   CONTROL            │  Strategy Selector → Constraint Engine            │
-│   │      LAYER           │                                                    │
+│   │   🧠 COGNITIVE     │  Intent Compiler → Task Decomposer                 │
+│   │   CONTROL           │  Strategy Selector → Constraint Engine             │
+│   │      LAYER          │                                                    │
 │   ╰──────────┬──────────╯                                                    │
-│              │                                                                │
-│              ▼                                                                │
+│              │                                                               │
+│              ▼                                                               │
 │   ╭─────────────────────╮                                                    │
-│   │   🔀 ORCHESTRATION   │  DAG-Based Execution Engine                      │
-│   │      GRAPH           │  Parallel Node Execution • Dependency Resolution │
-│   │      LAYER           │                                                    │
+│   │   🔀 ORCHESTRATION │  DAG-Based Execution Engine                        │
+│   │      GRAPH          │  Parallel Node Execution • Dependency Resolution   │
+│   │      LAYER          │                                                    │
 │   ╰──────────┬──────────╯                                                    │
-│              │                                                                │
-│              ▼                                                                │
+│              │                                                               │
+│              ▼                                                               │
 │   ╭─────────────────────╮                                                    │
-│   │   🧵 CAPABILITY      │  Cognitive • Operational • External              │
-│   │      FABRIC          │  Analyze → Retrieve → Transform → Execute        │
-│   │      LAYER           │                                                    │
+│   │   🧵 CAPABILITY    │  Cognitive • Operational • External                │
+│   │      FABRIC         │  Analyze → Retrieve → Transform → Execute          │
+│   │      LAYER          │                                                    │
 │   ╰──────────┬──────────╯                                                    │
-│              │                                                                │
-│              ▼                                                                │
+│              │                                                               │
+│              ▼                                                               │
 │   ╭─────────────────────╮                                                    │
-│   │   📦 CONTEXT         │  Router • Compressor • Prioritizer              │
-│   │      ENGINE          │  Cache • Memory Types                            │
-│   │      LAYER           │                                                    │
+│   │   📦 CONTEXT       │  Router • Compressor • Prioritizer                 │
+│   │      ENGINE         │  Cache • Memory Types                              │
+│   │      LAYER          │                                                    │
 │   ╰──────────┬──────────╯                                                    │
-│              │                                                                │
-│              ▼                                                                │
+│              │                                                               │
+│              ▼                                                               │
 │   ╭─────────────────────╮                                                    │
-│   │   🤖 MODEL           │  Model-Agnostic • Hot-Swappable                   │
-│   │   ABSTRACTION        │  Multi-Model Orchestration                        │
-│   │      LAYER           │                                                    │
+│   │   🤖 MODEL         │  Model-Agnostic • Hot-Swappable                    │
+│   │   ABSTRACTION       │  Multi-Model Orchestration                         │
+│   │      LAYER          │                                                    │
 │   ╰──────────┬──────────╯                                                    │
-│              │                                                                │
-│              ▼                                                                │
+│              │                                                               │
+│              ▼                                                               │
 │   ╭─────────────────────╮                                                    │
-│   │   ⚙️ RUNTIME         │  Electron + Express + Local LLM                   │
-│   │   & INFRASTRUCTURE   │  SQLite → PostgreSQL • Vector DB                  │
+│   │   ⚙️ RUNTIME       │  Electron + Express + Local LLM                    │
+│   │   & INFRASTRUCTURE  │  SQLite → PostgreSQL • Vector DB                   │
 │   ╰─────────────────────╯                                                    │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
@@ -171,8 +171,8 @@ Nexus replaces linear pipelines with **Directed Acyclic Graphs (DAGs)**:
          │                         └───────┬───────┘
          │                                 │
          └─────────────────────────────────┼───────┐
-                                         │       │
-                                         ▼       ▼
+                                           │       │
+                                           ▼       ▼
                                    ┌───────────┐ ┌───────────┐
                                    │  Node E   │ │  Node F   │
                                    │(Transform)│ │(Validation│
@@ -211,24 +211,24 @@ Phase 1 established the **Contract-First Development** approach for Nexus, defin
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
 │   ┌─────────────────────────────────────────────────────────────────────────┐   │
-│   │                         📋 CONTRACT ORCHESTRATION                        │   │
+│   │                         📋 CONTRACT ORCHESTRATION                      │   │
 │   ├─────────────────────────────────────────────────────────────────────────┤   │
-│   │                                                                          │   │
+│   │                                                                         │   │
 │   │   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌────────────┐  │   │
 │   │   │   errors.ts  │  │  events.ts   │  │    tool.ts   │  │    index   │  │   │
-│   │   │  (Error types)│  │ (Event types)│  │ (Capabilities)│  │  (Export)  │  │   │
+│   │   │ (Error types)│  │ (Event types)│  │(Capabilities)│  │  (Export)  │  │   │
 │   │   └──────────────┘  └──────────────┘  └──────────────┘  └────────────┘  │   │
-│   │                                                                          │   │
+│   │                                                                         │   │
 │   │   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                  │   │
-│   │   │orchestrator.ts│  │  node.ts     │  │   memory.ts  │                  │   │
+│   │   │orchestrator  │  │  node.ts     │  │   memory.ts  │                  │   │
 │   │   │ (Task + DAG) │  │ (DAG nodes)  │  │ (Memory ops) │                  │   │
 │   │   └──────────────┘  └──────────────┘  └──────────────┘                  │   │
-│   │                                                                          │   │
+│   │                                                                         │   │
 │   │   ┌────────────────────────────────────────────────────────────────┐    │   │
 │   │   │                    model-provider.ts                           │    │   │
 │   │   │              (Multi-model abstraction)                         │    │   │
 │   │   └────────────────────────────────────────────────────────────────┘    │   │
-│   │                                                                          │   │
+│   │                                                                         │   │
 │   └─────────────────────────────────────────────────────────────────────────┘   │
 │                                                                                 │
 └─────────────────────────────────────────────────────────────────────────────────┘
@@ -288,14 +288,14 @@ Core orchestration interfaces for task execution and DAG management.
 **TaskStatus Enumeration:**
 ```
 ┌─────────────┬─────────────┬────────────────────────────────────────────────────┐
-│   Status    │    Emoji    │                   Description                     │
+│   Status    │    Emoji    │                   Description                      │
 ├─────────────┼─────────────┼────────────────────────────────────────────────────┤
 │   PENDING   │    ⏳      │ Task created, waiting to be scheduled              │
-│   RUNNING    │    ⚙️      │ Task is actively executing                         │
-│   PAUSED     │    ⏸️      │ Task execution paused                             │
-│   COMPLETED  │    ✅      │ Task completed successfully                        │
-│   FAILED     │    ❌      │ Task failed with error                            │
-│   CANCELLED  │    🚫      │ Task was cancelled                                │
+│   RUNNING   │    ⚙️      │ Task is actively executing                         │
+│   PAUSED    │    ⏸️      │ Task execution paused                              │
+│   COMPLETED │    ✅      │ Task completed successfully                        │
+│   FAILED    │    ❌      │ Task failed with error                             │
+│   CANCELLED │    🚫      │ Task was cancelled                                 │
 └─────────────┴─────────────┴────────────────────────────────────────────────────┘
 ```
 
@@ -366,30 +366,30 @@ Model abstraction for multi-provider support.
 ├─────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                 │
 │                         ┌─────────────────┐                                     │
-│                         │  core/contracts  │                                     │
+│                         │  core/contracts │                                     │
 │                         │     /errors.ts  │                                     │
 │                         └────────┬────────┘                                     │
 │                                  │                                              │
 │                                  ▼                                              │
 │                         ┌─────────────────┐                                     │
-│                         │ core/contracts   │                                     │
+│                         │ core/contracts  │                                     │
 │                         │   /events.ts    │──────┐                              │
 │                         └─────────────────┘      │                              │
-│                                  │                │                              │
-│         ┌─────────────────────────┼─────────────────────────┐                  │
-│         │                         │                         │                  │
-│         ▼                         ▼                         ▼                  │
-│  ┌─────────────┐          ┌─────────────┐          ┌─────────────┐            │
-│  │orchestrator │          │    node.ts  │          │   memory.ts │            │
-│  │    .ts     │          │             │          │             │            │
-│  └──────┬──────┘          └──────┬──────┘          └──────┬──────┘            │
-│         │                        │                        │                    │
-│         └────────────────────────┼────────────────────────┘                    │
+│                                   │              │                              │
+│         ┌─────────────────────────┼─────────────────────────┐                   │
+│         │                         │                         │                   │
+│         ▼                         ▼                         ▼                   │
+│  ┌─────────────┐          ┌─────────────┐          ┌─────────────┐              │
+│  │orchestrator │          │    node.ts  │          │   memory.ts │              │
+│  │    .ts      │          │             │          │             │              │
+│  └──────┬──────┘          └──────┬──────┘          └──────┬──────┘              │
+│         │                        │                        │                     │
+│         └────────────────────────┼────────────────────────┘                     │
 │                                  │                                              │
 │                                  ▼                                              │
 │                         ┌─────────────────┐                                     │
 │                         │ model-provider  │                                     │
-│                         │     .ts        │                                     │
+│                         │     .ts         │                                     │
 │                         └─────────────────┘                                     │
 │                                                                                 │
 └─────────────────────────────────────────────────────────────────────────────────┘
@@ -494,55 +494,55 @@ apps ──► interfaces ──► systems ──► core
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║                            NEXUS DEVELOPMENT PHASES                             ║
+║                            NEXUS DEVELOPMENT PHASES                          ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
-║                                                                               ║
-║  ✅ PHASE 0  ─────────────────────────────────────────────────────────────►  ║
-║  ┌─────────────┐       Kernel: Minimal orchestrator, Direct LLM call        ║
+║                                                                              ║
+║  ✅ PHASE 0  ─────────────────────────────────────────────────────────────► ║
+║  ┌─────────────┐       Kernel: Minimal orchestrator, Direct LLM call         ║
 ║  │   KERNEL    │                                                             ║
 ║  └─────────────┘                                                             ║
-║                                                                               ║
-║  ✅ PHASE 1  ─────────────────────────────────────────────────────────────►  ║
-║  ┌─────────────┐       Core Contracts: Define interfaces (Orchestrator,    ║
-║  │   CONTRACTS │       Node, Tool, Memory, Model Provider)                 ║
-║  │   ✅ DONE   │                                                             ║
+║                                                                              ║
+║  ✅ PHASE 1  ─────────────────────────────────────────────────────────────► ║
+║  ┌─────────────┐       Core Contracts: Define interfaces (Orchestrator,      ║
+║  │   CONTRACTS │       Node, Tool, Memory, Model Provider)                   ║
+║  │   ✅ DONE   │                                                            ║
 ║  └─────────────┘                                                             ║
-║                                                                               ║
-║  🔜 PHASE 2  ─────────────────────────────────────────────────────────────►  ║
-║  ┌─────────────┐       Vertical Slice: Working system from                  ║
+║                                                                              ║
+║  🔜 PHASE 2  ─────────────────────────────────────────────────────────────► ║
+║  ┌─────────────┐       Vertical Slice: Working system from                   ║
 ║  │  MINIMAL     │       apps → interfaces → orchestration → models           ║
 ║  │    SLICE    │                                                             ║
 ║  └─────────────┘                                                             ║
-║                                                                               ║
-║  ⏳ PHASE 3  ─────────────────────────────────────────────────────────────►  ║
+║                                                                              ║
+║  ⏳ PHASE 3  ─────────────────────────────────────────────────────────────► ║
 ║  ┌─────────────┐       Graph Engine: DAG execution with parallel nodes       ║
 ║  │GRAPH ENGINE │                                                             ║
 ║  └─────────────┘                                                             ║
-║                                                                               ║
-║  ⏳ PHASE 4  ─────────────────────────────────────────────────────────────►  ║
+║                                                                              ║
+║  ⏳ PHASE 4  ─────────────────────────────────────────────────────────────► ║
 ║  ┌─────────────┐       Context Engine: Memory + retrieval, hybrid indexing   ║
 ║  │CONTEXT      │                                                             ║
 ║  │   ENGINE    │                                                             ║
 ║  └─────────────┘                                                             ║
-║                                                                               ║
-║  ⏳ PHASE 5  ─────────────────────────────────────────────────────────────►  ║
+║                                                                              ║
+║  ⏳ PHASE 5  ─────────────────────────────────────────────────────────────► ║
 ║  ┌─────────────┐       Capability Fabric: Tool system, plugin architecture   ║
 ║  │CAPABILITY   │                                                             ║
 ║  │   FABRIC    │                                                             ║
 ║  └─────────────┘                                                             ║
-║                                                                               ║
-║  ⏳ PHASE 6  ─────────────────────────────────────────────────────────────►  ║
+║                                                                              ║
+║  ⏳ PHASE 6  ─────────────────────────────────────────────────────────────► ║
 ║  ┌─────────────┐       UI Control Surface: Workspace with timeline, panels   ║
 ║  │    UI       │                                                             ║
 ║  │   SURFACE   │                                                             ║
 ║  └─────────────┘                                                             ║
-║                                                                               ║
-║  ⏳ PHASE 7  ─────────────────────────────────────────────────────────────►  ║
+║                                                                              ║
+║  ⏳ PHASE 7  ─────────────────────────────────────────────────────────────► ║
 ║  ┌─────────────┐       Optimization: Caching, compression, latency tuning    ║
 ║  │ OPTIMIZATION│                                                             ║
 ║  │    LAYER    │                                                             ║
 ║  └─────────────┘                                                             ║
-║                                                                               ║
+║                                                                              ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
@@ -580,12 +580,12 @@ apps ──► interfaces ──► systems ──► core
 
 ```
 ╭──────────────────────────────────────────────────────────────────────────────╮
-│                         🚀 PERFORMANCE TARGETS                                │
+│                         🚀 PERFORMANCE TARGETS                              │
 ├──────────────────────────────────┬───────────────────┬───────────────────────┤
-│            METRIC                │      TARGET       │      TECHNIQUE       │
+│            METRIC                │      TARGET       │      TECHNIQUE        │
 ├──────────────────────────────────┼───────────────────┼───────────────────────┤
 │  ⏱️  Latency                     │     < 500ms       │ Parallel DAG + precom │
-│  🪙  Token Usage                 │   40-60% reduction│ Context slicing      │
+│  🪙  Token Usage                 │   40-60% reduction│ Context slicing       │
 │  💾  Memory                      │    < 2GB base     │ Incremental compute   │
 │  📴  Local Execution             │   100% offline    │ LM Studio integration │
 ╰──────────────────────────────────┴───────────────────┴───────────────────────╯
@@ -612,13 +612,13 @@ Nexus provides comprehensive observability for debugging and optimization:
 
 ```
 ╭──────────────────────────────────────────────────────────────────────────────╮
-│                         🛡️ SECURITY LAYERS                                    │
-├──────────────────────────────────┬────────────────────────────────────────────┤
-│           FEATURE                │              IMPLEMENTATION              │
-├──────────────────────────────────┼────────────────────────────────────────────┤
-│  🏠 Local Security               │  Sandboxed tool execution, file access   │
+│                         🛡️ SECURITY LAYERS                                  │
+├──────────────────────────────────┬───────────────────────────────────────────┤
+│           FEATURE                │              IMPLEMENTATION               │
+├──────────────────────────────────┼───────────────────────────────────────────┤
+│  🏠 Local Security               │  Sandboxed tool execution, file access    │
 │  🌐 API Security                 │  Strict CORS, rate limiting, validation   │
-│  🔑 Authentication               │  JWT tokens with HTTP-only cookies       │
+│  🔑 Authentication               │  JWT tokens with HTTP-only cookies        │
 │  🔐 Password Storage             │  bcrypt with salt rounds                  │
 │  ⚠️ Error Handling               │  Safe messages, no stack traces           │
 │  🔄 Circuit Breaker              │  Prevents cascade from external services  │

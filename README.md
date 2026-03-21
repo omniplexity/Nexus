@@ -55,7 +55,7 @@ Nexus is not a chatbot. It is a **Cognitive Operating System (COS)** that orches
 │              ▼                                                                │
 │   ╭─────────────────────╮                                                    │
 │   │   🧠 COGNITIVE       │  Intent Compiler → Task Decomposer               │
-│   │   CONTROL            │  Strategy Selector → Constraint Engine          │
+│   │   CONTROL            │  Strategy Selector → Constraint Engine            │
 │   │      LAYER           │                                                    │
 │   ╰──────────┬──────────╯                                                    │
 │              │                                                                │
@@ -157,18 +157,40 @@ Nexus replaces linear pipelines with **Directed Acyclic Graphs (DAGs)**:
 
 ### Directory Layout
 
-| Path | Layer | Description |
-|------|-------|-------------|
-| `backend/src/cognitive-control/` | 🧠 | Intent Compiler, Task Decomposer, Strategy Selector, Constraint Engine |
-| `backend/src/orchestration-graph/` | 🔀 | DAG Engine, Node Types (Reasoning/Tool/Memory/Control), Executor |
-| `backend/src/capability-fabric/` | 🧵 | Cognitive, Operational, External Capabilities |
-| `backend/src/context-engine/` | 📦 | Router, Compressor, Prioritizer, Cache, Memory Types |
-| `backend/src/model-abstraction/` | 🤖 | Model Adapters, Router, Multi-model Pool |
-| `backend/src/experience/` | 🎨 | Experience Layer (UI) |
-| `backend/src/db/` | 🗄️ | Database Layer |
-| `backend/src/routes/` | 🌐 | API Endpoints |
-| `backend/src/services/` | ⚡ | Business Logic Services |
-| `frontend/src/` | 🖥️ | React Components, Pages, Services, Stores |
+ | Path | Layer | Description |
+ |------|-------|-------------|
+ | `apps/` | 🎨 | Entrypoint applications (desktop, web, cli) |
+ | `core/` | ⚙️ | System kernel (types, contracts, errors, config, utils) |
+ | `systems/cognitive/` | 🧠 | Intent Compiler, Task Decomposer, Strategy Selector, Constraint Engine |
+ | `systems/orchestration/` | 🔀 | DAG Engine, Node Types (Reasoning/Tool/Memory/Control), Executor |
+ | `systems/context/` | 📦 | Router, Compressor, Prioritizer, Cache, Memory Types |
+ | `systems/capabilities/` | 🧵 | Cognitive, Operational, External Capabilities |
+ | `systems/models/` | 🤖 | Model Adapters, Router, Multi-model Pool |
+ | `systems/memory/` | 💾 | Memory abstraction, retrieval, storage |
+ | `systems/execution/` | ⚡ | Execution runtime, parallel processing |
+ | `modules/tools/` | 🔧 | Tool implementations (filesystem, http, code-exec, vector-search) |
+ | `modules/agents/` | 🤖 | Agent definitions and behaviors |
+ | `modules/workflows/` | 📋 | Reusable workflow templates |
+ | `modules/integrations/` | 🔌 | External service integrations |
+ | `runtime/` | ⚙️ | Process management, IPC, scheduling, sandbox |
+ | `data/` | 🗄️ | Storage abstraction (schemas, repositories, migrations) |
+ | `interfaces/` | 🌐 | External boundaries (api, events, cli, websocket) |
+ | `infra/` | 🏗️ | Infrastructure (local, docker, ci, monitoring) |
+ | `dev/` | 🔧 | Development tooling (scripts, generators, benchmarks) |
+ | `docs/` | 📚 | Documentation (architecture, systems, guides, api) |
+ | `meta/` | 📋 | Project governance (roadmap, standards, conventions) |
+
+### Dependency Flow
+
+```
+apps → interfaces → systems → core
+                ↓
+             modules
+                ↓
+              data
+                ↓
+             runtime
+```
 
 ---
 
@@ -185,29 +207,40 @@ Nexus replaces linear pipelines with **Directed Acyclic Graphs (DAGs)**:
 ║  └─────────────┘                                                          ║
 ║                                                                              ║
 ║  PHASE 1  ══════════════════════════════════════════════════════════════►   ║
+║  ┌─────────────┐     Core Contracts: Define interfaces (Orchestrator,     ║
+║  │   CONTRACTS │     Node, Tool, Memory, Model Provider)                 ║
+║  └─────────────┘                                                          ║
+║                                                                              ║
+║  PHASE 2  ══════════════════════════════════════════════════════════════►   ║
+║  ┌─────────────┐     Vertical Slice: Working system from                 ║
+║  │  MINIMAL     │     apps → interfaces → orchestration → models         ║
+║  │    SLICE    │                                                          ║
+║  └─────────────┘                                                          ║
+║                                                                              ║
+║  PHASE 3  ══════════════════════════════════════════════════════════════►   ║
 ║  ┌─────────────┐     Graph Engine: DAG execution with parallel nodes       ║
 ║  │GRAPH ENGINE │                                                          ║
 ║  └─────────────┘                                                          ║
 ║                                                                              ║
-║  PHASE 2  ══════════════════════════════════════════════════════════════►   ║
+║  PHASE 4  ══════════════════════════════════════════════════════════════►   ║
 ║  ┌─────────────┐     Context Engine: Memory + retrieval, hybrid indexing  ║
 ║  │CONTEXT      │                                                          ║
 ║  │   ENGINE    │                                                          ║
 ║  └─────────────┘                                                          ║
 ║                                                                              ║
-║  PHASE 3  ══════════════════════════════════════════════════════════════►   ║
+║  PHASE 5  ══════════════════════════════════════════════════════════════►   ║
 ║  ┌─────────────┐     Capability Fabric: Tool system, plugin architecture   ║
 ║  │CAPABILITY   │                                                          ║
 ║  │   FABRIC    │                                                          ║
 ║  └─────────────┘                                                          ║
 ║                                                                              ║
-║  PHASE 4  ══════════════════════════════════════════════════════════════►   ║
+║  PHASE 6  ══════════════════════════════════════════════════════════════►   ║
 ║  ┌─────────────┐     UI Control Surface: Workspace with timeline, panels  ║
 ║  │    UI       │                                                          ║
 ║  │   SURFACE   │                                                          ║
 ║  └─────────────┘                                                          ║
 ║                                                                              ║
-║  PHASE 5  ══════════════════════════════════════════════════════════════►   ║
+║  PHASE 7  ══════════════════════════════════════════════════════════════►   ║
 ║  ┌─────────────┐     Optimization: Caching, compression, latency tuning    ║
 ║  │ OPTIMIZATION│                                                          ║
 ║  │    LAYER    │                                                          ║
@@ -305,8 +338,7 @@ git clone https://github.com/yourusername/nexus.git
 cd nexus
 
 # Configure environment
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
+cp infra/local/.env.example infra/local/.env
 
 # Start with Docker
 docker-compose up -d
@@ -320,7 +352,7 @@ We welcome contributions! Please follow these steps:
 
 1. **🍴 Fork** the repository
 2. **🌿 Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **💾 Commit** your changes (`git commit -m 'Add amazing feature'`)
+3. **💾 Commit** your changes (`git commit -m 'Add amazing-feature'`)
 4. **📤 Push** to the branch (`git push origin feature/amazing-feature`)
 5. **🔖 Open** a Pull Request
 

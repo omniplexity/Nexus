@@ -1,0 +1,11 @@
+# Core Contracts
+
+This directory contains the system kernel interfaces and contracts.
+
+## Required Contracts
+
+- `orchestrator.ts` - Main orchestration interface
+- `node.ts` - Node execution interface  
+- `tool.ts` - Tool capability interface
+- `memory.ts` - Memory system interface
+- `model-provider.ts` - Model abstraction interface

@@ -1,0 +1,50 @@
+{
+  "name": "nexus",
+  "version": "0.0.1",
+  "description": "Cognitive Operating System for AI Orchestration",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "core/*",
+    "systems/*",
+    "modules/*",
+    "interfaces/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces",
+    "build": "npm run build --workspaces",
+    "test": "npm run test --workspaces",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,yml,yaml}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.2.4",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/omniplexity/nexus"
+  },
+  "keywords": [
+    "ai",
+    "orchestration",
+    "cognitive",
+    "dag",
+    "llm"
+  ],
+  "author": "Nexus Team",
+  "license": "MIT"
+}

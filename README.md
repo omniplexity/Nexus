@@ -27,6 +27,20 @@ A local-first, high-performance AI interface framework that replaces the linear 
 
 ---
 
+## Quick Links
+
+| Category | Link | Description |
+|----------|------|-------------|
+| 📖 **Getting Started** | [docs/guides/GETTING_STARTED.md](docs/guides/GETTING_STARTED.md) | Quick start guide for new contributors |
+| 🏗️ **Architecture** | [docs/architecture/OVERVIEW.md](docs/architecture/OVERVIEW.md) | System architecture overview |
+| 📋 **Development** | [docs/guides/DEVELOPMENT.md](docs/guides/DEVELOPMENT.md) | Development setup and workflow |
+| 🗺️ **Roadmap** | [meta/roadmap/ROADMAP.md](meta/roadmap/ROADMAP.md) | Project roadmap and milestones |
+| 📝 **Changelog** | [meta/changelog/CHANGELOG.md](meta/changelog/CHANGELOG.md) | Release notes and changes |
+| 🤝 **Contributing** | [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines |
+| 🔒 **Security** | [SECURITY.md](SECURITY.md) | Security policies |
+
+---
+
 ## Table of Contents
 
 1. [Overview](#1-overview)
@@ -54,6 +68,7 @@ A local-first, high-performance AI interface framework that replaces the linear 
 13. [Contribution Guidelines](#13-contribution-guidelines)
 14. [Vision](#14-vision)
 15. [License](#15-license)
+16. [Documentation](#16-documentation)
 
 ---
 
@@ -681,6 +696,94 @@ The system makes models powerful — not by relying on larger models, but by orc
 ## 15. License
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 16. Documentation
+
+Nexus maintains comprehensive documentation across multiple categories. Below is a complete reference to all available documentation.
+
+### 16.1 Architecture Documentation
+
+| Document | Description |
+|----------|-------------|
+| [docs/architecture/OVERVIEW.md](docs/architecture/OVERVIEW.md) | High-level system overview and design philosophy |
+| [docs/architecture/LAYERS.md](docs/architecture/LAYERS.md) | Detailed layer architecture and responsibilities |
+| [docs/architecture/DATA_FLOW.md](docs/architecture/DATA_FLOW.md) | Data flow patterns and processing pipelines |
+| [docs/architecture/COMPONENT_MAP.md](docs/architecture/COMPONENT_MAP.md) | Component relationships and interactions |
+| [docs/architecture/BOUNDARIES.md](docs/architecture/BOUNDARIES.md) | System boundaries and interface definitions |
+
+### 16.2 API Documentation
+
+| Document | Description |
+|----------|-------------|
+| [docs/api/INDEX.md](docs/api/INDEX.md) | API documentation index and overview |
+| [docs/api/REST.md](docs/api/REST.md) | REST API endpoints and usage |
+| [docs/api/CLI.md](docs/api/CLI.md) | Command-line interface reference |
+| [docs/api/WebSocket.md](docs/api/WebSocket.md) | WebSocket events and subscriptions |
+| [docs/api/ERRORS.md](docs/api/ERRORS.md) | Error codes and handling guide |
+| [docs/api/EVENTS.md](docs/api/EVENTS.md) | System events reference |
+
+### 16.3 Architecture Decision Records (ADRs)
+
+| ADR | Title | Description |
+|-----|-------|-------------|
+| [ADR-001](docs/decisions/ADR-001-Contract-First-Development.md) | Contract-First Development | Why contracts precede implementation |
+| [ADR-002](docs/decisions/ADR-002-Layered-Architecture.md) | Layered Architecture | Layered system organization |
+| [ADR-003](docs/decisions/ADR-003-TypeScript-First.md) | TypeScript-First | TypeScript as primary language |
+| [ADR-004](docs/decisions/ADR-004-Multi-Provider-Model-Abstraction.md) | Multi-Provider Model Abstraction | Hot-swappable model providers |
+| [ADR-005](docs/decisions/ADR-005-DAG-Based-Orchestration.md) | DAG-Based Orchestration | Directed Acyclic Graph execution |
+| [ADR-006](docs/decisions/ADR-006-Event-Driven-Communication.md) | Event-Driven Communication | Inter-component communication |
+| [ADR-007](docs/decisions/ADR-007-Local-First-Data-Storage.md) | Local-First Data Storage | Local-first data strategy |
+
+> See [docs/decisions/INDEX.md](docs/decisions/INDEX.md) for the full ADR index.
+
+### 16.4 Developer Guides
+
+| Guide | Description |
+|-------|-------------|
+| [docs/guides/INDEX.md](docs/guides/INDEX.md) | Guides index and navigation |
+| [docs/guides/GETTING_STARTED.md](docs/guides/GETTING_STARTED.md) | Quick start for new contributors |
+| [docs/guides/DEVELOPMENT.md](docs/guides/DEVELOPMENT.md) | Development environment setup |
+| [docs/guides/CONTRACT_DEVELOPMENT.md](docs/guides/CONTRACT_DEVELOPMENT.md) | How to create and modify contracts |
+| [docs/guides/TESTING.md](docs/guides/TESTING.md) | Testing strategies and patterns |
+| [docs/guides/COMMIT_GUIDE.md](docs/guides/COMMIT_GUIDE.md) | Commit message conventions |
+| [docs/guides/TROUBLESHOOTING.md](docs/guides/TROUBLESHOOTING.md) | Common issues and solutions |
+
+### 16.5 Systems Documentation
+
+| System | Description |
+|--------|-------------|
+| [docs/systems/INDEX.md](docs/systems/INDEX.md) | Systems documentation index |
+| [docs/systems/ORCHESTRATION.md](docs/systems/ORCHESTRATION.md) | DAG orchestration engine |
+| [docs/systems/CONTEXT.md](docs/systems/CONTEXT.md) | Context routing and compression |
+| [docs/systems/MODELS.md](docs/systems/MODELS.md) | Model abstraction layer |
+| [docs/systems/CAPABILITIES.md](docs/systems/CAPABILITIES.md) | Tool and capability system |
+| [docs/systems/COGNITIVE.md](docs/systems/COGNITIVE.md) | Cognitive processing layer |
+| [docs/systems/MEMORY.md](docs/systems/MEMORY.md) | Memory management |
+| [docs/systems/EXECUTION.md](docs/systems/EXECUTION.md) | Execution runtime |
+
+### 16.6 Project Governance
+
+| Document | Description |
+|----------|-------------|
+| [meta/roadmap/ROADMAP.md](meta/roadmap/ROADMAP.md) | Project roadmap and milestones |
+| [meta/roadmap/INDEX.md](meta/roadmap/INDEX.md) | Roadmap index |
+| [meta/changelog/CHANGELOG.md](meta/changelog/CHANGELOG.md) | Changelog and release notes |
+| [meta/changelog/releases/v1.0.0-alpha.1.md](meta/changelog/releases/v1.0.0-alpha.1.md) | v1.0.0-alpha.1 release notes |
+
+### 16.7 Reference Documents
+
+| Document | Description |
+|----------|-------------|
+| [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | Community code of conduct |
+| [SECURITY.md](SECURITY.md) | Security policy and vulnerability reporting |
+| [MAINTAINERS.md](MAINTAINERS.md) | Project maintainers and responsibilities |
+| [AUTHORS.md](AUTHORS.md) | Project authors and contributors |
+| [STYLEGUIDE.md](STYLEGUIDE.md) | Code style and formatting guide |
+| [GLOSSARY.md](GLOSSARY.md) | Technical terminology reference |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution guidelines |
+| [AGENTS.md](AGENTS.md) | Agent operational rules |
 
 ---
 

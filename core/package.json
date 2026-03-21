@@ -1,0 +1,13 @@
+{
+  "name": "@nexus/core",
+  "version": "0.0.1",
+  "description": "Core contracts and types for Nexus",
+  "main": "contracts/index.ts",
+  "types": "contracts/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@nexus/orchestration",
+  "version": "0.0.1",
+  "description": "DAG-based orchestration engine for Nexus",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/uuid": "^9.0.7",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "@nexus/core": "*",
+    "@nexus/models": "*"
+  }
+}

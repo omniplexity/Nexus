@@ -4,7 +4,7 @@
 
 # Nexus
 
-> **Cognitive Operating System for AI Orchestration**
+> **🧠 Cognitive Operating System for AI Orchestration**
 
 A local-first, high-performance AI interface framework that replaces the linear prompt→response loop with a graph-based execution architecture.
 
@@ -17,17 +17,64 @@ A local-first, high-performance AI interface framework that replaces the linear 
 [![Docker](https://img.shields.io/badge/Docker-24+-2496ED?logo=docker&style=flat-square)](#)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-06B6D4?logo=tailwind-css&style=flat-square)](#)
 
+---
+
+## 📋 Phase 1: Core Contracts — ✅ COMPLETED
+
+> *The foundation is laid. The contracts are defined. The architecture is solid.*
+
 </div>
 
 ---
 
-## 📋 Overview
+## Table of Contents
 
-Nexus is not a chatbot. It is a **Cognitive Operating System (COS)** that orchestrates reasoning, amplifies user cognition, and executes structured work — running entirely on your local machine. The system replaces the traditional linear prompt→response loop with a Directed Acyclic Graph (DAG)-based execution architecture, enabling parallel tool execution, deterministic orchestration, and reusable execution graphs.
+1. [Overview](#1-overview)
+2. [Key Features](#2-key-features)
+3. [System Architecture](#3-system-architecture)
+   3.1 [Architecture Layers](#31-architecture-layers)
+   3.2 [Execution Model](#32-execution-model)
+4. [Phase 1: Core Contracts](#4-phase-1-core-contracts)
+   4.1 [Contract Architecture](#41-contract-architecture)
+   4.2 [Core Contracts Details](#42-core-contracts-details)
+   4.3 [Contract Dependency Graph](#43-contract-dependency-graph)
+   4.4 [Module Contracts](#44-module-contracts)
+5. [Tech Stack](#5-tech-stack)
+6. [Project Structure](#6-project-structure)
+   6.1 [Directory Layout](#61-directory-layout)
+   6.2 [Dependency Flow](#62-dependency-flow)
+7. [Development Roadmap](#7-development-roadmap)
+   7.1 [Phase Overview](#71-phase-overview)
+   7.2 [Current Status](#72-current-status)
+8. [Design Principles](#8-design-principles)
+9. [Performance Goals](#9-performance-goals)
+10. [Observability](#10-observability)
+11. [Security](#11-security)
+12. [Getting Started](#12-getting-started)
+13. [Contribution Guidelines](#13-contribution-guidelines)
+14. [Vision](#14-vision)
+15. [License](#15-license)
 
 ---
 
-## ✨ Key Features
+## 1. Overview
+
+Nexus is not a chatbot. It is a **Cognitive Operating System (COS)** that orchestrates reasoning, amplifies user cognition, and executes structured work — running entirely on your local machine. The system replaces the traditional linear prompt→response loop with a Directed Acyclic Graph (DAG)-based execution architecture, enabling parallel tool execution, deterministic orchestration, and reusable execution graphs.
+
+### 1.1 What Makes Nexus Different
+
+| Aspect | Traditional AI | Nexus |
+|--------|---------------|-------|
+| 🔄 **Flow** | Linear prompt→response | DAG-based parallel execution |
+| 🧠 **Reasoning** | Single LLM call | Multi-node orchestration |
+| 💾 **Memory** | Context window only | Hybrid memory system |
+| ⚡ **Performance** | Sequential processing | Parallel node execution |
+| 🔌 **Models** | Single provider | Multi-model abstraction |
+| 🏠 **Privacy** | Cloud-dependent | 100% local execution |
+
+---
+
+## 2. Key Features
 
 | Feature Category | Components |
 |-----------------|------------|
@@ -40,7 +87,9 @@ Nexus is not a chatbot. It is a **Cognitive Operating System (COS)** that orches
 
 ---
 
-## 🏗️ System Architecture
+## 3. System Architecture
+
+### 3.1 Architecture Layers
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────┐
@@ -54,7 +103,7 @@ Nexus is not a chatbot. It is a **Cognitive Operating System (COS)** that orches
 │              │                                                                │
 │              ▼                                                                │
 │   ╭─────────────────────╮                                                    │
-│   │   🧠 COGNITIVE       │  Intent Compiler → Task Decomposer               │
+│   │   🧠 COGNITIVE       │  Intent Compiler → Task Decomposer                 │
 │   │   CONTROL            │  Strategy Selector → Constraint Engine            │
 │   │      LAYER           │                                                    │
 │   ╰──────────┬──────────╯                                                    │
@@ -62,43 +111,41 @@ Nexus is not a chatbot. It is a **Cognitive Operating System (COS)** that orches
 │              ▼                                                                │
 │   ╭─────────────────────╮                                                    │
 │   │   🔀 ORCHESTRATION   │  DAG-Based Execution Engine                      │
-│   │      GRAPH           │  Parallel Node Execution • Dependency Resolution│
+│   │      GRAPH           │  Parallel Node Execution • Dependency Resolution │
 │   │      LAYER           │                                                    │
 │   ╰──────────┬──────────╯                                                    │
 │              │                                                                │
 │              ▼                                                                │
 │   ╭─────────────────────╮                                                    │
-│   │   🧵 CAPABILITY      │  Cognitive • Operational • External             │
-│   │      FABRIC          │  Analyze → Retrieve → Transform → Execute       │
+│   │   🧵 CAPABILITY      │  Cognitive • Operational • External              │
+│   │      FABRIC          │  Analyze → Retrieve → Transform → Execute        │
 │   │      LAYER           │                                                    │
 │   ╰──────────┬──────────╯                                                    │
 │              │                                                                │
 │              ▼                                                                │
 │   ╭─────────────────────╮                                                    │
 │   │   📦 CONTEXT         │  Router • Compressor • Prioritizer              │
-│   │      ENGINE          │  Cache • Memory Types                           │
+│   │      ENGINE          │  Cache • Memory Types                            │
 │   │      LAYER           │                                                    │
 │   ╰──────────┬──────────╯                                                    │
 │              │                                                                │
 │              ▼                                                                │
 │   ╭─────────────────────╮                                                    │
-│   │   🤖 MODEL           │  Model-Agnostic • Hot-Swappable                  │
-│   │   ABSTRACTION        │  Multi-Model Orchestration                       │
+│   │   🤖 MODEL           │  Model-Agnostic • Hot-Swappable                   │
+│   │   ABSTRACTION        │  Multi-Model Orchestration                        │
 │   │      LAYER           │                                                    │
 │   ╰──────────┬──────────╯                                                    │
 │              │                                                                │
 │              ▼                                                                │
 │   ╭─────────────────────╮                                                    │
-│   │   ⚙️ RUNTIME         │  Electron + Express + Local LLM                │
-│   │   & INFRASTRUCTURE   │  SQLite → PostgreSQL • Vector DB                │
+│   │   ⚙️ RUNTIME         │  Electron + Express + Local LLM                   │
+│   │   & INFRASTRUCTURE   │  SQLite → PostgreSQL • Vector DB                  │
 │   ╰─────────────────────╯                                                    │
 │                                                                              │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
----
-
-## 🔄 Execution Model
+### 3.2 Execution Model
 
 Nexus replaces linear pipelines with **Directed Acyclic Graphs (DAGs)**:
 
@@ -111,8 +158,8 @@ Nexus replaces linear pipelines with **Directed Acyclic Graphs (DAGs)**:
          │                        │                        │
          ▼                        ▼                        ▼
    ┌───────────┐            ┌───────────┐            ┌───────────┐
-   │  Node A  │            │  Node B   │            │  Node C   │
-   │   (LLM)  │            │  (Tool)   │            │ (Memory)  │
+   │  Node A   │            │  Node B   │            │  Node C   │
+   │   (LLM)   │            │  (Tool)   │            │ (Memory)  │
    └─────┬─────┘            └─────┬─────┘            └─────┬─────┘
          │                        │                        │
          │                        └────────┬───────────────┘
@@ -124,12 +171,12 @@ Nexus replaces linear pipelines with **Directed Acyclic Graphs (DAGs)**:
          │                         └───────┬───────┘
          │                                 │
          └─────────────────────────────────┼───────┐
-                                           │       │
-                                           ▼       ▼
-                                     ┌───────────┐ ┌───────────┐
-                                     │  Node E   │ │  Node F   │
-                                     │(Transform) │ │(Validation│
-                                     └───────────┘ └───────────┘
+                                         │       │
+                                         ▼       ▼
+                                   ┌───────────┐ ┌───────────┐
+                                   │  Node E   │ │  Node F   │
+                                   │(Transform)│ │(Validation│
+                                   └───────────┘ └───────────┘
 ```
 
 | Node Type | Description |
@@ -138,10 +185,253 @@ Nexus replaces linear pipelines with **Directed Acyclic Graphs (DAGs)**:
 | 🔧 **Tool Node** | External/internal function execution |
 | 💾 **Memory Node** | Retrieval or storage operations |
 | 🔀 **Control Node** | Conditional branching, looping, retry logic |
+| 🔗 **Aggregator Node** | Merges multiple inputs (concat, merge, override) |
+| ⚡ **Transform Node** | Data transformation (map, filter, reduce) |
+| ❓ **Conditional Node** | Conditional routing based on conditions |
 
 ---
 
-## 🛠️ Tech Stack
+## 4. Phase 1: Core Contracts
+
+> ✅ **Phase 1 is Complete!** The foundational contract layer has been successfully implemented.
+
+Phase 1 established the **Contract-First Development** approach for Nexus, defining interfaces and types before any implementation. This ensures:
+
+- ✅ Type-safe system boundaries
+- ✅ Clear separation of concerns  
+- ✅ Hot-swappable implementations
+- ✅ Testable contract definitions
+- ✅ Versionable interfaces
+
+### 4.1 Contract Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                            CORE CONTRACTS LAYER                                 │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│   ┌─────────────────────────────────────────────────────────────────────────┐   │
+│   │                         📋 CONTRACT ORCHESTRATION                        │   │
+│   ├─────────────────────────────────────────────────────────────────────────┤   │
+│   │                                                                          │   │
+│   │   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌────────────┐  │   │
+│   │   │   errors.ts  │  │  events.ts   │  │    tool.ts   │  │    index   │  │   │
+│   │   │  (Error types)│  │ (Event types)│  │ (Capabilities)│  │  (Export)  │  │   │
+│   │   └──────────────┘  └──────────────┘  └──────────────┘  └────────────┘  │   │
+│   │                                                                          │   │
+│   │   ┌──────────────┐  ┌──────────────┐  ┌──────────────┐                  │   │
+│   │   │orchestrator.ts│  │  node.ts     │  │   memory.ts  │                  │   │
+│   │   │ (Task + DAG) │  │ (DAG nodes)  │  │ (Memory ops) │                  │   │
+│   │   └──────────────┘  └──────────────┘  └──────────────┘                  │   │
+│   │                                                                          │   │
+│   │   ┌────────────────────────────────────────────────────────────────┐    │   │
+│   │   │                    model-provider.ts                           │    │   │
+│   │   │              (Multi-model abstraction)                         │    │   │
+│   │   └────────────────────────────────────────────────────────────────┘    │   │
+│   │                                                                          │   │
+│   └─────────────────────────────────────────────────────────────────────────┘   │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 4.2 Core Contracts Details
+
+#### 4.2.1 Error Contracts (`core/contracts/errors.ts`)
+
+Defines standardized error types across all Nexus systems.
+
+| Type | Purpose |
+|------|---------|
+| `NexusError` | Base error class for all Nexus errors |
+| `ValidationError` | Input validation failures |
+| `ExecutionError` | Runtime execution failures |
+| `TimeoutError` | Operation timeout errors |
+| `MemoryError` | Memory operation failures |
+| `ToolError` | Tool execution failures |
+
+#### 4.2.2 Event Contracts (`core/contracts/events.ts`)
+
+Defines the event system for inter-component communication.
+
+| Event Type | Description |
+|------------|-------------|
+| `TaskEvent` | Task lifecycle events (start, complete, fail) |
+| `NodeEvent` | Node execution events |
+| `MemoryEvent` | Memory operations events |
+| `SystemEvent` | System-level events |
+
+#### 4.2.3 Tool Contracts (`core/contracts/tool.ts`)
+
+Minimal tool capability definitions for the core layer.
+
+| Interface | Purpose |
+|-----------|---------|
+| `CapabilitySet` | Collection of available capabilities |
+| `ToolCapability` | Individual tool capability definition |
+| `ToolMetadata` | Metadata for tool capabilities |
+
+#### 4.2.4 Orchestrator Contracts (`core/contracts/orchestrator.ts`)
+
+Core orchestration interfaces for task execution and DAG management.
+
+| Interface | Purpose |
+|-----------|---------|
+| `Orchestrator` | Main orchestration interface |
+| `Task` | Task definition with input/constraints |
+| `ExecutionContext` | Context passed to all nodes |
+| `ExecutionResult` | Result of task execution |
+| `DAG` | Directed Acyclic Graph representation |
+| `TaskStatus` | Task state enumeration |
+| `TaskConstraints` | Execution constraints (tokens, latency, timeout) |
+| `ExecutionMetrics` | Observability metrics |
+
+**TaskStatus Enumeration:**
+```
+┌─────────────┬─────────────┬────────────────────────────────────────────────────┐
+│   Status    │    Emoji    │                   Description                     │
+├─────────────┼─────────────┼────────────────────────────────────────────────────┤
+│   PENDING   │    ⏳      │ Task created, waiting to be scheduled              │
+│   RUNNING    │    ⚙️      │ Task is actively executing                         │
+│   PAUSED     │    ⏸️      │ Task execution paused                             │
+│   COMPLETED  │    ✅      │ Task completed successfully                        │
+│   FAILED     │    ❌      │ Task failed with error                            │
+│   CANCELLED  │    🚫      │ Task was cancelled                                │
+└─────────────┴─────────────┴────────────────────────────────────────────────────┘
+```
+
+#### 4.2.5 Node Contracts (`core/contracts/node.ts`)
+
+DAG node types and execution interfaces.
+
+| Node Type | Emoji | Purpose |
+|-----------|-------|---------|
+| `REASONING` | 🧠 | LLM call with structured prompt |
+| `TOOL` | 🔧 | Tool execution |
+| `MEMORY` | 💾 | Memory retrieval/storage |
+| `CONTROL` | 🔀 | Branch, loop, retry logic |
+| `AGGREGATOR` | 🔗 | Merge multiple inputs |
+| `TRANSFORM` | ⚡ | Data transformation |
+| `CONDITIONAL` | ❓ | Conditional routing |
+
+| Interface | Purpose |
+|-----------|---------|
+| `Node` | Base node interface |
+| `NodeConfig` | Node configuration |
+| `NodeInput` | Input to node execution |
+| `NodeOutput` | Output from node execution |
+| `NodeExecutor` | Node execution handler |
+| `NodeFactory` | Factory for creating nodes |
+
+#### 4.2.6 Memory Contracts (`core/contracts/memory.ts`)
+
+Memory and context management interfaces.
+
+| Memory Type | Emoji | Description |
+|-------------|-------|-------------|
+| `ephemeral` | 💨 | Short-lived, single request |
+| `session` | � Session | Per-session context |
+| `persistent` | 💿 | Long-term storage |
+| `derived` | 🔬 | Computed/derived information |
+
+| Interface | Purpose |
+|-----------|---------|
+| `Memory` | Memory operations interface |
+| `MemoryEntry` | Individual memory entry |
+| `MemoryQuery` | Query for memory retrieval |
+| `MemoryResult` | Result of memory operations |
+| `MemorySnapshot` | Snapshot of memory state |
+
+#### 4.2.7 Model Provider Contracts (`core/contracts/model-provider.ts`)
+
+Model abstraction for multi-provider support.
+
+| Model Role | Emoji | Purpose |
+|------------|-------|---------|
+| `fast` | ⚡ | Fast, lightweight responses |
+| `reasoning` | 🧠 | Deep reasoning tasks |
+| `specialized` | 🎯 | Domain-specific tasks |
+
+| Interface | Purpose |
+|-----------|---------|
+| `ModelProvider` | Model provider interface |
+| `ModelConfig` | Model configuration |
+| `ModelResponse` | Response from model |
+| `Prompt` | Input prompt definition |
+
+### 4.3 Contract Dependency Graph
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                         CONTRACT DEPENDENCY FLOW                                │
+├─────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                 │
+│                         ┌─────────────────┐                                     │
+│                         │  core/contracts  │                                     │
+│                         │     /errors.ts  │                                     │
+│                         └────────┬────────┘                                     │
+│                                  │                                              │
+│                                  ▼                                              │
+│                         ┌─────────────────┐                                     │
+│                         │ core/contracts   │                                     │
+│                         │   /events.ts    │──────┐                              │
+│                         └─────────────────┘      │                              │
+│                                  │                │                              │
+│         ┌─────────────────────────┼─────────────────────────┐                  │
+│         │                         │                         │                  │
+│         ▼                         ▼                         ▼                  │
+│  ┌─────────────┐          ┌─────────────┐          ┌─────────────┐            │
+│  │orchestrator │          │    node.ts  │          │   memory.ts │            │
+│  │    .ts     │          │             │          │             │            │
+│  └──────┬──────┘          └──────┬──────┘          └──────┬──────┘            │
+│         │                        │                        │                    │
+│         └────────────────────────┼────────────────────────┘                    │
+│                                  │                                              │
+│                                  ▼                                              │
+│                         ┌─────────────────┐                                     │
+│                         │ model-provider  │                                     │
+│                         │     .ts        │                                     │
+│                         └─────────────────┘                                     │
+│                                                                                 │
+└─────────────────────────────────────────────────────────────────────────────────┘
+```
+
+### 4.4 Module Contracts
+
+Phase 1 also established contracts for modules and interfaces:
+
+#### 4.4.1 Tool Contracts (`modules/tools/contracts/`)
+
+| File | Purpose |
+|------|---------|
+| `tool.ts` | Tool interface with input/output schemas |
+| `schema.ts` | JSON Schema types for tool definitions |
+| `registry.ts` | Tool registry for tool discovery |
+
+#### 4.4.2 Agent Contracts (`modules/agents/contracts/`)
+
+| File | Purpose |
+|------|---------|
+| `agent.ts` | Agent definition contracts |
+| `executor.ts` | Agent execution contracts |
+
+#### 4.4.3 Integration Contracts (`modules/integrations/contracts/`)
+
+| File | Purpose |
+|------|---------|
+| `provider.ts` | Integration provider contracts |
+| `adapter.ts` | Adapter pattern contracts |
+
+#### 4.4.4 Interface Contracts (`interfaces/contracts/`)
+
+| File | Purpose |
+|------|---------|
+| `api.ts` | REST API interface contracts |
+| `websocket.ts` | WebSocket contracts |
+| `cli.ts` | CLI contracts |
+
+---
+
+## 5. Tech Stack
 
 | Layer | Technology | Purpose |
 |:-----:|------------|---------|
@@ -153,107 +443,127 @@ Nexus replaces linear pipelines with **Directed Acyclic Graphs (DAGs)**:
 
 ---
 
-## 📁 Project Structure
+## 6. Project Structure
 
-### Directory Layout
+### 6.1 Directory Layout
 
- | Path | Layer | Description |
- |------|-------|-------------|
- | `apps/` | 🎨 | Entrypoint applications (desktop, web, cli) |
- | `core/` | ⚙️ | System kernel (types, contracts, errors, config, utils) |
- | `systems/cognitive/` | 🧠 | Intent Compiler, Task Decomposer, Strategy Selector, Constraint Engine |
- | `systems/orchestration/` | 🔀 | DAG Engine, Node Types (Reasoning/Tool/Memory/Control), Executor |
- | `systems/context/` | 📦 | Router, Compressor, Prioritizer, Cache, Memory Types |
- | `systems/capabilities/` | 🧵 | Cognitive, Operational, External Capabilities |
- | `systems/models/` | 🤖 | Model Adapters, Router, Multi-model Pool |
- | `systems/memory/` | 💾 | Memory abstraction, retrieval, storage |
- | `systems/execution/` | ⚡ | Execution runtime, parallel processing |
- | `modules/tools/` | 🔧 | Tool implementations (filesystem, http, code-exec, vector-search) |
- | `modules/agents/` | 🤖 | Agent definitions and behaviors |
- | `modules/workflows/` | 📋 | Reusable workflow templates |
- | `modules/integrations/` | 🔌 | External service integrations |
- | `runtime/` | ⚙️ | Process management, IPC, scheduling, sandbox |
- | `data/` | 🗄️ | Storage abstraction (schemas, repositories, migrations) |
- | `interfaces/` | 🌐 | External boundaries (api, events, cli, websocket) |
- | `infra/` | 🏗️ | Infrastructure (local, docker, ci, monitoring) |
- | `dev/` | 🔧 | Development tooling (scripts, generators, benchmarks) |
- | `docs/` | 📚 | Documentation (architecture, systems, guides, api) |
- | `meta/` | 📋 | Project governance (roadmap, standards, conventions) |
+| Path | Layer | Description |
+|------|-------|-------------|
+| `apps/` | 🎨 | Entrypoint applications (desktop, web, cli) |
+| `core/` | ⚙️ | System kernel (types, contracts, errors, config, utils) |
+| `systems/cognitive/` | 🧠 | Intent Compiler, Task Decomposer, Strategy Selector, Constraint Engine |
+| `systems/orchestration/` | 🔀 | DAG Engine, Node Types (Reasoning/Tool/Memory/Control), Executor |
+| `systems/context/` | 📦 | Router, Compressor, Prioritizer, Cache, Memory Types |
+| `systems/capabilities/` | 🧵 | Cognitive, Operational, External Capabilities |
+| `systems/models/` | 🤖 | Model Adapters, Router, Multi-model Pool |
+| `systems/memory/` | 💾 | Memory abstraction, retrieval, storage |
+| `systems/execution/` | ⚡ | Execution runtime, parallel processing |
+| `modules/tools/` | 🔧 | Tool implementations (filesystem, http, code-exec, vector-search) |
+| `modules/agents/` | 🤖 | Agent definitions and behaviors |
+| `modules/workflows/` | 📋 | Reusable workflow templates |
+| `modules/integrations/` | 🔌 | External service integrations |
+| `runtime/` | ⚙️ | Process management, IPC, scheduling, sandbox |
+| `data/` | 🗄️ | Storage abstraction (schemas, repositories, migrations) |
+| `interfaces/` | 🌐 | External boundaries (api, events, cli, websocket) |
+| `infra/` | 🏗️ | Infrastructure (local, docker, ci, monitoring) |
+| `dev/` | 🔧 | Development tooling (scripts, generators, benchmarks) |
+| `docs/` | 📚 | Documentation (architecture, systems, guides, api) |
+| `meta/` | 📋 | Project governance (roadmap, standards, conventions) |
+| `plans/` | 📝 | Implementation plans (Phase 1, etc.) |
 
-### Dependency Flow
+### 6.2 Dependency Flow
 
 ```
-apps → interfaces → systems → core
-                ↓
-             modules
-                ↓
-              data
-                ↓
-             runtime
+apps ──► interfaces ──► systems ──► core
+                           │
+                           ▼
+                        modules
+                           │
+                           ▼
+                          data
+                           │
+                           ▼
+                        runtime
 ```
 
 ---
 
-## 🗺️ Development Roadmap
+## 7. Development Roadmap
+
+### 7.1 Phase Overview
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║                            NEXUS DEVELOPMENT PHASES                          ║
+║                            NEXUS DEVELOPMENT PHASES                             ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
-║                                                                              ║
-║  PHASE 0  ══════════════════════════════════════════════════════════════►   ║
-║  ┌─────────────┐     Kernel: Minimal orchestrator, Direct LLM call         ║
-║  │   KERNEL    │                                                          ║
-║  └─────────────┘                                                          ║
-║                                                                              ║
-║  PHASE 1  ══════════════════════════════════════════════════════════════►   ║
-║  ┌─────────────┐     Core Contracts: Define interfaces (Orchestrator,     ║
-║  │   CONTRACTS │     Node, Tool, Memory, Model Provider)                 ║
-║  └─────────────┘                                                          ║
-║                                                                              ║
-║  PHASE 2  ══════════════════════════════════════════════════════════════►   ║
-║  ┌─────────────┐     Vertical Slice: Working system from                 ║
-║  │  MINIMAL     │     apps → interfaces → orchestration → models         ║
-║  │    SLICE    │                                                          ║
-║  └─────────────┘                                                          ║
-║                                                                              ║
-║  PHASE 3  ══════════════════════════════════════════════════════════════►   ║
-║  ┌─────────────┐     Graph Engine: DAG execution with parallel nodes       ║
-║  │GRAPH ENGINE │                                                          ║
-║  └─────────────┘                                                          ║
-║                                                                              ║
-║  PHASE 4  ══════════════════════════════════════════════════════════════►   ║
-║  ┌─────────────┐     Context Engine: Memory + retrieval, hybrid indexing  ║
-║  │CONTEXT      │                                                          ║
-║  │   ENGINE    │                                                          ║
-║  └─────────────┘                                                          ║
-║                                                                              ║
-║  PHASE 5  ══════════════════════════════════════════════════════════════►   ║
-║  ┌─────────────┐     Capability Fabric: Tool system, plugin architecture   ║
-║  │CAPABILITY   │                                                          ║
-║  │   FABRIC    │                                                          ║
-║  └─────────────┘                                                          ║
-║                                                                              ║
-║  PHASE 6  ══════════════════════════════════════════════════════════════►   ║
-║  ┌─────────────┐     UI Control Surface: Workspace with timeline, panels  ║
-║  │    UI       │                                                          ║
-║  │   SURFACE   │                                                          ║
-║  └─────────────┘                                                          ║
-║                                                                              ║
-║  PHASE 7  ══════════════════════════════════════════════════════════════►   ║
-║  ┌─────────────┐     Optimization: Caching, compression, latency tuning    ║
-║  │ OPTIMIZATION│                                                          ║
-║  │    LAYER    │                                                          ║
-║  └─────────────┘                                                          ║
-║                                                                              ║
+║                                                                               ║
+║  ✅ PHASE 0  ─────────────────────────────────────────────────────────────►  ║
+║  ┌─────────────┐       Kernel: Minimal orchestrator, Direct LLM call        ║
+║  │   KERNEL    │                                                             ║
+║  └─────────────┘                                                             ║
+║                                                                               ║
+║  ✅ PHASE 1  ─────────────────────────────────────────────────────────────►  ║
+║  ┌─────────────┐       Core Contracts: Define interfaces (Orchestrator,    ║
+║  │   CONTRACTS │       Node, Tool, Memory, Model Provider)                 ║
+║  │   ✅ DONE   │                                                             ║
+║  └─────────────┘                                                             ║
+║                                                                               ║
+║  🔜 PHASE 2  ─────────────────────────────────────────────────────────────►  ║
+║  ┌─────────────┐       Vertical Slice: Working system from                  ║
+║  │  MINIMAL     │       apps → interfaces → orchestration → models           ║
+║  │    SLICE    │                                                             ║
+║  └─────────────┘                                                             ║
+║                                                                               ║
+║  ⏳ PHASE 3  ─────────────────────────────────────────────────────────────►  ║
+║  ┌─────────────┐       Graph Engine: DAG execution with parallel nodes       ║
+║  │GRAPH ENGINE │                                                             ║
+║  └─────────────┘                                                             ║
+║                                                                               ║
+║  ⏳ PHASE 4  ─────────────────────────────────────────────────────────────►  ║
+║  ┌─────────────┐       Context Engine: Memory + retrieval, hybrid indexing   ║
+║  │CONTEXT      │                                                             ║
+║  │   ENGINE    │                                                             ║
+║  └─────────────┘                                                             ║
+║                                                                               ║
+║  ⏳ PHASE 5  ─────────────────────────────────────────────────────────────►  ║
+║  ┌─────────────┐       Capability Fabric: Tool system, plugin architecture   ║
+║  │CAPABILITY   │                                                             ║
+║  │   FABRIC    │                                                             ║
+║  └─────────────┘                                                             ║
+║                                                                               ║
+║  ⏳ PHASE 6  ─────────────────────────────────────────────────────────────►  ║
+║  ┌─────────────┐       UI Control Surface: Workspace with timeline, panels   ║
+║  │    UI       │                                                             ║
+║  │   SURFACE   │                                                             ║
+║  └─────────────┘                                                             ║
+║                                                                               ║
+║  ⏳ PHASE 7  ─────────────────────────────────────────────────────────────►  ║
+║  ┌─────────────┐       Optimization: Caching, compression, latency tuning    ║
+║  │ OPTIMIZATION│                                                             ║
+║  │    LAYER    │                                                             ║
+║  └─────────────┘                                                             ║
+║                                                                               ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 ```
 
 > **Each phase must be runnable, testable, and measurable.**
 
+### 7.2 Current Status
+
+| Phase | Status | Completion |
+|-------|--------|------------|
+| Phase 0: Kernel | ✅ Complete | 100% |
+| Phase 1: Core Contracts | ✅ Complete | 100% |
+| Phase 2: Minimal Vertical Slice | 🔜 Up Next | 0% |
+| Phase 3: Graph Engine | ⏳ Planned | 0% |
+| Phase 4: Context Engine | ⏳ Planned | 0% |
+| Phase 5: Capability Fabric | ⏳ Planned | 0% |
+| Phase 6: UI Surface | ⏳ Planned | 0% |
+| Phase 7: Optimization | ⏳ Planned | 0% |
+
 ---
 
-## 🎯 Design Principles
+## 8. Design Principles
 
 | Principle | Description |
 |-----------|-------------|
@@ -266,11 +576,11 @@ apps → interfaces → systems → core
 
 ---
 
-## ⚡ Performance Goals
+## 9. Performance Goals
 
 ```
 ╭──────────────────────────────────────────────────────────────────────────────╮
-│                         🚀 PERFORMANCE TARGETS                               │
+│                         🚀 PERFORMANCE TARGETS                                │
 ├──────────────────────────────────┬───────────────────┬───────────────────────┤
 │            METRIC                │      TARGET       │      TECHNIQUE       │
 ├──────────────────────────────────┼───────────────────┼───────────────────────┤
@@ -283,7 +593,7 @@ apps → interfaces → systems → core
 
 ---
 
-## 📊 Observability
+## 10. Observability
 
 Nexus provides comprehensive observability for debugging and optimization:
 
@@ -298,11 +608,11 @@ Nexus provides comprehensive observability for debugging and optimization:
 
 ---
 
-## 🔒 Security
+## 11. Security
 
 ```
 ╭──────────────────────────────────────────────────────────────────────────────╮
-│                         🛡️ SECURITY LAYERS                                   │
+│                         🛡️ SECURITY LAYERS                                    │
 ├──────────────────────────────────┬────────────────────────────────────────────┤
 │           FEATURE                │              IMPLEMENTATION              │
 ├──────────────────────────────────┼────────────────────────────────────────────┤
@@ -311,15 +621,15 @@ Nexus provides comprehensive observability for debugging and optimization:
 │  🔑 Authentication               │  JWT tokens with HTTP-only cookies       │
 │  🔐 Password Storage             │  bcrypt with salt rounds                  │
 │  ⚠️ Error Handling               │  Safe messages, no stack traces           │
-│  🔄 Circuit Breaker              │  Prevents cascade from external services   │
+│  🔄 Circuit Breaker              │  Prevents cascade from external services  │
 ╰──────────────────────────────────┴────────────────────────────────────────────╯
 ```
 
 ---
 
-## 🚀 Getting Started (Planned)
+## 12. Getting Started (Planned)
 
-> 📋 Detailed setup instructions coming in Phase 4+
+> 📋 Detailed setup instructions coming in Phase 2+
 
 ### Prerequisites
 
@@ -334,7 +644,7 @@ Nexus provides comprehensive observability for debugging and optimization:
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/nexus.git
+git clone https://github.com/omniplexity/nexus.git
 cd nexus
 
 # Configure environment
@@ -346,7 +656,7 @@ docker-compose up -d
 
 ---
 
-## 🤝 Contribution Guidelines
+## 13. Contribution Guidelines
 
 We welcome contributions! Please follow these steps:
 
@@ -360,7 +670,7 @@ For detailed guidelines, see [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ---
 
-## 💡 Vision
+## 14. Vision
 
 Nexus is a **cognitive amplifier**, a **task execution engine**, a **multi-model orchestrator**, and a **local-first AI OS**. Using Nexus should feel like high-speed, precise, controlled, and powerful cognition augmentation.
 
@@ -368,7 +678,7 @@ The system makes models powerful — not by relying on larger models, but by orc
 
 ---
 
-## 📜 License
+## 15. License
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
@@ -378,7 +688,9 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 <div align="center">
 
-**🏗️ Early Architecture Phase**
+**🟢 Phase 1 Complete — Core Contracts Established**
+
+*22 contract interfaces defined across core, modules, and interfaces layers*
 
 </div>
 

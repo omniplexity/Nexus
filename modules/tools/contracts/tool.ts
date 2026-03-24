@@ -4,9 +4,7 @@
  * Defines the tool capability interface for the capability fabric.
  */
 
-// Import ToolExecutionError from core contracts to ensure consistency
-// This maintains the core-first dependency direction
-import type { ToolExecutionError } from '../../../core/contracts/tool';
+import type { ToolExecutionError } from '@nexus/core/contracts/tool';
 
 import type { ToolInputSchema, ToolOutputSchema } from './schema';
 
@@ -28,8 +26,10 @@ export interface ToolExecutionContext {
   userId?: string;
   capabilities: ToolCapabilities;
   variables: Record<string, unknown>;
+  abortSignal?: AbortSignal;
   metadata: {
     requestId: string;
+    executionId?: string;
     timestamp: Date;
   };
 }
@@ -67,6 +67,8 @@ export interface ToolExecutionResult {
     toolName: string;
     duration: number;
     tokensUsed?: number;
+    cacheHit?: boolean;
+    executionId?: string;
   };
 }
 

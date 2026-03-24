@@ -13,7 +13,7 @@ Nexus is a TypeScript monorepo for building a local-first orchestration system a
 
 ## Current Status
 
-Nexus is currently at the end of Phase 4.
+Nexus is currently at the end of Phase 5.
 
 | Phase | Status | Notes |
 |---|---:|---|
@@ -22,29 +22,28 @@ Nexus is currently at the end of Phase 4.
 | Phase 2 | Complete | Minimal vertical slice |
 | Phase 3 | Complete | Graph execution engine and orchestration |
 | Phase 4 | Complete | Context engine, memory, prioritization, routing, compression |
-| Phase 5 | Planned | Capability fabric |
+| Phase 5 | Complete | Capability fabric, tool runtime, policy, and orchestration integration |
 | Phase 6 | Planned | UI control surface |
 | Phase 7 | Planned | Optimization layer |
 
-## What Phase 4 Added
+## What Phase 5 Added
 
-Phase 4 turned the context layer into a real subsystem instead of a placeholder.
+Phase 5 turned tool contracts into a usable runtime instead of a placeholder.
 
-- Context engine contracts in `core/contracts/context-engine.ts`
-- `DefaultContextEngineService` in `systems/context/src/engine/service.ts`
-- Memory query support for `sessionIds`
-- Context routing with complexity-aware budgets
-- Context compression strategies: truncate, summarize, hybrid
-- Memory prioritization with weighted scoring
-- Multi-session aggregation and deduplication
-- Vector index aware filtering for semantic retrieval
-- Orchestrator integration with automatic context preparation
+- Core `ToolInvoker` boundary in `core/contracts/tool.ts`
+- Buildable `@nexus/tools` workspace package in `modules/tools/`
+- Runtime registry, cache, executor, schema validation, and policy helpers
+- Built-in tools: `filesystem.read_file`, `filesystem.list_directory`, `http.get`
+- Real `ToolNode` execution through injected runtime instead of simulation
+- Explicit DAG execution path through `task.metadata.dag`
+- Phase 5 tests for runtime, policies, built-ins, and orchestration integration
 
 ## Repository Layout
 
 | Path | Purpose |
 |---|---|
 | `core/` | Shared contracts and types |
+| `modules/tools/` | Capability fabric runtime, built-in tools, and tool contracts |
 | `systems/context/` | Context engine, cache, prioritizer, router, compressor |
 | `systems/memory/` | In-memory memory store, archive, vector index |
 | `systems/orchestration/` | DAG execution engine and node implementations |
@@ -74,7 +73,7 @@ The important rule is simple: implementation flows downward, never upward.
 | Context | Routing, compression, prioritization, and context slicing | [docs/systems/CONTEXT.md](docs/systems/CONTEXT.md) |
 | Memory | Retrieval, storage, archiving, and vector indexing | [docs/systems/MEMORY.md](docs/systems/MEMORY.md) |
 | Models | Model provider abstraction | [docs/systems/MODELS.md](docs/systems/MODELS.md) |
-| Capabilities | Tool and capability contracts | [docs/systems/CAPABILITIES.md](docs/systems/CAPABILITIES.md) |
+| Capabilities | Tool runtime, policies, and built-in tools | [docs/systems/CAPABILITIES.md](docs/systems/CAPABILITIES.md) |
 
 ## Getting Started
 
@@ -99,6 +98,8 @@ npm test
 
 ### Build
 
+Workspace build scripts exist, but the current clean validation baseline for the repo is `lint`, `typecheck`, and `test`.
+
 ```bash
 npm run build
 ```
@@ -115,20 +116,21 @@ npm run build --workspaces
 ## Development Notes
 
 - Contracts live in `core/contracts/` and should be updated before implementation changes.
-- The context engine is the primary Phase 4 surface area.
+- The capability fabric is the primary Phase 5 surface area.
 - The memory system is responsible for storage, retrieval, snapshots, archiving, and indexing.
 - The orchestration engine consumes context services through contracts, not concrete memory internals.
-- Tests use Vitest in the `systems/context` and `systems/memory` packages.
+- The orchestration engine consumes tool execution through the core `ToolInvoker` boundary.
+- Tests use Vitest in the `systems/context`, `systems/memory`, and `modules/tools` packages.
 
 ## Useful Entry Points
 
 | File | Purpose |
 |---|---|
-| [core/contracts/context-engine.ts](core/contracts/context-engine.ts) | Phase 4 context engine contracts |
-| [systems/context/src/engine/service.ts](systems/context/src/engine/service.ts) | Context engine implementation |
-| [systems/context/src/router/index.ts](systems/context/src/router/index.ts) | Context routing |
-| [systems/memory/src/store.ts](systems/memory/src/store.ts) | In-memory memory store |
-| [systems/orchestration/engine/orchestrator.ts](systems/orchestration/engine/orchestrator.ts) | DAG orchestrator integration |
+| [core/contracts/tool.ts](core/contracts/tool.ts) | Core tool and invoker contracts |
+| [modules/tools/index.ts](modules/tools/index.ts) | Phase 5 capability fabric entry point |
+| [modules/tools/runtime/executor.ts](modules/tools/runtime/executor.ts) | Tool execution runtime |
+| [modules/tools/builtins/index.ts](modules/tools/builtins/index.ts) | Built-in tool registration |
+| [systems/orchestration/nodes/tool.ts](systems/orchestration/nodes/tool.ts) | Real ToolNode execution path |
 
 ## Documentation
 

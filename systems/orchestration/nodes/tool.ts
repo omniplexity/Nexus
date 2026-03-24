@@ -5,7 +5,30 @@
  */
 
 import { NodeType, Node, NodeInput, NodeOutput, NodeStatus } from '@nexus/core/contracts/node';
-import type { CapabilitySet } from '@nexus/core/contracts/tool';
+import type { CapabilitySet, ToolContext, ToolInvoker } from '@nexus/core/contracts/tool';
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function isCapabilitySet(value: unknown): value is CapabilitySet {
+  return isRecord(value) &&
+    typeof value.canAccessFilesystem === 'boolean' &&
+    typeof value.canExecuteCode === 'boolean' &&
+    typeof value.canAccessNetwork === 'boolean' &&
+    typeof value.canUseVectorSearch === 'boolean' &&
+    isRecord(value.customCapabilities);
+}
+
+function createDefaultCapabilities(): CapabilitySet {
+  return {
+    canAccessFilesystem: false,
+    canExecuteCode: false,
+    canAccessNetwork: false,
+    canUseVectorSearch: false,
+    customCapabilities: {}
+  };
+}
 
 /**
  * Tool node for executing registered tools
@@ -31,6 +54,7 @@ export class ToolNode implements Node {
   private toolName: string;
   private inputMapping?: Record<string, string>;
   private capabilities: CapabilitySet | null = null;
+  private invoker: ToolInvoker | null = null;
 
   constructor(config: {
     id: string;
@@ -51,6 +75,7 @@ export class ToolNode implements Node {
       priority?: number;
     };
     capabilities?: CapabilitySet;
+    invoker?: ToolInvoker;
   }) {
     this.id = config.id;
     this.name = config.name;
@@ -68,6 +93,7 @@ export class ToolNode implements Node {
       ...config.config
     };
     this.capabilities = config.capabilities ?? null;
+    this.invoker = config.invoker ?? null;
   }
 
   /**
@@ -77,33 +103,48 @@ export class ToolNode implements Node {
     const startTime = new Date();
     
     try {
-      // In a real implementation, this would invoke the actual tool
-      // For now, we'll simulate tool execution
+      if (!this.invoker) {
+        throw new Error(`Tool invoker is not configured for tool node "${this.id}"`);
+      }
       
       // Map input according to inputMapping
       const mappedInput = this.mapInput(input.data);
-      
-      // Simulate tool execution delay
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      // Simulate tool result
-      const result = {
+      const toolContext = this.createToolContext(input);
+      const result = await this.invoker.invoke({
         toolId: this.toolId,
         toolName: this.toolName,
         input: mappedInput,
-        timestamp: new Date().toISOString(),
-        result: `Tool ${this.toolName} executed successfully`
-      };
+        context: toolContext
+      });
+
+      if (!result.success) {
+        return {
+          nodeId: this.id,
+          data: null,
+          status: NodeStatus.FAILED,
+          error: result.error?.message ?? `Tool ${this.toolName} failed`,
+          metadata: {
+            startTime,
+            endTime: new Date(),
+            tokensUsed: result.metadata.tokensUsed,
+            cacheHit: result.metadata.cacheHit
+          }
+        };
+      }
       
       return {
         nodeId: this.id,
-        data: result,
+        data: {
+          toolId: result.metadata.toolId,
+          toolName: result.metadata.toolName ?? this.toolName,
+          output: result.output
+        },
         status: NodeStatus.COMPLETED,
         metadata: {
           startTime,
           endTime: new Date(),
-          tokensUsed: 0, // Tool execution doesn't typically consume LLM tokens
-          cacheHit: false
+          tokensUsed: result.metadata.tokensUsed,
+          cacheHit: result.metadata.cacheHit
         }
       };
     } catch (error) {
@@ -124,7 +165,7 @@ export class ToolNode implements Node {
    * Validate node configuration
    */
   validate(): boolean {
-    return !!this.id && !!this.toolId && !!this.toolName;
+    return !!this.id && !!this.toolId && !!this.toolName && this.invoker !== null;
   }
 
   /**
@@ -146,8 +187,23 @@ export class ToolNode implements Node {
       toolName: this.toolName,
       inputMapping: this.inputMapping,
       config: this.config,
-      capabilities: this.capabilities ?? undefined
+      capabilities: this.capabilities ?? undefined,
+      invoker: this.invoker ?? undefined
     });
+  }
+
+  /**
+   * Inject the runtime tool invoker.
+   */
+  setInvoker(invoker: ToolInvoker): void {
+    this.invoker = invoker;
+  }
+
+  /**
+   * Check if the node has an invoker configured.
+   */
+  hasInvoker(): boolean {
+    return this.invoker !== null;
   }
 
   /**
@@ -175,6 +231,20 @@ export class ToolNode implements Node {
     
     return mapped;
   }
+
+  private createToolContext(input: NodeInput): ToolContext {
+    const rawContext = input.context;
+    const variables = isRecord(rawContext?.variables) ? rawContext.variables : {};
+
+    return {
+      sessionId: typeof rawContext?.sessionId === 'string' ? rawContext.sessionId : 'default',
+      userId: typeof rawContext?.userId === 'string' ? rawContext.userId : undefined,
+      capabilities: isCapabilitySet(rawContext?.capabilities)
+        ? rawContext.capabilities
+        : this.capabilities ?? createDefaultCapabilities(),
+      variables
+    };
+  }
 }
 
 /**
@@ -199,6 +269,7 @@ export function createToolNode(config: {
     priority?: number;
   };
   capabilities?: CapabilitySet;
+  invoker?: ToolInvoker;
 }): ToolNode {
   return new ToolNode(config);
 }

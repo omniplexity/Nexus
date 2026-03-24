@@ -1,8 +1,8 @@
 # Nexus Architecture Overview
 
 > **Version:** 1.0.0  
-> **Status:** Phase 1 Complete (Core Contracts)  
-> **Last Updated:** 2026-03-21
+> **Status:** Phase 5 Complete (Capability Fabric)  
+> **Last Updated:** 2026-03-24
 
 ---
 
@@ -96,7 +96,7 @@ Each layer has strict boundaries:
 | `interfaces/` | External I/O adapters | systems | API ✅, WebSocket ✗, CLI ✗ |
 | `systems/` | Business logic orchestration | core | ✅ Mostly Complete |
 | `core/` | Fundamental contracts | None (pure) | ✅ Complete |
-| `modules/` | Capability implementations | core | Contracts ✅, Impl ✗ |
+| `modules/` | Capability implementations | core | Tools ✅, other modules contracts-only |
 | `data/` | Persistence layer | core types | ✗ Planned |
 | `runtime/` | Execution environment | core | ✗ Planned |
 
@@ -140,13 +140,13 @@ Each layer has strict boundaries:
 - Response caching (see [`systems/context/src/cache/`](../../systems/context/src/cache/))
 - Context prioritization (see [`systems/context/src/prioritizer/`](../../systems/context/src/prioritizer/))
 
-### Phase 5: Capability Fabric ✅ In Progress
+### Phase 5: Capability Fabric ✅ Complete
 
-- Tool interface implementation (contracts in [`modules/tools/contracts/`](../../modules/tools/contracts/))
-- Tool registry
-- Execution chaining
-- Agent contracts (see [`modules/agents/contracts/`](../../modules/agents/contracts/))
-- Model providers (see [`systems/models/`](../../systems/models/))
+- Tool interface implementation (see [`modules/tools/contracts/`](../../modules/tools/contracts/))
+- Tool registry, executor, cache, and policy runtime (see [`modules/tools/runtime/`](../../modules/tools/runtime/))
+- Built-in read-only tools (see [`modules/tools/builtins/`](../../modules/tools/builtins/))
+- Orchestration integration through `ToolInvoker` and real `ToolNode` execution
+- Agent contracts remain in place for future implementation phases
 
 ### Phase 6: UI Control Surface (Planned)
 
@@ -295,7 +295,7 @@ Nexus/
 │   └── contracts/    # Interface definitions
 ├── modules/           # Capability implementations
 │   ├── agents/       # Contracts defined
-│   ├── tools/        # Contracts defined
+│   ├── tools/        # ✅ Tool runtime and contracts
 │   ├── integrations/ # Contracts defined
 │   └── workflows/    # Planned
 ├── data/              # ✗ Persistence layer (planned)

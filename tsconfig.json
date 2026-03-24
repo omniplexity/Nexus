@@ -27,6 +27,8 @@
     "paths": {
       "@nexus/core": ["./core"],
       "@nexus/core/*": ["./core/*"],
+      "@nexus/tools": ["./modules/tools"],
+      "@nexus/tools/*": ["./modules/tools/*"],
       "@nexus/systems-memory": ["./systems/memory"],
       "@nexus/systems-memory/*": ["./systems/memory/*"],
       "@nexus/systems": ["./systems"],

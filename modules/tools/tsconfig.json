@@ -1,14 +1,15 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "node",
-    "lib": ["ES2022"],
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -24,6 +25,12 @@
   "references": [
     { "path": "../../core" }
   ],
-  "include": ["src/**/*"],
+  "include": [
+    "index.ts",
+    "contracts/**/*",
+    "runtime/**/*",
+    "builtins/**/*",
+    "test-helpers/**/*"
+  ],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }

@@ -10,10 +10,10 @@ Nexus is built on a layered architecture with clear separation of concerns. Each
 
 | System | Description | Status |
 |--------|-------------|--------|
-| [ORCHESTRATION.md](ORCHESTRATION.md) | DAG-based task orchestration and workflow execution with Context Engine integration | Phase 4 |
+| [ORCHESTRATION.md](ORCHESTRATION.md) | DAG-based task orchestration and workflow execution with Context Engine and Capability Fabric integration | Phase 5 |
 | [CONTEXT.md](CONTEXT.md) | Context management, compression, prioritization, and routing (ContextEngineService) | Phase 4 |
 | [MODELS.md](MODELS.md) | Multi-provider model abstraction and routing | Phase 1 |
-| [CAPABILITIES.md](CAPABILITIES.md) | Tool capability system and execution | Phase 1 |
+| [CAPABILITIES.md](CAPABILITIES.md) | Tool capability fabric, runtime execution, policy enforcement, and built-in tools | Phase 5 |
 | [COGNITIVE.md](COGNITIVE.md) | Intent recognition, planning, and strategy systems | Future |
 | [MEMORY.md](MEMORY.md) | Persistent and ephemeral memory management with Vector Index | Phase 4 |
 | [EXECUTION.md](EXECUTION.md) | Runtime execution engine and sandboxing | Future |
@@ -50,10 +50,17 @@ Nexus is built on a layered architecture with clear separation of concerns. Each
 - Orchestrator integration: `setMemoryService()` and `setContextEngine()`
 - Automatic context preparation in task execution
 
-### Future Phases
-Implementation of systems based on Phase 1 contracts will proceed in subsequent phases:
+### Phase 5: Capability Fabric (Complete)
+- [`core/contracts/tool.ts`](../../core/contracts/tool.ts) - `ToolInvoker` execution boundary
+- [`modules/tools/index.ts`](../../modules/tools/index.ts) - Tool workspace package entry point
+- Registry, cache, executor, and validation runtime
+- Filesystem and network policy enforcement
+- Built-in tools: `filesystem.read_file`, `filesystem.list_directory`, `http.get`
+- Orchestrator integration through injected tool runtime
 
-- **Phase 5**: Capability Fabric
+### Future Phases
+Implementation of systems beyond the capability fabric will proceed in subsequent phases:
+
 - **Phase 6**: UI Control Surface
 - **Phase 7**: Optimization Layer
 
@@ -76,4 +83,4 @@ Each system document follows this structure:
 - [Layered Architecture](../architecture/LAYERS.md)
 - [Component Map](../architecture/COMPONENT_MAP.md)
 - [Data Flow](../architecture/DATA_FLOW.md)
-- [Core Contracts](../core/contracts/)
+- [Core Contracts](../../core/contracts/)

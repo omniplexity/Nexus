@@ -8,7 +8,7 @@
 
 import type { ContextEngineService, ContextRequest } from '@nexus/core/contracts/context-engine';
 import type { Memory } from '@nexus/core/contracts/memory';
-import { ModelRole } from '@nexus/core/contracts/model-provider';
+import { MessageRole, ModelRole } from '@nexus/core/contracts/model-provider';
 import {
   Node,
   NodeInput,
@@ -26,12 +26,15 @@ import {
   ExecutionMetrics,
   DAG,
 } from '@nexus/core/contracts/orchestrator';
+import type { ToolInvoker } from '@nexus/core/contracts/tool';
 import type { ModelRouter } from '@nexus/systems/models';
 import { v4 as uuidv4 } from 'uuid';
 
 import { 
   ResourceScheduler, 
 } from '@nexus/systems/orchestration/scheduler/resource-scheduler';
+
+import { ToolNode } from '../nodes/tool';
 
 import { DAGBuilder, DAGUtils } from './dag';
 import { NodeExecutor } from './executor';
@@ -68,6 +71,7 @@ export class MinimalOrchestrator implements Orchestrator {
   private executionPlanner: ExecutionPlanner | null = null;
   private scheduler: ResourceScheduler | null = null;
   private router: ModelRouter | null = null;
+  private toolInvoker: ToolInvoker | null = null;
   private currentDAG: EnhancedDAG | null = null;
   private taskStates: Map<string, TaskStatus> = new Map();
   private nodeOutputs: Map<string, NodeOutput> = new Map();
@@ -173,6 +177,13 @@ export class MinimalOrchestrator implements Orchestrator {
    */
   setContextEngine(contextEngine: ContextEngineService): void {
     this.contextEngine = contextEngine;
+  }
+
+  /**
+   * Set the tool invoker used by ToolNode instances.
+   */
+  setToolInvoker(toolInvoker: ToolInvoker): void {
+    this.toolInvoker = toolInvoker;
   }
 
   /**
@@ -441,6 +452,7 @@ export class MinimalOrchestrator implements Orchestrator {
    * Register a node type with the orchestrator
    */
   registerNode(node: Node): void {
+    this.attachToolInvoker(node);
     this.executor.registerNode(node);
   }
 
@@ -509,6 +521,11 @@ export class MinimalOrchestrator implements Orchestrator {
    * Build DAG from task
    */
   private buildDAG(task: Task, context: ExecutionContext): EnhancedDAG {
+    const explicitDAG = this.getExplicitDAG(task);
+    if (explicitDAG) {
+      return this.hydrateToolNodes(explicitDAG);
+    }
+
     // For Phase 2, create a simple single-node DAG
     // In Phase 3+, this will parse task.graph or create from task.type
     
@@ -565,7 +582,7 @@ export class MinimalOrchestrator implements Orchestrator {
             const selection = await this.router.selectModel({
               model: '',
               messages: [
-                { role: 'user', content: prompt }
+                { role: MessageRole.USER, content: prompt }
               ],
               config: { role: ModelRole.REASONING },
             });
@@ -579,7 +596,7 @@ export class MinimalOrchestrator implements Orchestrator {
           const response = await provider.complete({
             model: '',
             messages: [
-              { role: 'user', content: prompt }
+              { role: MessageRole.USER, content: prompt }
             ],
             config: {
               role: ModelRole.REASONING,
@@ -646,6 +663,7 @@ export class MinimalOrchestrator implements Orchestrator {
       context: {
         sessionId: context.sessionId,
         userId: context.userId,
+        capabilities: context.capabilities,
         variables: context.variables,
       },
     };
@@ -727,6 +745,79 @@ export class MinimalOrchestrator implements Orchestrator {
       totalTokens,
       totalLatencyMs: Date.now() - startTime,
       cacheHits: 0,
+    };
+  }
+
+  private getExplicitDAG(task: Task): EnhancedDAG | null {
+    const dagCandidate = task.metadata?.dag;
+    if (!this.isEnhancedDAG(dagCandidate)) {
+      return null;
+    }
+
+    return dagCandidate;
+  }
+
+  private isEnhancedDAG(value: unknown): value is EnhancedDAG {
+    if (!value || typeof value !== 'object') {
+      return false;
+    }
+
+    const candidate = value as Partial<EnhancedDAG>;
+    return typeof candidate.id === 'string' &&
+      typeof candidate.nodes === 'object' &&
+      candidate.nodes !== null &&
+      Array.isArray(candidate.edges);
+  }
+
+  private attachToolInvoker(node: Node): void {
+    if (!this.toolInvoker || !(node instanceof ToolNode) || node.hasInvoker()) {
+      return;
+    }
+
+    node.setInvoker(this.toolInvoker);
+  }
+
+  private hydrateToolNode(node: Node): Node {
+    if (node instanceof ToolNode) {
+      this.attachToolInvoker(node);
+      return node;
+    }
+
+    if (node.type !== NodeType.TOOL) {
+      return node;
+    }
+
+    const config = node.config as {
+      toolId?: string;
+      toolName?: string;
+      inputMapping?: Record<string, string>;
+    };
+
+    if (!config.toolId || !config.toolName) {
+      return node;
+    }
+
+    return new ToolNode({
+      id: node.id,
+      name: node.name,
+      toolId: config.toolId,
+      toolName: config.toolName,
+      inputMapping: config.inputMapping,
+      config: node.config,
+      invoker: this.toolInvoker ?? undefined
+    });
+  }
+
+  private hydrateToolNodes(dag: EnhancedDAG): EnhancedDAG {
+    const nodes: Record<string, Node> = {};
+
+    for (const [nodeId, node] of Object.entries(dag.nodes)) {
+      nodes[nodeId] = this.hydrateToolNode(node);
+    }
+
+    return {
+      ...dag,
+      nodes
     };
   }
 }

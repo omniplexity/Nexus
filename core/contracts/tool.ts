@@ -26,8 +26,11 @@ export interface ToolResult {
   error?: ToolExecutionError;
   metadata: {
     toolId: string;
+    toolName?: string;
     duration: number;
     tokensUsed?: number;
+    cacheHit?: boolean;
+    executionId?: string;
   };
 }
 
@@ -55,6 +58,16 @@ export interface ToolContext {
 }
 
 /**
+ * Tool invocation request for orchestration-facing execution
+ */
+export interface ToolInvocationRequest {
+  toolId: string;
+  toolName?: string;
+  input: unknown;
+  context: ToolContext;
+}
+
+/**
  * Capability set available to tools
  */
 export interface CapabilitySet {
@@ -72,4 +85,12 @@ export interface CapabilitySet {
 export interface ToolSchema {
   input: Record<string, unknown>;
   output: Record<string, unknown>;
+}
+
+/**
+ * Minimal tool execution bridge used by systems without importing modules.
+ */
+export interface ToolInvoker {
+  invoke(request: ToolInvocationRequest): Promise<ToolResult>;
+  cancel(executionId: string): void;
 }

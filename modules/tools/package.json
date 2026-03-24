@@ -1,0 +1,30 @@
+{
+  "name": "@nexus/tools",
+  "version": "1.0.0",
+  "description": "Capability fabric runtime and built-in tools for Nexus",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nexus/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3",
+    "vitest": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "keywords": [
+    "nexus",
+    "tools",
+    "capabilities",
+    "executor",
+    "registry"
+  ]
+}

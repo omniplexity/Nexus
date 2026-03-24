@@ -12,3 +12,6 @@ export * from './tool';
 
 // Registry contracts
 export * from './registry';
+
+// Policy contracts
+export * from './policy';

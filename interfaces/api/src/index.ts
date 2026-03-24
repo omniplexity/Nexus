@@ -4,6 +4,7 @@
  * Express-based REST API for Nexus orchestration.
  */
 
+import { createWorkspaceWebSocketServer } from '@nexus/websocket';
 import 'dotenv/config';
 import cors from 'cors';
 import express, { Express, Request, Response, NextFunction, json, urlencoded } from 'express';
@@ -13,6 +14,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { modelsRouter } from './routes/models';
 import { statusRouter } from './routes/status';
 import { tasksRouter } from './routes/tasks';
+import { workspaceRouter } from './routes/workspace';
+import { workspaceHub } from './workspace';
 
 // Configuration
 const PORT = parseInt(process.env.PORT || '3000', 10);
@@ -43,6 +46,7 @@ app.get(`${API_PREFIX}/health`, (_req: Request, res: Response) => {
 app.use(`${API_PREFIX}/tasks`, tasksRouter);
 app.use(`${API_PREFIX}/status`, statusRouter);
 app.use(`${API_PREFIX}/models`, modelsRouter);
+app.use(`${API_PREFIX}/workspace`, workspaceRouter);
 
 // 404 handler
 app.use((_req: Request, res: Response) => {
@@ -80,17 +84,32 @@ const server = app.listen(PORT, () => {
 │  • GET  ${API_PREFIX}/tasks/:id        Get task    │
 │  • GET  ${API_PREFIX}/status           System info │
 │  • GET  ${API_PREFIX}/models           List models  │
+│  • GET  ${API_PREFIX}/workspace        Workspace UI │
 ╰──────────────────────────────────────────╯
   `);
+});
+
+const workspaceWebSocketServer = createWorkspaceWebSocketServer({
+  port: PORT,
+  path: '/ws',
+  server,
+  hub: workspaceHub,
+  autoSnapshotOnConnect: true,
+});
+
+workspaceWebSocketServer.start().catch((error) => {
+  console.error('Failed to start workspace websocket server:', error);
 });
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
   console.log('SIGTERM received, shutting down gracefully');
-  server.close(() => {
-    console.log('Server closed');
-    process.exit(0);
+  workspaceWebSocketServer.stop().finally(() => {
+    server.close(() => {
+      console.log('Server closed');
+      process.exit(0);
+    });
   });
 });
 
-export { app, server };
+export { app, server, workspaceWebSocketServer };

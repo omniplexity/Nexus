@@ -10,12 +10,143 @@
 export type WebSocketMessageType = 'text' | 'binary' | 'ping' | 'pong' | 'close';
 
 /**
+ * Workspace control surface message type
+ */
+export type WorkspaceMessageType =
+  | 'workspace:subscribe'
+  | 'workspace:request-snapshot'
+  | 'workspace:snapshot'
+  | 'workspace:update'
+  | 'workspace:ping'
+  | 'workspace:pong'
+  | 'workspace:error'
+  | 'workspace:connected'
+  | 'task:create'
+  | 'task:update'
+  | 'task:cancel'
+  | 'task:status'
+  | 'log:append'
+  | 'status:update'
+  | 'graph:update';
+
+/**
  * WebSocket message
  */
 export interface WebSocketMessage {
   type: WebSocketMessageType;
   payload: unknown;
   timestamp: Date;
+}
+
+/**
+ * Workspace graph node
+ */
+export interface WorkspaceGraphNode {
+  id: string;
+  label: string;
+  type: string;
+  status: string;
+  description?: string;
+}
+
+/**
+ * Workspace graph edge
+ */
+export interface WorkspaceGraphEdge {
+  sourceId: string;
+  targetId: string;
+  condition?: string;
+}
+
+/**
+ * Workspace execution graph
+ */
+export interface WorkspaceGraph {
+  id: string;
+  nodes: WorkspaceGraphNode[];
+  edges: WorkspaceGraphEdge[];
+  activeTaskId?: string | null;
+}
+
+/**
+ * Workspace task record
+ */
+export interface WorkspaceTaskRecord {
+  taskId: string;
+  type: string;
+  status: 'pending' | 'running' | 'paused' | 'completed' | 'failed' | 'cancelled';
+  inputPreview?: string;
+  outputPreview?: string;
+  error?: string;
+  createdAt: string;
+  completedAt?: string;
+  metadata?: Record<string, unknown>;
+  graph?: WorkspaceGraph;
+}
+
+/**
+ * Workspace log entry
+ */
+export interface WorkspaceLogEntry {
+  id: string;
+  level: 'debug' | 'info' | 'warn' | 'error';
+  scope: string;
+  message: string;
+  timestamp: string;
+  details?: Record<string, unknown>;
+}
+
+/**
+ * Workspace status snapshot
+ */
+export interface WorkspaceStatusSnapshot {
+  status: 'healthy' | 'degraded' | 'unhealthy';
+  version: string;
+  environment: string;
+  uptime: number;
+  lastUpdated: string;
+}
+
+/**
+ * Workspace model record
+ */
+export interface WorkspaceModelRecord {
+  id: string;
+  name: string;
+  role: string;
+  contextWindow?: number;
+  maxOutputTokens?: number;
+}
+
+/**
+ * Workspace metrics snapshot
+ */
+export interface WorkspaceMetricsSnapshot {
+  totalTasks: number;
+  runningTasks: number;
+  completedTasks: number;
+  failedTasks: number;
+  totalLogs: number;
+  activeConnections: number;
+}
+
+/**
+ * Workspace snapshot
+ */
+export interface WorkspaceSnapshot {
+  version: string;
+  generatedAt: string;
+  status: WorkspaceStatusSnapshot;
+  tasks: WorkspaceTaskRecord[];
+  graph: WorkspaceGraph;
+  logs: WorkspaceLogEntry[];
+  models: WorkspaceModelRecord[];
+  metrics: WorkspaceMetricsSnapshot;
+  connections: {
+    active: number;
+    lastConnectedAt?: string;
+    lastDisconnectedAt?: string;
+  };
 }
 
 /**
@@ -44,6 +175,25 @@ export interface WebSocketServerMessage {
   event: string;
   data?: unknown;
   error?: string;
+}
+
+/**
+ * Workspace client message
+ */
+export interface WorkspaceClientMessage {
+  event: WorkspaceMessageType;
+  data?: unknown;
+  requestId?: string;
+}
+
+/**
+ * Workspace server message
+ */
+export interface WorkspaceServerMessage {
+  event: WorkspaceMessageType;
+  data?: unknown;
+  error?: string;
+  requestId?: string;
 }
 
 /**
@@ -162,4 +312,12 @@ export interface WebSocketConfig {
   pingInterval?: number;
   pingTimeout?: number;
   maxPayload?: number;
+}
+
+/**
+ * Workspace control surface configuration
+ */
+export interface WorkspaceWebSocketConfig extends WebSocketConfig {
+  workspaceId?: string;
+  autoSnapshotOnConnect?: boolean;
 }

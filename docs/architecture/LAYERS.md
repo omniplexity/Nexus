@@ -40,8 +40,8 @@ Dependency Direction: Outer → Inner
 | Component | Description | Status |
 |-----------|-------------|--------|
 | `apps/cli/` | Command-line interface | ✅ Implemented |
-| `apps/web/` | Web application (React/Next.js frontend) | ✗ Planned |
-| `apps/desktop/` | Desktop application (Electron/Tauri) | ✗ Planned |
+| `apps/web/` | Web application workspace shell | ✅ Implemented |
+| `apps/desktop/` | Desktop launcher for the workspace shell | ✅ Implemented |
 
 **Dependencies:** `interfaces/`
 
@@ -54,7 +54,7 @@ Dependency Direction: Outer → Inner
 | Component | File | Description | Status |
 |-----------|------|-------------|--------|
 | API | [`interfaces/contracts/api.ts`](../../interfaces/contracts/api.ts) | REST API contracts | ✅ Implemented |
-| WebSocket | [`interfaces/contracts/websocket.ts`](../../interfaces/contracts/websocket.ts) | Real-time communication | ✗ Planned |
+| WebSocket | [`interfaces/contracts/websocket.ts`](../../interfaces/contracts/websocket.ts) | Real-time communication | ✅ Implemented |
 | CLI | [`interfaces/contracts/cli.ts`](../../interfaces/contracts/cli.ts) | CLI input/output | Contracts ✅ |
 | Events | `interfaces/events/` | Event interface adapters | ✗ Planned |
 
@@ -383,7 +383,7 @@ Results flow upward through layers via return values and events.
 | Phase 3 | Orchestration (Layer 5) | ✅ Complete |
 | Phase 4 | Context Engine (Layer 5) | ✅ Complete |
 | Phase 5 | Modules (Layer 3) | Contracts ✅ / Impl ✗ |
-| Phase 6 | Interfaces + Apps (Layer 6-7) | API ✅ / CLI ✅ / Web ✗ / Desktop ✗ |
+| Phase 6 | Interfaces + Apps (Layer 6-7) | API ✅ / CLI ✅ / Web ✅ / Desktop ✅ |
 | Phase 7 | Runtime + Optimization (Layer 1-2) | ✗ Planned |
 
 ---
@@ -392,8 +392,8 @@ Results flow upward through layers via return values and events.
 
 | Layer | Name | Purpose | Status |
 |-------|------|---------|--------|
-| 7 | Apps | Entry points | CLI ✅, Web ✗, Desktop ✗ |
-| 6 | Interfaces | External I/O | API ✅, WebSocket ✗, CLI ✗ |
+| 7 | Apps | Entry points | CLI ✅, Web ✅, Desktop ✅ |
+| 6 | Interfaces | External I/O | API ✅, WebSocket ✅, CLI ✗ |
 | 5 | Systems | Business logic | ✅ Mostly Complete |
 | 4 | Core | Contracts | ✅ Complete |
 | 3 | Modules | Capabilities | Contracts ✅, Impl ✗ |

@@ -4,7 +4,8 @@
  * HTTP client for communicating with the Nexus API.
  */
 
-import axios, { AxiosInstance, AxiosError } from 'axios';
+import type { WorkspaceSnapshot } from '@nexus/websocket';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 
 /**
  * Client configuration
@@ -55,6 +56,9 @@ export interface SystemStatus {
   status?: string;
   version?: string;
   uptime?: number;
+  logs?: number;
+  tasks?: number;
+  connections?: number;
   models?: Array<{
     id: string;
     name: string;
@@ -124,6 +128,18 @@ export class NexusClient {
     try {
       const response = await this.client.get<{ models: SystemStatus['models'] }>('/models');
       return response.data.models;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  /**
+   * Get workspace snapshot
+   */
+  async getWorkspace(): Promise<WorkspaceSnapshot> {
+    try {
+      const response = await this.client.get<WorkspaceSnapshot>('/workspace');
+      return response.data;
     } catch (error) {
       throw this.handleError(error);
     }

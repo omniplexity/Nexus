@@ -7,24 +7,13 @@
 import { Router, Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 
+import { workspaceHub } from '../workspace';
+
 const router = Router();
 
-// In-memory task storage (Phase 2 - no persistence)
-interface TaskStore {
-  [taskId: string]: {
-    id: string;
-    input: unknown;
-    type: string;
-    status: string;
-    output?: unknown;
-    error?: string;
-    createdAt: string;
-    completedAt?: string;
-    metadata?: Record<string, unknown>;
-  };
+function toRecord(value: unknown): Record<string, unknown> | undefined {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : undefined;
 }
-
-const taskStore: TaskStore = {};
 
 /**
  * POST /tasks - Create and execute a task
@@ -46,24 +35,47 @@ router.post('/', async (req: Request, res: Response) => {
 
     const taskId = uuidv4();
     const task = {
-      id: taskId,
+      taskId,
       input,
       type: type || 'reasoning',
       status: 'pending',
       createdAt: new Date().toISOString(),
-      metadata,
+      metadata: toRecord(metadata),
     };
 
-    // Store task
-    taskStore[taskId] = task;
+    workspaceHub.upsertTask({
+      taskId,
+      type: task.type,
+      status: 'pending',
+      createdAt: task.createdAt,
+      metadata,
+      inputPreview: typeof input === 'string' ? input : JSON.stringify(input),
+    });
+    workspaceHub.appendLog({
+      level: 'info',
+      scope: 'tasks',
+      message: `Queued task ${taskId}`,
+      details: { type: task.type },
+    });
 
     // Execute task asynchronously (in production, this would be a job queue)
     executeTask(taskId, input, config).then((result) => {
-      taskStore[taskId] = {
-        ...taskStore[taskId],
-        ...result,
+      workspaceHub.patchTask(taskId, {
+        status: result.status as 'completed' | 'failed',
+        outputPreview: typeof result.output === 'string' ? result.output : JSON.stringify(result.output),
+        error: result.error,
         completedAt: new Date().toISOString(),
-      };
+        metadata: {
+          ...(toRecord(metadata) ?? {}),
+          metrics: result.metadata,
+        },
+      });
+      workspaceHub.appendLog({
+        level: result.status === 'completed' ? 'info' : 'error',
+        scope: 'tasks',
+        message: `Task ${taskId} ${result.status}`,
+        details: result.metadata,
+      });
     });
 
     // Return immediately with task ID
@@ -88,7 +100,7 @@ router.post('/', async (req: Request, res: Response) => {
  */
 router.get('/:id', (req: Request, res: Response) => {
   const { id } = req.params;
-  const task = taskStore[id];
+  const task = workspaceHub.getTask(id);
 
   if (!task) {
     res.status(404).json({
@@ -101,9 +113,9 @@ router.get('/:id', (req: Request, res: Response) => {
   }
 
   res.json({
-    taskId: task.id,
+    taskId: task.taskId,
     status: task.status,
-    output: task.output,
+    output: task.outputPreview,
     error: task.error,
     metrics: task.metadata?.metrics,
     createdAt: task.createdAt,
@@ -115,8 +127,8 @@ router.get('/:id', (req: Request, res: Response) => {
  * GET /tasks - List all tasks
  */
 router.get('/', (_req: Request, res: Response) => {
-  const tasks = Object.values(taskStore).map((task) => ({
-    taskId: task.id,
+  const tasks = workspaceHub.listTasks().map((task) => ({
+    taskId: task.taskId,
     type: task.type,
     status: task.status,
     createdAt: task.createdAt,
@@ -136,7 +148,7 @@ async function executeTask(
 ): Promise<{ status: string; output?: unknown; error?: string; metadata?: Record<string, unknown> }> {
   try {
     // Update status to running
-    taskStore[taskId].status = 'running';
+    workspaceHub.patchTask(taskId, { status: 'running' });
 
     // Get model from environment or config
     const apiKey = process.env.OPENAI_API_KEY;

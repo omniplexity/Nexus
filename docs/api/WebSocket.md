@@ -1,10 +1,12 @@
 # WebSocket Reference
 
-> **Phase 1 Stub** — This documents the WebSocket interface contracts. Events and messages will be implemented in Phase 2+.
+> **Phase 6 Complete** — This documents the WebSocket interface contracts and the live workspace control surface implemented in `interfaces/api` and `interfaces/websocket`.
 
 ## Contract Source
 
 Interface contracts defined in [`interfaces/contracts/websocket.ts`](../../interfaces/contracts/websocket.ts).
+
+The workspace control surface now uses these contracts to stream snapshots, task updates, logs, and status changes to browser, desktop, and CLI clients.
 
 ## Interfaces
 
@@ -177,13 +179,17 @@ interface WebSocketConfig {
 
 | Event | Data | Description |
 |-------|------|-------------|
+| `workspace:connected` | `{ clientId, state }` | Connection confirmed |
+| `workspace:snapshot` | `WorkspaceSnapshot` | Full workspace snapshot |
+| `workspace:update` | `{ message, clientId }` | Generic workspace update |
+| `workspace:pong` | `{ receivedAt }` | Response to ping |
+| `workspace:error` | `{ error }` | Workspace transport error |
 | `task:status` | `{ taskId, status, progress }` | Task status update |
 | `node:result` | `{ nodeId, output, error }` | Node execution result |
 | `tool:result` | `{ toolName, output, error }` | Tool execution result |
 | `agent:status` | `{ agentId, status, message }` | Agent status update |
 | `memory:result` | `{ items: MemoryEntry[] }` | Memory query result |
 | `error` | `{ code, message, details }` | Error notification |
-| `connected` | `{ clientId }` | Connection confirmed |
 
 ### System Events
 

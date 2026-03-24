@@ -6,22 +6,21 @@
 
 import { Router, Request, Response } from 'express';
 
-const router = Router();
+import { workspaceHub } from '../workspace';
 
-// Track server start time
-const startTime = Date.now();
+const router = Router();
 
 /**
  * GET /status - Get system status
  */
 router.get('/', (_req: Request, res: Response) => {
-  const uptimeSeconds = Math.floor((Date.now() - startTime) / 1000);
+  const snapshot = workspaceHub.snapshot();
 
   res.json({
-    status: 'healthy',
-    version: process.env.npm_package_version || '0.0.1',
-    uptime: uptimeSeconds,
-    environment: process.env.NODE_ENV || 'development',
+    ...snapshot.status,
+    tasks: snapshot.metrics.totalTasks,
+    logs: snapshot.metrics.totalLogs,
+    connections: snapshot.connections.active,
   });
 });
 

@@ -13,7 +13,7 @@ Nexus is a TypeScript monorepo for building a local-first orchestration system a
 
 ## Current Status
 
-Nexus is currently at the end of Phase 5.
+Nexus is currently at the end of Phase 6.
 
 | Phase | Status | Notes |
 |---|---:|---|
@@ -23,7 +23,7 @@ Nexus is currently at the end of Phase 5.
 | Phase 3 | Complete | Graph execution engine and orchestration |
 | Phase 4 | Complete | Context engine, memory, prioritization, routing, compression |
 | Phase 5 | Complete | Capability fabric, tool runtime, policy, and orchestration integration |
-| Phase 6 | Planned | UI control surface |
+| Phase 6 | Complete | UI control surface, websocket live stream, web and desktop shells |
 | Phase 7 | Planned | Optimization layer |
 
 ## What Phase 5 Added
@@ -37,6 +37,17 @@ Phase 5 turned tool contracts into a usable runtime instead of a placeholder.
 - Real `ToolNode` execution through injected runtime instead of simulation
 - Explicit DAG execution path through `task.metadata.dag`
 - Phase 5 tests for runtime, policies, built-ins, and orchestration integration
+
+## What Phase 6 Added
+
+Phase 6 exposed the backend through a real control surface.
+
+- Workspace snapshot endpoint at `/api/workspace`
+- Native WebSocket live stream on `/ws` for task, log, status, and graph updates
+- Browser workspace shell in `apps/web/`
+- Desktop launcher in `apps/desktop/`
+- CLI `inspect` and `watch` commands for the workspace control surface
+- Shared workspace state hub in `interfaces/api/src/workspace.ts`
 
 ## Repository Layout
 
@@ -131,6 +142,9 @@ npm run build --workspaces
 | [modules/tools/runtime/executor.ts](modules/tools/runtime/executor.ts) | Tool execution runtime |
 | [modules/tools/builtins/index.ts](modules/tools/builtins/index.ts) | Built-in tool registration |
 | [systems/orchestration/nodes/tool.ts](systems/orchestration/nodes/tool.ts) | Real ToolNode execution path |
+| [interfaces/api/src/workspace.ts](interfaces/api/src/workspace.ts) | Workspace snapshot and live state hub |
+| [apps/web/src/index.ts](apps/web/src/index.ts) | Browser workspace shell |
+| [apps/desktop/src/index.ts](apps/desktop/src/index.ts) | Desktop launcher for the workspace shell |
 
 ## Documentation
 

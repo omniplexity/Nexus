@@ -59,9 +59,8 @@ Nexus is built on a layered architecture with clear separation of concerns. Each
 - Orchestrator integration through injected tool runtime
 
 ### Future Phases
-Implementation of systems beyond the capability fabric will proceed in subsequent phases:
+Implementation of systems beyond the control surface will proceed in subsequent phases:
 
-- **Phase 6**: UI Control Surface
 - **Phase 7**: Optimization Layer
 
 See [ARCHITECTURE](../architecture/OVERVIEW.md) for full phase details.

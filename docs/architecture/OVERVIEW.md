@@ -1,7 +1,7 @@
 # Nexus Architecture Overview
 
 > **Version:** 1.0.0  
-> **Status:** Phase 5 Complete (Capability Fabric)  
+> **Status:** Phase 6 Complete (UI Control Surface)  
 > **Last Updated:** 2026-03-24
 
 ---
@@ -92,8 +92,8 @@ Each layer has strict boundaries:
 
 | Layer | Responsibility | Dependencies | Status |
 |-------|---------------|--------------|--------|
-| `apps/` | Application entry points | interfaces | CLI ✅, Web ✗, Desktop ✗ |
-| `interfaces/` | External I/O adapters | systems | API ✅, WebSocket ✗, CLI ✗ |
+| `apps/` | Application entry points | interfaces | CLI ✅, Web ✅, Desktop ✅ |
+| `interfaces/` | External I/O adapters | systems | API ✅, WebSocket ✅, CLI ✗ |
 | `systems/` | Business logic orchestration | core | ✅ Mostly Complete |
 | `core/` | Fundamental contracts | None (pure) | ✅ Complete |
 | `modules/` | Capability implementations | core | Tools ✅, other modules contracts-only |
@@ -148,12 +148,13 @@ Each layer has strict boundaries:
 - Orchestration integration through `ToolInvoker` and real `ToolNode` execution
 - Agent contracts remain in place for future implementation phases
 
-### Phase 6: UI Control Surface (Planned)
+### Phase 6: UI Control Surface ✅ Complete
 
 - Web application (see [`apps/web/`](../../apps/web/))
-- Desktop application (see [`apps/desktop/`](../../apps/desktop/))
-- Workspace layout
-- Execution visualization
+- Desktop launcher (see [`apps/desktop/`](../../apps/desktop/))
+- Workspace snapshot endpoint (see [`interfaces/api/src/routes/workspace.ts`](../../interfaces/api/src/routes/workspace.ts))
+- Live WebSocket transport and workspace state hub
+- Execution visualization, logs, metrics, and settings panels
 
 ### Phase 7: Optimization Layer (Planned)
 
@@ -282,8 +283,8 @@ enum EventNamespace {
 
 ```
 Nexus/
-├── apps/              # Application entry points (cli ✅, web ✗, desktop ✗)
-├── interfaces/        # External I/O adapters (api ✅, cli ✗, websocket ✗)
+├── apps/              # Application entry points (cli ✅, web ✅, desktop ✅)
+├── interfaces/        # External I/O adapters (api ✅, cli ✗, websocket ✅)
 ├── systems/           # Business logic orchestration
 │   ├── orchestration/ # ✅ DAG execution engine (complete)
 │   ├── context/        # ✅ Context management (complete)

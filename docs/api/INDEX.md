@@ -8,7 +8,7 @@ Nexus provides multiple interaction interfaces:
 
 - **REST API** — HTTP-based API for programmatic access
 - **CLI** — Command-line interface for terminal operations
-- **WebSocket** — Real-time bidirectional communication
+- **WebSocket** — Real-time workspace communication and control surface transport
 - **Events** — Internal event system for component communication
 
 ## API Reference
@@ -70,7 +70,7 @@ const parser: CliParser = {
 ### WebSocket
 
 ```typescript
-// Example: WebSocket client (Phase 2+)
+// Example: WebSocket client (Phase 6 complete)
 import { WebSocketClient, WebSocketState } from '@nexus/websocket';
 
 const client: WebSocketClient = {

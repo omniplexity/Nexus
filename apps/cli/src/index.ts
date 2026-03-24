@@ -9,8 +9,10 @@
 import chalk from 'chalk';
 import { Command } from 'commander';
 
+import { inspectCommand } from './commands/inspect';
 import { runCommand } from './commands/run';
 import { statusCommand } from './commands/status';
+import { watchCommand } from './commands/watch';
 import { version } from './utils/version';
 
 const program = new Command();
@@ -65,6 +67,36 @@ program
     try {
       const { modelsCommand } = await import('./commands/models');
       await modelsCommand();
+    } catch (error) {
+      console.error(chalk.red('Error:'), error instanceof Error ? error.message : String(error));
+      process.exit(1);
+    }
+  });
+
+/**
+ * Inspect command - Show workspace snapshot
+ */
+program
+  .command('inspect')
+  .description('Inspect the workspace snapshot')
+  .action(async () => {
+    try {
+      await inspectCommand();
+    } catch (error) {
+      console.error(chalk.red('Error:'), error instanceof Error ? error.message : String(error));
+      process.exit(1);
+    }
+  });
+
+/**
+ * Watch command - Stream workspace events
+ */
+program
+  .command('watch')
+  .description('Watch workspace updates in real time')
+  .action(async () => {
+    try {
+      await watchCommand();
     } catch (error) {
       console.error(chalk.red('Error:'), error instanceof Error ? error.message : String(error));
       process.exit(1);

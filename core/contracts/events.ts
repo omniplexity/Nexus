@@ -13,6 +13,7 @@ export enum EventNamespace {
   MEMORY = 'memory',
   MODEL = 'model',
   CONTEXT = 'context',
+  UI = 'ui',
   RUNTIME = 'runtime',
   AGENT = 'agent',
   SYSTEM = 'system'
@@ -179,6 +180,28 @@ export interface SystemHealthEventPayload {
 }
 
 /**
+ * Event payload for UI control surface events
+ */
+export interface UiEventPayload {
+  surface: 'web' | 'desktop' | 'cli';
+  action:
+    | 'hydrate'
+    | 'connected'
+    | 'disconnected'
+    | 'snapshot'
+    | 'refresh'
+    | 'inspect'
+    | 'watch'
+    | 'settings:update'
+    | 'error';
+  status: 'idle' | 'loading' | 'ready' | 'connected' | 'disconnected' | 'error';
+  sessionId?: string;
+  workspaceId?: string;
+  message?: string;
+  details?: Record<string, unknown>;
+}
+
+/**
  * Event types enum for type safety
  */
 export const EventTypes = {
@@ -227,7 +250,18 @@ export const EventTypes = {
   
   // System events
   SYSTEM_HEALTH: 'system:health',
-  SYSTEM_SHUTDOWN: 'system:shutdown'
+  SYSTEM_SHUTDOWN: 'system:shutdown',
+
+  // UI events
+  UI_HYDRATE: 'ui:hydrate',
+  UI_CONNECTED: 'ui:connected',
+  UI_DISCONNECTED: 'ui:disconnected',
+  UI_SNAPSHOT: 'ui:snapshot',
+  UI_REFRESH: 'ui:refresh',
+  UI_INSPECT: 'ui:inspect',
+  UI_WATCH: 'ui:watch',
+  UI_SETTINGS_UPDATE: 'ui:settings:update',
+  UI_ERROR: 'ui:error'
 } as const;
 
 export type EventType = typeof EventTypes[keyof typeof EventTypes];

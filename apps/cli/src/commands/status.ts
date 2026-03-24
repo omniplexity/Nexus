@@ -41,6 +41,14 @@ export async function statusCommand(options: StatusOptions): Promise<void> {
       console.log(chalk.cyan('Uptime:'), chalk.white(formatUptime(status.uptime)));
     }
 
+    if (typeof status.tasks === 'number') {
+      console.log(chalk.cyan('Tasks:'), chalk.white(String(status.tasks)));
+    }
+
+    if (typeof status.connections === 'number') {
+      console.log(chalk.cyan('Connections:'), chalk.white(String(status.connections)));
+    }
+
     // Models
     if (status.models) {
       console.log(chalk.cyan('\nAvailable Models:'));

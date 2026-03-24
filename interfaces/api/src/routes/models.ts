@@ -6,6 +6,8 @@
 
 import { Router, Request, Response } from 'express';
 
+import { workspaceHub } from '../workspace';
+
 const router = Router();
 
 /**
@@ -18,6 +20,7 @@ router.get('/', async (_req: Request, res: Response) => {
 
     // If no API key, return default models
     if (!apiKey) {
+      workspaceHub.setModels(getDefaultModels());
       res.json({
         models: getDefaultModels(),
       });
@@ -35,6 +38,7 @@ router.get('/', async (_req: Request, res: Response) => {
 
       if (!response.ok) {
         // Return defaults on error
+        workspaceHub.setModels(getDefaultModels());
         res.json({
           models: getDefaultModels(),
         });
@@ -51,9 +55,11 @@ router.get('/', async (_req: Request, res: Response) => {
         role: inferRole(m.id),
       }));
 
+      workspaceHub.setModels(models);
       res.json({ models });
     } catch {
       // Return defaults on network error
+      workspaceHub.setModels(getDefaultModels());
       res.json({
         models: getDefaultModels(),
       });

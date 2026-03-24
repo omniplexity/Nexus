@@ -1,6 +1,6 @@
 # CLI Reference
 
-> **Phase 1 Stub** — This documents the CLI interface contracts. Commands will be implemented in Phase 2+.
+> **Phase 1 Stub** — This documents the CLI interface contracts. Some commands are implemented, others are planned for Phase 2+.
 
 ## Contract Source
 
@@ -120,9 +120,9 @@ interface CliRunner {
 }
 ```
 
-## Expected Commands
+## Implemented Commands
 
-> **Note:** These commands will be implemented in Phase 2+. This is a reference for planned functionality.
+> **Note:** These commands are currently implemented and available.
 
 ### Global Options
 
@@ -130,10 +130,78 @@ interface CliRunner {
 |--------|-------|------|-------------|
 | `--help` | `-h` | boolean | Show help |
 | `--version` | `-v` | boolean | Show version |
-| `--verbose` | | boolean | Verbose output |
-| `--config` | `-c` | string | Config file path |
 
-### Orchestration Commands
+### run
+
+Execute a task using the Nexus API.
+
+```bash
+nexus run <task> [options]
+```
+
+| Argument | Description |
+|----------|-------------|
+| `<task>` | The task to execute (string or JSON) |
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--model` | `-m` | string | `gpt-4o-mini` | Model to use |
+| `--temperature` | `-t` | string | `0.7` | Temperature for model |
+| `--stream` | | boolean | `false` | Stream the response |
+| `--verbose` | `-v` | boolean | `false` | Verbose output |
+
+**Examples:**
+```bash
+# Execute a simple task
+nexus run "What is the capital of France?"
+
+# Execute with specific model
+nexus run "Analyze this data" --model gpt-4o
+
+# Stream response
+nexus run "Write a story" --stream
+```
+
+### status
+
+Check system status and health.
+
+```bash
+nexus status [options]
+```
+
+| Option | Alias | Type | Default | Description |
+|--------|-------|------|---------|-------------|
+| `--verbose` | `-v` | boolean | `false` | Verbose output |
+
+**Examples:**
+```bash
+# Check basic status
+nexus status
+
+# Check detailed status
+nexus status --verbose
+```
+
+### models
+
+List available models from the API.
+
+```bash
+nexus models
+```
+
+**Examples:**
+```bash
+# List available models
+nexus models
+```
+
+## Planned Commands (Phase 2+)
+
+> **Note:** These commands are planned for future implementation.
+
+### Task Commands
 
 | Command | Description |
 |---------|-------------|
@@ -248,8 +316,8 @@ const runner: CliRunner = {
 ## Implementation Status
 
 - **Phase 1:** Contract definitions (complete)
-- **Phase 2:** CLI runner and parser implementation
-- **Phase 3:** Full command implementation
+- **Phase 2:** CLI runner and parser implementation (complete: run, status, models commands)
+- **Phase 3:** Full command implementation (in progress)
 
 ---
 

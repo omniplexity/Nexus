@@ -36,6 +36,11 @@ export interface MemoryMetadata {
   source?: string;
   importance?: number;
   embedding?: number[];
+  /**
+   * Number of times this memory entry has been accessed.
+   * Useful for relevance scoring and cache optimization.
+   */
+  accessCount?: number;
 }
 
 /**
@@ -68,6 +73,8 @@ export interface MemoryQuery {
   limit?: number;
   offset?: number;
   minImportance?: number;
+  sortBy?: 'createdAt' | 'updatedAt' | 'importance' | 'accessCount';
+  sortOrder?: 'asc' | 'desc';
 }
 
 /**

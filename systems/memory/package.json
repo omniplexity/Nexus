@@ -1,0 +1,28 @@
+{
+  "name": "@nexus/systems-memory",
+  "version": "1.0.0",
+  "description": "Memory system for Nexus context engine",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@nexus/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "keywords": [
+    "nexus",
+    "memory",
+    "context",
+    "embedding"
+  ]
+}

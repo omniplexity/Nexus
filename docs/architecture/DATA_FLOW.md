@@ -431,16 +431,16 @@ const EventTypes = {
 
 ## 9. Summary
 
-| Flow Stage | Direction | Data | Layer |
-|------------|-----------|------|-------|
-| Input | ↓ | Raw user input | apps/ |
-| Parsing | ↓ | Validated request | interfaces/ |
-| Orchestration | ↓ | Task + Context | systems/ |
-| Execution | ↓ | DAG + Nodes | systems/ |
-| Capability | ↔ | Tool/Memory/Model | modules/ |
-| Result | ↑ | ExecutionResult | systems/ |
-| Response | ↑ | Formatted output | interfaces/ |
-| Display | ↑ | User-facing result | apps/ |
+| Flow Stage | Direction | Data | Layer | Status |
+|------------|-----------|------|-------|--------|
+| Input | ↓ | Raw user input | apps/ | CLI ✅ |
+| Parsing | ↓ | Validated request | interfaces/ | API ✅ |
+| Orchestration | ↓ | Task + Context | systems/ | ✅ Complete |
+| Execution | ↓ | DAG + Nodes | systems/orchestration/ | ✅ Complete |
+| Capability | ↔ | Tool/Memory/Model | modules/ | Contracts ✅ |
+| Result | ↑ | ExecutionResult | systems/ | ✅ Complete |
+| Response | ↑ | Formatted output | interfaces/ | ✅ Complete |
+| Display | ↑ | User-facing result | apps/ | CLI ✅ |
 
 ---
 

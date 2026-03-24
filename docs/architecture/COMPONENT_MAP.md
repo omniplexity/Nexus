@@ -122,7 +122,7 @@ graph TD
 | NodeFactory | [`core/contracts/node.ts`](../../core/contracts/node.ts:185) | Node creation |
 | NodeExecutor | [`core/contracts/node.ts`](../../core/contracts/node.ts:198) | Node execution |
 
-**Status:** Contracts defined (Phase 1); Implementation TODO (Phase 2-3)
+**Status:** ✅ Complete - Contracts defined (Phase 1); Full implementation in [`systems/orchestration/`](../../systems/orchestration/)
 
 ### 3.2 Context Components
 
@@ -134,7 +134,7 @@ graph TD
 | MemorySnapshot | [`core/contracts/memory.ts`](../../core/contracts/memory.ts:86) | Context snapshot |
 | ContextCompressor | [`core/contracts/memory.ts`](../../core/contracts/memory.ts:176) | Token compression |
 
-**Status:** Contracts defined (Phase 1); Implementation TODO (Phase 4)
+**Status:** ✅ Complete - Contracts defined (Phase 1); Full implementation in [`systems/context/`](../../systems/context/) and [`systems/memory/`](../../systems/memory/)
 
 ### 3.3 Model Components
 
@@ -145,7 +145,7 @@ graph TD
 | ModelCache | [`core/contracts/model-provider.ts`](../../core/contracts/model-provider.ts:260) | Response caching |
 | ModelMetrics | [`core/contracts/model-provider.ts`](../../core/contracts/model-provider.ts:285) | Usage metrics |
 
-**Status:** Contracts defined (Phase 1); Implementation TODO (Phase 5)
+**Status:** ✅ Complete - Contracts defined (Phase 1); Implementation in [`systems/models/`](../../systems/models/)
 
 ### 3.4 Tool Components
 
@@ -155,7 +155,7 @@ graph TD
 | ToolRegistry | [`modules/tools/contracts/registry.ts`](../../modules/tools/contracts/registry.ts) | Tool discovery |
 | ToolSchema | [`modules/tools/contracts/schema.ts`](../../modules/tools/contracts/schema.ts) | Input/Output schemas |
 
-**Status:** Contracts defined (Phase 1); Implementation TODO (Phase 5)
+**Status:** Contracts defined (Phase 1); Implementations in progress
 
 ### 3.5 Agent Components
 
@@ -164,7 +164,7 @@ graph TD
 | Agent | [`modules/agents/contracts/agent.ts`](../../modules/agents/contracts/agent.ts) | Agent definition |
 | Executor | [`modules/agents/contracts/executor.ts`](../../modules/agents/contracts/executor.ts) | Agent execution |
 
-**Status:** Contracts defined (Phase 1); Implementation TODO (Phase 5)
+**Status:** Contracts defined (Phase 1); Implementations in progress
 
 ---
 
@@ -266,17 +266,22 @@ NexusError (abstract)
 
 | Directory | Primary Components | Status |
 |-----------|-------------------|--------|
-| `core/contracts/` | Orchestrator, Node, Memory, ModelProvider, Events, Errors | ✅ Phase 1 |
-| `systems/orchestration/` | DAG Engine, Scheduler, Runtime | 📋 Phase 2-3 |
-| `systems/context/` | Compressor, Cache, Prioritizer | 📋 Phase 4 |
-| `systems/cognitive/` | Planner, Strategy, Intent | 📋 Phase 5 |
-| `modules/tools/` | Tool implementations | 📋 Phase 5 |
-| `modules/agents/` | Agent implementations | 📋 Phase 5 |
-| `modules/integrations/` | Provider adapters | 📋 Phase 5 |
-| `interfaces/` | API, WebSocket, CLI | 📋 Phase 6 |
-| `apps/` | Web, Desktop, CLI apps | 📋 Phase 6 |
-| `data/` | Adapters, Repositories | 📋 Phase 7 |
-| `runtime/` | Process, IPC, Sandbox | 📋 Phase 7 |
+| `core/contracts/` | Orchestrator, Node, Memory, ModelProvider, Events, Errors | ✅ Phase 1 Complete |
+| `systems/orchestration/` | DAG Engine, Scheduler, Runtime | ✅ Complete |
+| `systems/context/` | Compressor, Cache, Prioritizer | ✅ Complete |
+| `systems/memory/` | Store, Vector Index, Archive | ✅ Complete |
+| `systems/models/` | OpenAI Provider, Router | ✅ Complete |
+| `systems/cognitive/` | Planner, Strategy, Intent | ✗ Planned |
+| `modules/tools/` | Tool contracts | Contracts ✅ |
+| `modules/agents/` | Agent contracts | Contracts ✅ |
+| `modules/integrations/` | Provider adapters | Contracts ✅ |
+| `interfaces/api/` | REST API routes | ✅ Complete |
+| `interfaces/contracts/` | API, WebSocket, CLI contracts | ✅ Mostly Complete |
+| `apps/cli/` | CLI commands | ✅ Complete |
+| `apps/web/` | Web application | ✗ Planned |
+| `apps/desktop/` | Desktop application | ✗ Planned |
+| `data/*/` | Adapters, Repositories | ✗ Planned |
+| `runtime/*/` | Process, IPC, Sandbox | ✗ Planned |
 
 ---
 

@@ -1,6 +1,6 @@
 # REST API Reference
 
-> **Phase 1 Stub** — This documents the REST API interface contracts. Endpoints will be implemented in Phase 2+.
+> **Phase 1 Stub** — This documents the REST API interface contracts. Some endpoints are implemented, others are planned for Phase 2+.
 
 ## Contract Source
 
@@ -120,15 +120,36 @@ interface ApiRouter {
 }
 ```
 
-## Expected Endpoints
+## Implemented Endpoints
 
-> **Note:** These endpoints will be implemented in Phase 2+. This is a reference for planned functionality.
+> **Note:** These endpoints are currently implemented and available.
 
 ### Health Check
 
 | Method | Path | Description |
 |--------|------|-------------|
-| GET | `/health` | Server health status |
+| GET | `/api/health` | Server health status |
+| GET | `/api/status` | System status (uptime, version) |
+| GET | `/api/status/readiness` | Readiness probe |
+| GET | `/api/status/liveness` | Liveness probe |
+
+### Tasks
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/api/tasks` | Create and execute a task |
+| GET | `/api/tasks` | List all tasks |
+| GET | `/api/tasks/:id` | Get task status and result |
+
+### Models
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/models` | List available models |
+
+## Planned Endpoints (Phase 2+)
+
+> **Note:** These endpoints are planned for future implementation.
 
 ### Orchestration
 
@@ -211,16 +232,18 @@ const server: ApiServer = {
 |------|-------------|
 | 200 | Success |
 | 201 | Created |
+| 202 | Accepted (async processing) |
 | 400 | Bad Request |
 | 401 | Unauthorized |
 | 404 | Not Found |
 | 500 | Internal Server Error |
+| 503 | Service Unavailable |
 
 ## Implementation Status
 
 - **Phase 1:** Contract definitions (complete)
-- **Phase 2:** Minimal server implementation
-- **Phase 3:** Full endpoint implementation
+- **Phase 2:** Minimal server implementation (complete: health, tasks, status, models)
+- **Phase 3:** Full endpoint implementation (in progress)
 
 ---
 

@@ -276,8 +276,10 @@ const client: WebSocketClient = {
 ## Implementation Status
 
 - **Phase 1:** Contract definitions (complete)
-- **Phase 2:** Minimal WebSocket server
+- **Phase 2:** WebSocket server/client implementation (not yet implemented)
 - **Phase 3:** Full event implementation
+
+> ⚠️ **Note:** As of the current phase, the WebSocket server and client are not yet implemented in the codebase. The contracts in [`interfaces/contracts/websocket.ts`](../../interfaces/contracts/websocket.ts) define the expected interfaces for future implementation.
 
 ---
 

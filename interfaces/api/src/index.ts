@@ -34,8 +34,8 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
   next();
 });
 
-// Health check (no prefix)
-app.get('/health', (_req: Request, res: Response) => {
+// Health check (moved from /health to /api/health in v1.0.0)
+app.get(`${API_PREFIX}/health`, (_req: Request, res: Response) => {
   res.json({ status: 'healthy', timestamp: new Date().toISOString() });
 });
 
@@ -75,7 +75,7 @@ const server = app.listen(PORT, () => {
 │  API prefix: ${API_PREFIX}                    │
 │                                          │
 │  Endpoints:                               │
-│  • GET  /health              Health check │
+│  • GET  /api/health         Health check │
 │  • POST ${API_PREFIX}/tasks            Create task │
 │  • GET  ${API_PREFIX}/tasks/:id        Get task    │
 │  • GET  ${API_PREFIX}/status           System info │

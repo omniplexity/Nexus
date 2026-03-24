@@ -90,15 +90,15 @@ apps → interfaces → systems → core → modules → data → runtime
 
 Each layer has strict boundaries:
 
-| Layer | Responsibility | Dependencies |
-|-------|---------------|--------------|
-| `apps/` | Application entry points | interfaces |
-| `interfaces/` | External I/O adapters | systems |
-| `systems/` | Business logic orchestration | core |
-| `core/` | Fundamental contracts | None (pure) |
-| `modules/` | Capability implementations | core |
-| `data/` | Persistence layer | core types |
-| `runtime/` | Execution environment | core |
+| Layer | Responsibility | Dependencies | Status |
+|-------|---------------|--------------|--------|
+| `apps/` | Application entry points | interfaces | CLI ✅, Web ✗, Desktop ✗ |
+| `interfaces/` | External I/O adapters | systems | API ✅, WebSocket ✗, CLI ✗ |
+| `systems/` | Business logic orchestration | core | ✅ Mostly Complete |
+| `core/` | Fundamental contracts | None (pure) | ✅ Complete |
+| `modules/` | Capability implementations | core | Contracts ✅, Impl ✗ |
+| `data/` | Persistence layer | core types | ✗ Planned |
+| `runtime/` | Execution environment | core | ✗ Planned |
 
 ---
 
@@ -118,32 +118,40 @@ Each layer has strict boundaries:
 | Events | [`core/contracts/events.ts`](../../core/contracts/events.ts) | Inter-component communication |
 | Errors | [`core/contracts/errors.ts`](../../core/contracts/errors.ts) | Structured error types |
 
-### Phase 2: Minimal Vertical Slice (Planned)
+### Phase 2: Minimal Vertical Slice ✅ Complete
 
 - Basic orchestration engine
 - Single node type execution
-- No memory, tools, or advanced UI
+- CLI interface implementation
+- REST API implementation
 
-### Phase 3: Graph Execution Engine (In Progress)
+### Phase 3: Graph Execution Engine ✅ Complete
 
-- Full DAG structure
-- Node execution logic
-- Task scheduler
+- Full DAG structure (see [`systems/orchestration/engine/dag.ts`](../../systems/orchestration/engine/dag.ts))
+- Node execution logic (see [`systems/orchestration/nodes/`](../../systems/orchestration/nodes/))
+- Task scheduler (see [`systems/orchestration/scheduler/`](../../systems/orchestration/scheduler/))
+- Circuit breaker & retry strategies
 
-### Phase 4: Context Engine (Planned)
+### Phase 4: Context Engine ✅ Complete
 
-- Memory abstraction
-- Retrieval system
-- Context compression
+- Memory abstraction (see [`systems/memory/`](../../systems/memory/))
+- Retrieval system (vector-index)
+- Context compression (see [`systems/context/src/compressor/`](../../systems/context/src/compressor/))
+- Response caching (see [`systems/context/src/cache/`](../../systems/context/src/cache/))
+- Context prioritization (see [`systems/context/src/prioritizer/`](../../systems/context/src/prioritizer/))
 
-### Phase 5: Capability Fabric (Planned)
+### Phase 5: Capability Fabric ✅ In Progress
 
-- Tool interface implementation
+- Tool interface implementation (contracts in [`modules/tools/contracts/`](../../modules/tools/contracts/))
 - Tool registry
 - Execution chaining
+- Agent contracts (see [`modules/agents/contracts/`](../../modules/agents/contracts/))
+- Model providers (see [`systems/models/`](../../systems/models/))
 
 ### Phase 6: UI Control Surface (Planned)
 
+- Web application (see [`apps/web/`](../../apps/web/))
+- Desktop application (see [`apps/desktop/`](../../apps/desktop/))
 - Workspace layout
 - Execution visualization
 
@@ -274,31 +282,33 @@ enum EventNamespace {
 
 ```
 Nexus/
-├── apps/              # Application entry points (web, desktop, cli)
-├── interfaces/        # External I/O adapters (api, cli, websocket)
+├── apps/              # Application entry points (cli ✅, web ✗, desktop ✗)
+├── interfaces/        # External I/O adapters (api ✅, cli ✗, websocket ✗)
 ├── systems/           # Business logic orchestration
-│   ├── orchestration/ # DAG execution engine
-│   ├── context/       # Context management
-│   ├── cognitive/     # Reasoning & planning
-│   ├── execution/    # Task execution
-│   ├── memory/       # Memory systems
-│   └── models/       # Model abstraction
-├── core/              # Fundamental contracts
+│   ├── orchestration/ # ✅ DAG execution engine (complete)
+│   ├── context/        # ✅ Context management (complete)
+│   ├── cognitive/     # ✗ Reasoning & planning (planned)
+│   ├── execution/     # ✗ Task execution (planned)
+│   ├── memory/        # ✅ Memory systems (complete)
+│   └── models/        # ✅ Model abstraction (complete)
+├── core/              # ✅ Fundamental contracts (complete)
 │   └── contracts/    # Interface definitions
 ├── modules/           # Capability implementations
-│   ├── agents/       # Agent definitions
-│   ├── tools/        # Tool implementations
-│   ├── integrations/ # External integrations
-│   └── workflows/    # Workflow definitions
-├── data/              # Persistence layer
+│   ├── agents/       # Contracts defined
+│   ├── tools/        # Contracts defined
+│   ├── integrations/ # Contracts defined
+│   └── workflows/    # Planned
+├── data/              # ✗ Persistence layer (planned)
 │   ├── adapters/     # Database adapters
-│   ├── repositories/# Data access
-│   └── schemas/     # Data schemas
-└── runtime/          # Execution environment
+│   ├── repositories/ # Data access
+│   └── schemas/      # Data schemas
+└── runtime/          # ✗ Execution environment (planned)
     ├── process/      # Process management
     ├── scheduler/    # Task scheduling
-    └── sandbox/     # Execution sandbox
+    └── sandbox/      # Execution sandbox
 ```
+
+> **Legend:** ✅ = Implemented | ✗ = Not Yet Implemented | Contracts = Interface contracts defined
 
 ### Key Files
 

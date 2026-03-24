@@ -1,5 +1,10 @@
 {
   "root": true,
+  "ignorePatterns": [
+    "**/dist/**",
+    "**/node_modules/**",
+    "**/coverage/**"
+  ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": "latest",
@@ -29,7 +34,8 @@
     },
     "import/resolver": {
       "typescript": {
-        "alwaysTryTypes": true
+        "alwaysTryTypes": true,
+        "project": "./tsconfig.json"
       }
     }
   },

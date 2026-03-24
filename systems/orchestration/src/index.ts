@@ -14,18 +14,23 @@ export {
   createExecutor,
   MinimalOrchestrator,
   createOrchestrator,
-} from './engine';
+} from './engine/index';
 
 // Re-export from nodes
-export {
-  BaseNode,
+export { 
   ReasoningNode,
-  ReasoningNodeOptions,
   ReasoningNodeFactory,
   createReasoningNodeFactory,
   NodeTypeRegistry,
   NodeUtils,
   defaultNodeRegistry,
+} from './nodes';
+export type {
+  BaseNode,
+  ReasoningNodeOptions,
+  NodeRegistryEntry,
+  NodeExecutionResult,
+  NodeCreator,
 } from './nodes';
 
 // Re-export types from contracts
@@ -40,7 +45,7 @@ export type {
   ExecutionMetrics,
   DAG,
   DAGEdge,
-} from '../../core/contracts/orchestrator';
+} from '@nexus/core/contracts/orchestrator';
 
 export type {
   Node,
@@ -50,4 +55,4 @@ export type {
   NodeOutput,
   NodeStatus,
   RetryConfig,
-} from '../../core/contracts/node';
+} from '@nexus/core/contracts/node';

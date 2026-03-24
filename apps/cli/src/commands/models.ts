@@ -5,6 +5,7 @@
  */
 
 import chalk from 'chalk';
+
 import { NexusClient } from '../utils/client';
 
 /**
@@ -16,7 +17,7 @@ export async function modelsCommand(): Promise<void> {
   });
 
   try {
-    const models = await client.listModels();
+    const models = await client.listModels() || [];
 
     if (models.length === 0) {
       console.log(chalk.yellow('No models available'));
@@ -39,7 +40,8 @@ export async function modelsCommand(): Promise<void> {
     // Display by role
     for (const [role, roleModels] of Object.entries(byRole)) {
       console.log(chalk.cyan(`\n${role.toUpperCase()}:`));
-      for (const model of roleModels) {
+      const modelArray = roleModels || [];
+      for (const model of modelArray) {
         const name = chalk.white(model.name || model.id);
         const tokens = model.maxOutputTokens ? chalk.gray(`${model.maxOutputTokens}t`) : '';
         const context = model.contextWindow ? chalk.gray(`${model.contextWindow}c`) : '';

@@ -5,15 +5,15 @@
  * Routes requests to appropriate providers based on role.
  */
 
-import type {
+import {
   ModelRouter,
   ModelSelection,
   ModelRequest,
   ModelProvider,
-  ModelRole,
   RouterStats,
   ModelInfo,
-} from '../../core/contracts/model-provider';
+  ModelRole,
+} from '@nexus/core/contracts/model-provider';
 
 /**
  * Simple router configuration
@@ -133,7 +133,7 @@ export class SimpleModelRouter implements ModelRouter {
   /**
    * Get the provider for a specific role
    */
-  private getProviderForRole(role: ModelRole): ModelProvider | null {
+  private getProviderForRole(_role: ModelRole): ModelProvider | null {
     // For Phase 2, use default provider
     // In future, implement role-based provider selection
     return this.defaultProvider || this.providers.values().next().value || null;

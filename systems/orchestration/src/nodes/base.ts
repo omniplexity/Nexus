@@ -4,15 +4,16 @@
  * Provides the foundation for all node types.
  */
 
-import { v4 as uuidv4 } from 'uuid';
-import type {
+import {
   Node,
   NodeType,
   NodeConfig,
   NodeInput,
   NodeOutput,
   NodeStatus,
-} from '../../../core/contracts/node';
+} from '@nexus/core/contracts/node';
+import { v4 as uuidv4 } from 'uuid';
+
 
 /**
  * Abstract base node class

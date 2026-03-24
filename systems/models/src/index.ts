@@ -9,10 +9,12 @@
 export { BaseModelProvider, createModelProvider } from './provider';
 
 // OpenAI provider
-export { OpenAIProvider, OpenAIProviderConfig, createOpenAIProvider } from './openai';
+export { OpenAIProvider, createOpenAIProvider } from './openai';
+export type { OpenAIProviderConfig } from './openai';
 
 // Router
-export { SimpleModelRouter, SimpleRouterConfig, createSingleProviderRouter } from './router';
+export { SimpleModelRouter, createSingleProviderRouter } from './router';
+export type { SimpleRouterConfig } from './router';
 
 // Re-export types for convenience
 export type {
@@ -35,4 +37,4 @@ export type {
   ModelCache,
   ModelMetrics,
   ModelMetricsData,
-} from '../../core/contracts/model-provider';
+} from '@nexus/core/contracts/model-provider';

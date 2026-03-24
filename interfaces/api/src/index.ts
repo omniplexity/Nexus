@@ -5,13 +5,14 @@
  */
 
 import 'dotenv/config';
-import express, { Express, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import express, { Express, Request, Response, NextFunction, json, urlencoded } from 'express';
 import helmet from 'helmet';
 import { v4 as uuidv4 } from 'uuid';
-import { tasksRouter } from './routes/tasks';
-import { statusRouter } from './routes/status';
+
 import { modelsRouter } from './routes/models';
+import { statusRouter } from './routes/status';
+import { tasksRouter } from './routes/tasks';
 
 // Configuration
 const PORT = parseInt(process.env.PORT || '3000', 10);
@@ -23,8 +24,8 @@ const app: Express = express();
 // Middleware
 app.use(helmet());
 app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(json());
+app.use(urlencoded({ extended: true }));
 
 // Request logging
 app.use((req: Request, _res: Response, next: NextFunction) => {

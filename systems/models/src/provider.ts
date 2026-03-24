@@ -5,7 +5,7 @@
  * All providers should extend this class.
  */
 
-import type {
+import {
   ModelProvider,
   ModelRequest,
   ModelResponse,
@@ -13,7 +13,7 @@ import type {
   ModelInfo,
   ProviderConfig,
   ProviderStatus,
-} from '../../core/contracts/model-provider';
+} from '@nexus/core/contracts/model-provider';
 
 /**
  * Base model provider with common functionality
@@ -180,11 +180,7 @@ export abstract class BaseModelProvider implements ModelProvider {
 /**
  * Create a model provider from config
  */
-export function createModelProvider(
-  id: string,
-  name: string,
-  config: ProviderConfig
-): ModelProvider {
+export function createModelProvider(config: ProviderConfig): ModelProvider {
   // Factory pattern - can be extended to support multiple provider types
   const providerType = config.baseUrl?.includes('openai') ? 'openai' : 'generic';
   

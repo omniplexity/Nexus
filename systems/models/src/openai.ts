@@ -5,18 +5,17 @@
  * Supports OpenAI, Anthropic (via OpenAI compatibility), and local models.
  */
 
-import { BaseModelProvider } from './provider';
 import type {
   ModelRequest,
   ModelResponse,
   StreamingChunk,
   ModelInfo,
   ProviderConfig,
-  ProviderStatus,
   Message,
-  ToolDefinition,
-} from '../../core/contracts/model-provider';
-import { ProviderStatus as Status } from '../../core/contracts/model-provider';
+} from '@nexus/core/contracts/model-provider';
+import { ModelRole, ProviderStatus as Status } from '@nexus/core/contracts/model-provider';
+
+import { BaseModelProvider } from './provider';
 
 /**
  * OpenAI API response types
@@ -31,7 +30,7 @@ interface OpenAIMessage {
 
 interface OpenAIToolCall {
   id: string;
-  type: string;
+  type: 'function';
   function: {
     name: string;
     arguments: string;
@@ -69,6 +68,11 @@ interface OpenAIStreamChunk {
     };
     finish_reason: string | null;
   }>;
+  usage?: {
+    prompt_tokens: number;
+    completion_tokens: number;
+    total_tokens: number;
+  };
 }
 
 interface OpenAIModelInfo {
@@ -136,11 +140,9 @@ export class OpenAIProvider extends BaseModelProvider {
   /**
    * Complete with streaming
    */
-  async completeWithStreaming(request: ModelRequest): AsyncIterable<StreamingChunk> {
+  async *completeWithStreaming(request: ModelRequest): AsyncIterable<StreamingChunk> {
     const model = request.model || this.defaultModel;
-    
     const url = `${this.baseUrl}/chat/completions`;
-    
     const body = this.buildRequestBody(model, request);
     body.stream = true;
 
@@ -163,38 +165,33 @@ export class OpenAIProvider extends BaseModelProvider {
     const decoder = new TextDecoder();
     let buffer = '';
 
-    return {
-      async *[Symbol.asyncIterator]() {
-        try {
-          while (true) {
-            const { done, value } = await reader.read();
-            
-            if (done) break;
-            
-            buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split('\n');
-            buffer = lines.pop() || '';
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
 
-            for (const line of lines) {
-              const trimmed = line.trim();
-              if (!trimmed || !trimmed.startsWith('data: ')) continue;
-              
-              const data = trimmed.slice(6);
-              if (data === '[DONE]') return;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
 
-              try {
-                const chunk = JSON.parse(data) as OpenAIStreamChunk;
-                yield mapStreamChunk(chunk);
-              } catch {
-                // Skip invalid JSON
-              }
-            }
+        for (const line of lines) {
+          const trimmed = line.trim();
+          if (!trimmed || !trimmed.startsWith('data: ')) continue;
+
+          const data = trimmed.slice(6);
+          if (data === '[DONE]') return;
+
+          try {
+            const chunk = JSON.parse(data) as OpenAIStreamChunk;
+            yield mapStreamChunk(chunk);
+          } catch {
+            // Skip invalid JSON
           }
-        } finally {
-          reader.releaseLock();
         }
-      },
-    };
+      }
+    } finally {
+      reader.releaseLock();
+    }
   }
 
   /**
@@ -333,16 +330,16 @@ export class OpenAIProvider extends BaseModelProvider {
   /**
    * Infer model role from model ID
    */
-  private inferRole(modelId: string): 'fast' | 'reasoning' | 'specialized' {
+  private inferRole(modelId: string): ModelRole {
     const lower = modelId.toLowerCase();
     
     if (lower.includes('gpt-3.5') || lower.includes('haiku') || lower.includes('flash')) {
-      return 'fast';
+      return ModelRole.FAST;
     }
     if (lower.includes('code') || lower.includes('math')) {
-      return 'specialized';
+      return ModelRole.SPECIALIZED;
     }
-    return 'reasoning';
+    return ModelRole.REASONING;
   }
 
   /**
@@ -354,7 +351,7 @@ export class OpenAIProvider extends BaseModelProvider {
         id: 'gpt-4o-mini',
         name: 'GPT-4o Mini',
         provider: this.id,
-        role: 'fast',
+        role: ModelRole.FAST,
         contextWindow: 128000,
         maxOutputTokens: 16384,
         supportsStreaming: true,
@@ -365,7 +362,7 @@ export class OpenAIProvider extends BaseModelProvider {
         id: 'gpt-4o',
         name: 'GPT-4o',
         provider: this.id,
-        role: 'reasoning',
+        role: ModelRole.REASONING,
         contextWindow: 128000,
         maxOutputTokens: 16384,
         supportsStreaming: true,
@@ -376,7 +373,7 @@ export class OpenAIProvider extends BaseModelProvider {
         id: 'gpt-4-turbo',
         name: 'GPT-4 Turbo',
         provider: this.id,
-        role: 'reasoning',
+        role: ModelRole.REASONING,
         contextWindow: 128000,
         maxOutputTokens: 4096,
         supportsStreaming: true,

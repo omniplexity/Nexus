@@ -5,12 +5,12 @@
  * Handles dependency resolution and sequential execution.
  */
 
-import type {
+import {
   Node,
   NodeInput,
   NodeOutput,
   NodeStatus,
-} from '../../../core/contracts/node';
+} from '@nexus/core/contracts/node';
 
 /**
  * Executor configuration
@@ -18,14 +18,6 @@ import type {
 export interface ExecutorConfig {
   defaultTimeout?: number;
   maxRetries?: number;
-}
-
-/**
- * Execution queue item
- */
-interface QueueItem {
-  nodeId: string;
-  input: NodeInput;
 }
 
 /**

@@ -162,7 +162,7 @@ interface IPCMessage {
 | IPC System | 🔄 Future | Phase 6+ implementation |
 | Sandboxing | 🔄 Future | Phase 6+ implementation |
 | State Management | 🔄 Future | Phase 6+ implementation |
-| Scheduler | 🔄 Future | Phase 2+ (orchestration related) |
+| Scheduler | ✅ Implemented | Core scheduling algorithms and priority queuing |
 
 ## Usage
 

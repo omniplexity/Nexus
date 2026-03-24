@@ -6,6 +6,7 @@
 
 import chalk from 'chalk';
 import ora from 'ora';
+
 import { NexusClient } from '../utils/client';
 
 export interface RunOptions {

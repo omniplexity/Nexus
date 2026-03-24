@@ -152,10 +152,10 @@ Task scheduling and prioritization:
 | Contracts | ✅ Complete | Phase 1 - Core contracts defined |
 | DAG Structure | ✅ Complete | Contracts define DAG interface |
 | Node Types | ✅ Complete | All node types defined in contracts |
-| Execution Engine | 🔄 Future | Phase 2 implementation |
-| Node Implementations | 🔄 Future | Phase 2+ implementation |
-| Scheduler | 🔄 Future | Phase 2+ implementation |
-| Runtime Context | 🔄 Future | Phase 2+ implementation |
+| Execution Engine | ✅ Complete | Phase 3 - DAG execution engine implemented |
+| Node Implementations | ✅ Complete | Phase 3 - All node types implemented |
+| Scheduler | ✅ Complete | Phase 3 - Priority and resource schedulers implemented |
+| Runtime Context | 🔄 In Progress | Phase 3 - Basic runtime context implemented |
 
 ## Usage
 

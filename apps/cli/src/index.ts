@@ -6,8 +6,9 @@
  * Command-line interface for Nexus.
  */
 
-import { Command } from 'commander';
 import chalk from 'chalk';
+import { Command } from 'commander';
+
 import { runCommand } from './commands/run';
 import { statusCommand } from './commands/status';
 import { version } from './utils/version';

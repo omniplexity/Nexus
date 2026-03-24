@@ -5,15 +5,16 @@
  * This is the primary node type for Phase 2.
  */
 
-import { BaseNode } from './base';
-import type {
+import { ModelProvider, ModelRequest, ModelRole, MessageRole } from '@nexus/core/contracts/model-provider';
+import {
+  NodeType,
   NodeInput,
   NodeOutput,
   NodeConfig,
-  ReasoningNodeConfig,
-  NodeStatus,
-} from '../../../core/contracts/node';
-import type { ModelProvider, ModelRequest, ModelRole, MessageRole } from '../../../core/contracts/model-provider';
+} from '@nexus/core/contracts/node';
+import { v4 as uuidv4 } from 'uuid';
+
+import { BaseNode } from './base';
 
 /**
  * Reasoning node configuration
@@ -39,7 +40,7 @@ export class ReasoningNode extends BaseNode {
     options: ReasoningNodeOptions,
     config: NodeConfig = {}
   ) {
-    super(id, 'reasoning', 'Reasoning Node', config);
+    super(id, NodeType.REASONING, 'Reasoning Node', config);
     this.options = {
       temperature: 0.7,
       maxTokens: 4096,
@@ -147,11 +148,8 @@ export class ReasoningNode extends BaseNode {
    * Create a clone of this node
    */
   protected createClone(): ReasoningNode {
-    return new ReasoningNode(
-      BaseNode.generateId('reasoning'),
-      { ...this.options },
-      { ...this.config }
-    );
+    const nodeId = `${NodeType.REASONING}-${uuidv4().slice(0, 8)}`;
+    return new ReasoningNode(nodeId, { ...this.options }, { ...this.config });
   }
 
   /**
@@ -197,10 +195,11 @@ export class ReasoningNodeFactory {
       systemPrompt: options.systemPrompt || this.defaultSystemPrompt,
       temperature: options.temperature ?? 0.7,
       maxTokens: options.maxTokens ?? 4096,
-      modelProvider: options.modelProvider || this.defaultProvider,
+      modelProvider: options.modelProvider ?? this.defaultProvider,
     };
 
-    return new ReasoningNode(BaseNode.generateId('reasoning'), nodeOptions);
+    const nodeId = `${NodeType.REASONING}-${uuidv4().slice(0, 8)}`;
+    return new ReasoningNode(nodeId, nodeOptions);
   }
 
   /**
@@ -215,7 +214,11 @@ export class ReasoningNodeFactory {
  * Create a reasoning node factory
  */
 export function createReasoningNodeFactory(
-  options?: ReasoningNodeFactory['defaultProvider']
+  options?: Partial<{
+    defaultProvider?: ModelProvider;
+    defaultModel?: string;
+    defaultSystemPrompt?: string;
+  }>
 ): ReasoningNodeFactory {
   return new ReasoningNodeFactory(options);
 }

@@ -16,8 +16,8 @@
 //
 // Note: CapabilitySet from core/tool.ts is the minimal core primitive.
 // Full tool capabilities are defined in modules/tools/contracts/tool.ts
-import type { Node, NodeOutput } from './node';
 import type { MemorySnapshot } from './memory';
+import type { Node, NodeOutput } from './node';
 import type { CapabilitySet } from './tool';
 
 /**

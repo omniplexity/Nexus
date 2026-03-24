@@ -4,14 +4,16 @@
  * Provides node types for the orchestration system.
  */
 
-// Base node
-export { BaseNode, NodeFactory } from './base';
+// Base node - type-only export
+export type { BaseNode, NodeFactory } from './base';
 
 // Reasoning node
-export { ReasoningNode, ReasoningNodeOptions, ReasoningNodeFactory, createReasoningNodeFactory } from './reasoning';
+export { ReasoningNode, ReasoningNodeFactory, createReasoningNodeFactory } from './reasoning';
+export type { ReasoningNodeOptions } from './reasoning';
 
-// Node utilities
-export { NodeTypeRegistry, NodeRegistryEntry, NodeExecutionResult, NodeCreator, defaultNodeRegistry, NodeUtils } from './types';
+// Node utilities - split into type and value exports
+export { NodeTypeRegistry, defaultNodeRegistry, NodeUtils } from './types';
+export type { NodeRegistryEntry, NodeExecutionResult, NodeCreator } from './types';
 
 // Re-export node types
 export type {
@@ -29,7 +31,6 @@ export type {
   AggregatorNodeConfig,
   TransformNodeConfig,
   ConditionalNodeConfig,
-  NodeExecutor,
   NodeFactory as NodeFactoryInterface,
   NodeMetadata,
-} from '../../../core/contracts/node';
+} from '@nexus/core/contracts/node';

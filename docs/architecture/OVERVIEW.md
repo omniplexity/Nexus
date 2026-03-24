@@ -124,7 +124,7 @@ Each layer has strict boundaries:
 - Single node type execution
 - No memory, tools, or advanced UI
 
-### Phase 3: Graph Execution Engine (Planned)
+### Phase 3: Graph Execution Engine (In Progress)
 
 - Full DAG structure
 - Node execution logic

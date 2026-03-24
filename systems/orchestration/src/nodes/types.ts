@@ -4,7 +4,7 @@
  * Helper functions and types for node operations.
  */
 
-import type { Node, NodeType, NodeConfig, NodeInput, NodeOutput } from '../../../core/contracts/node';
+import type { Node, NodeType, NodeConfig, NodeOutput } from '@nexus/core/contracts/node';
 
 /**
  * Node execution result

@@ -21,6 +21,8 @@ Nexus is a cognitive operating system for AI orchestration, built with a layered
 |-------|-------------|
 | [CONTRACT_DEVELOPMENT](CONTRACT_DEVELOPMENT.md) | How to create new contracts using the contract-first methodology |
 | [TESTING](TESTING.md) | Testing patterns, conventions, and best practices |
+| [CONTEXT](CONTEXT.md) | Using the Context Engine for context preparation and compression |
+| [MEMORY](MEMORY.md) | Using the Memory System for storage and retrieval |
 
 ### Workflow & Maintenance
 

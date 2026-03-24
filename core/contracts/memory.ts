@@ -64,6 +64,7 @@ export interface MemoryQuery {
   embedding?: number[];
   type?: MemoryType | MemoryType[];
   sessionId?: string;
+  sessionIds?: string[];
   userId?: string;
   tags?: string[];
   dateRange?: {

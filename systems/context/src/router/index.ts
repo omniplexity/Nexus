@@ -101,7 +101,17 @@ export class ContextRouter {
   private classifyQuery(query: MemoryQuery): QueryType {
     let complexityScore = 0;
 
-    // Check for multi-session
+    // Check for explicit multi-session aggregation
+    if (this.config.enableMultiSession && (query.sessionIds?.length ?? 0) > 1) {
+      return QueryType.MULTI_SESSION;
+    }
+
+    // Check for multi-session request without an explicit current session
+    if (this.config.enableMultiSession && query.userId && !query.sessionId && (query.sessionIds?.length ?? 0) > 0) {
+      return QueryType.MULTI_SESSION;
+    }
+
+    // Check for multi-session hint from user/session pairing
     if (this.config.enableMultiSession && query.sessionId && query.userId) {
       complexityScore += 2;
     }
@@ -180,7 +190,10 @@ export class ContextRouter {
 
     // Determine if multi-session needed
     const requiresMultiSession = queryType === QueryType.MULTI_SESSION ||
-      (this.config.enableMultiSession && query.userId && !query.sessionId);
+      (this.config.enableMultiSession && (
+        (query.sessionIds?.length ?? 0) > 1 ||
+        (query.userId && !query.sessionId && (query.sessionIds?.length ?? 0) > 0)
+      ));
 
     return {
       queryType,
@@ -205,8 +218,13 @@ export class ContextRouter {
     let snapshot = await this.memory.getSnapshot(sessionId, routing.tokenBudget);
 
     // Handle multi-session if needed
-    if (routing.requiresMultiSession && query.userId) {
-      snapshot = await this.aggregateSessions(query.userId, routing.tokenBudget, routing.options.maxSessions as number);
+    if (routing.requiresMultiSession) {
+      snapshot = await this.aggregateSessions(
+        query.userId ?? 'default',
+        routing.tokenBudget,
+        routing.options.maxSessions as number,
+        query.sessionIds
+      );
     }
 
     // Compress to fit token budget

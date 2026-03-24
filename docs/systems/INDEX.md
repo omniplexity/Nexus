@@ -10,12 +10,12 @@ Nexus is built on a layered architecture with clear separation of concerns. Each
 
 | System | Description | Status |
 |--------|-------------|--------|
-| [ORCHESTRATION.md](ORCHESTRATION.md) | DAG-based task orchestration and workflow execution | Phase 1 |
-| [CONTEXT.md](CONTEXT.md) | Context management, compression, and memory routing | Phase 1 |
+| [ORCHESTRATION.md](ORCHESTRATION.md) | DAG-based task orchestration and workflow execution with Context Engine integration | Phase 4 |
+| [CONTEXT.md](CONTEXT.md) | Context management, compression, prioritization, and routing (ContextEngineService) | Phase 4 |
 | [MODELS.md](MODELS.md) | Multi-provider model abstraction and routing | Phase 1 |
 | [CAPABILITIES.md](CAPABILITIES.md) | Tool capability system and execution | Phase 1 |
 | [COGNITIVE.md](COGNITIVE.md) | Intent recognition, planning, and strategy systems | Future |
-| [MEMORY.md](MEMORY.md) | Persistent and ephemeral memory management | Phase 1 |
+| [MEMORY.md](MEMORY.md) | Persistent and ephemeral memory management with Vector Index | Phase 4 |
 | [EXECUTION.md](EXECUTION.md) | Runtime execution engine and sandboxing | Future |
 
 ## Phase Status
@@ -27,14 +27,35 @@ Nexus is built on a layered architecture with clear separation of concerns. Each
 - [`core/contracts/model-provider.ts`](../core/contracts/model-provider.ts) - Model abstraction
 - [`core/contracts/tool.ts`](../core/contracts/tool.ts) - Tool capability interfaces
 
+### Phase 2: Vertical Slice (Complete)
+- Minimal task execution
+- Basic orchestration without parallel processing
+- Simple memory interface
+
+### Phase 3: Graph Execution Engine (Complete)
+- DAG-based execution engine
+- Node implementations (Reasoning, Tool, Memory, Control, etc.)
+- Parallel execution support
+- Priority and resource scheduling
+
+### Phase 4: Context Engine (Complete)
+- [`core/contracts/context-engine.ts`](../core/contracts/context-engine.ts) - Context engine contracts
+- [`systems/context/src/engine/service.ts`](../systems/context/src/engine/service.ts) - ContextEngineService implementation
+- Context routing with complexity detection
+- Memory prioritization with weighted scoring
+- Context compression (truncate, summarize, hybrid)
+- Vector index integration for semantic search
+- Multi-session context aggregation
+- Memory Node with shared store support in DAG
+- Orchestrator integration: `setMemoryService()` and `setContextEngine()`
+- Automatic context preparation in task execution
+
 ### Future Phases
 Implementation of systems based on Phase 1 contracts will proceed in subsequent phases:
 
-- **Phase 2**: Graph Execution Engine
-- **Phase 3**: Context Engine
-- **Phase 4**: Capability Fabric
-- **Phase 5**: UI Control Surface
-- **Phase 6**: Optimization Layer
+- **Phase 5**: Capability Fabric
+- **Phase 6**: UI Control Surface
+- **Phase 7**: Optimization Layer
 
 See [ARCHITECTURE](../architecture/OVERVIEW.md) for full phase details.
 

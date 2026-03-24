@@ -11,6 +11,9 @@ export type { BaseNode, NodeFactory } from './base';
 export { ReasoningNode, ReasoningNodeFactory, createReasoningNodeFactory } from './reasoning';
 export type { ReasoningNodeOptions } from './reasoning';
 
+// Memory node - from nodes directory
+export { MemoryNode, createMemoryNode } from '../../nodes/memory.js';
+
 // Node utilities - split into type and value exports
 export { NodeTypeRegistry, defaultNodeRegistry, NodeUtils } from './types';
 export type { NodeRegistryEntry, NodeExecutionResult, NodeCreator } from './types';

@@ -30,11 +30,3 @@ export type { Scheduler, SchedulerConfig, SchedulerDecision } from './scheduler/
 
 // Re-export from nodes  
 export * from './src/nodes';
-
-// Re-export node implementations (Phase 3)
-export { AggregatorNode, createAggregatorNode } from './nodes/aggregator';
-export { ConditionalNode, createConditionalNode } from './nodes/conditional';
-export { ControlNode, createControlNode } from './nodes/control';
-export { MemoryNode, createMemoryNode } from './nodes/memory';
-export { ToolNode, createToolNode } from './nodes/tool';
-export { TransformNode, createTransformNode } from './nodes/transform';

@@ -27,6 +27,8 @@
     "paths": {
       "@nexus/core": ["./core"],
       "@nexus/core/*": ["./core/*"],
+      "@nexus/systems-memory": ["./systems/memory"],
+      "@nexus/systems-memory/*": ["./systems/memory/*"],
       "@nexus/systems": ["./systems"],
       "@nexus/systems/*": ["./systems/*"],
       "@nexus/modules": ["./modules"],
@@ -40,5 +42,5 @@
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "dist", "build", "out"]
+  "exclude": ["node_modules", "dist", "build", "out", "**/*.test.ts", "**/*.test.tsx", "vitest.config.ts", "**/vitest.config.ts"]
 }

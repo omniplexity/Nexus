@@ -201,7 +201,17 @@ export class InMemoryStore implements Memory {
     let candidateIds: Set<string>;
 
     // Use indexes for fast lookup when possible
-    if (query.sessionId && !query.embedding && !query.text) {
+    if (query.sessionIds && query.sessionIds.length > 0 && !query.embedding && !query.text) {
+      candidateIds = new Set();
+      for (const sessionId of query.sessionIds) {
+        const sessionSet = this.indexes.bySession.get(sessionId);
+        if (!sessionSet) continue;
+
+        for (const id of sessionSet) {
+          candidateIds.add(id);
+        }
+      }
+    } else if (query.sessionId && !query.embedding && !query.text) {
       candidateIds = this.indexes.bySession.get(query.sessionId) || new Set();
     } else if (query.type) {
       const types = Array.isArray(query.type) ? query.type : [query.type];
@@ -248,6 +258,14 @@ export class InMemoryStore implements Memory {
       if (query.userId) {
         const userIds = this.indexes.byUser.get(query.userId);
         if (!userIds || !userIds.has(id)) {
+          this.cacheMisses++;
+          continue;
+        }
+      }
+
+      // Check explicit session list filter
+      if (query.sessionIds && query.sessionIds.length > 0) {
+        if (!query.sessionIds.includes(entry.sessionId ?? '')) {
           this.cacheMisses++;
           continue;
         }

@@ -24,6 +24,8 @@ export {
   NodeTypeRegistry,
   NodeUtils,
   defaultNodeRegistry,
+  MemoryNode,
+  createMemoryNode,
 } from './nodes';
 export type {
   BaseNode,

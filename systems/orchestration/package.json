@@ -19,6 +19,7 @@
   },
   "peerDependencies": {
     "@nexus/core": "*",
-    "@nexus/models": "*"
+    "@nexus/models": "*",
+    "@nexus/systems-memory": "*"
   }
 }

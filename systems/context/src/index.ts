@@ -18,10 +18,19 @@ export type {
   MemoryStatus,
   MemoryMetadata,
   ContextSlice,
-  ContextCompressor,
   MemoryIndex,
   MemoryValidator
 } from '../../../core/contracts/memory';
+
+// Re-export context engine contracts
+export type {
+  ContextEngineService,
+  ContextEngineConfig,
+  ContextRequest,
+  ContextEngineStats,
+  CompressionStrategy,
+  DEFAULT_CONTEXT_ENGINE_CONFIG
+} from '../../../core/contracts/context-engine';
 
 // Export compressor
 export * from './compressor/index.js';
@@ -34,6 +43,9 @@ export * from './prioritizer/index.js';
 
 // Export router
 export * from './router/index.js';
+
+// Export engine (ContextEngineService)
+export * from './engine/index.js';
 
 /**
  * Default context engine configuration

@@ -15,23 +15,16 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "import",
-    "react",
-    "react-hooks"
+    "import"
   ],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:import/errors",
     "plugin:import/warnings",
-    "plugin:import/typescript",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended"
+    "plugin:import/typescript"
   ],
   "settings": {
-    "react": {
-      "version": "detect"
-    },
     "import/resolver": {
       "typescript": {
         "alwaysTryTypes": true,
@@ -64,9 +57,7 @@
         "argsIgnorePattern": "^_",
         "varsIgnorePattern": "^_"
       }
-    ],
-    "react/react-in-jsx-scope": "off",
-    "react/prop-types": "off"
+    ]
   },
   "overrides": [
     {

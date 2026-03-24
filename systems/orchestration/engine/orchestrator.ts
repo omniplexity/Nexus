@@ -6,6 +6,8 @@
  */
 
 
+import type { ContextEngineService, ContextRequest } from '@nexus/core/contracts/context-engine';
+import type { Memory } from '@nexus/core/contracts/memory';
 import { ModelRole } from '@nexus/core/contracts/model-provider';
 import {
   Node,
@@ -69,6 +71,14 @@ export class MinimalOrchestrator implements Orchestrator {
   private currentDAG: EnhancedDAG | null = null;
   private taskStates: Map<string, TaskStatus> = new Map();
   private nodeOutputs: Map<string, NodeOutput> = new Map();
+  
+  // Context Engine components
+  private memoryService: Memory | null = null;
+  private contextEngine: ContextEngineService | null = null;
+  
+  // Context preparation metrics
+  private contextPrepFailures: number = 0;
+  private contextPrepSuccesses: number = 0;
    
   // Error handling components
   private errorHandler!: ErrorHandler;
@@ -148,6 +158,24 @@ export class MinimalOrchestrator implements Orchestrator {
   }
 
   /**
+   * Set the memory service for context retrieval
+   * 
+   * @param memory - Memory store instance
+   */
+  setMemoryService(memory: Memory): void {
+    this.memoryService = memory;
+  }
+
+  /**
+   * Set the context engine for context preparation
+   * 
+   * @param contextEngine - ContextEngineService instance
+   */
+  setContextEngine(contextEngine: ContextEngineService): void {
+    this.contextEngine = contextEngine;
+  }
+
+  /**
    * Execute a task with the given input and context
    */
   async execute(task: Task, context: ExecutionContext): Promise<ExecutionResult> {
@@ -160,6 +188,64 @@ export class MinimalOrchestrator implements Orchestrator {
     try {
       // Build DAG from task or use existing
       const dag = this.buildDAG(task, context);
+
+      // Prepare context using Context Engine if available
+      if (this.contextEngine && this.memoryService) {
+        const contextRequest: ContextRequest = {
+          sessionId: context.sessionId,
+          userId: context.userId,
+          maxTokens: task.constraints?.maxTokens ?? 4000
+        };
+        
+        try {
+          const contextSlice = await this.contextEngine.prepareContext(contextRequest);
+          
+          // Track successful context preparation
+          this.contextPrepSuccesses++;
+          
+          // Populate memory snapshot in execution context
+          context.memory = await this.memoryService.getSnapshot(
+            context.sessionId,
+            contextRequest.maxTokens ?? 4000
+          );
+          
+          // Also inject context slice into variables for nodes to access
+          context.variables = {
+            ...context.variables,
+            contextSlice: {
+              system: contextSlice.system,
+              conversation: contextSlice.conversation,
+              tools: contextSlice.tools,
+              totalTokens: contextSlice.totalTokens,
+              memoryIds: contextSlice.memoryIds
+            }
+          };
+        } catch (ctxError) {
+          // Track context preparation failure for observability
+          this.contextPrepFailures++;
+          
+          // Categorize error type for debugging
+          const errorType = ctxError instanceof Error 
+            ? ctxError.constructor.name 
+            : 'Unknown';
+          const errorMessage = ctxError instanceof Error 
+            ? ctxError.message 
+            : String(ctxError);
+          
+          // Log context preparation failure with structured information
+          // Continue without context - this is not a fatal error
+          console.warn('Context preparation failed, continuing without context:', {
+            sessionId: context.sessionId,
+            errorType,
+            errorMessage,
+            timestamp: new Date().toISOString(),
+            // Exclude stack trace in production to reduce log noise
+            ...(process.env.NODE_ENV !== 'production' && ctxError instanceof Error 
+              ? { stack: ctxError.stack } 
+              : {})
+          });
+        }
+      }
 
       // Register all nodes with executors
       for (const nodeId of Object.keys(dag.nodes)) {
@@ -404,6 +490,19 @@ export class MinimalOrchestrator implements Orchestrator {
    */
   getTaskStatus(taskId: string): TaskStatus | null {
     return this.taskStates.get(taskId) || null;
+  }
+  
+  /**
+   * Get context engine statistics
+   * Useful for monitoring context preparation health
+   */
+  getContextStats(): { failures: number; successes: number; failureRate: number } {
+    const total = this.contextPrepFailures + this.contextPrepSuccesses;
+    return {
+      failures: this.contextPrepFailures,
+      successes: this.contextPrepSuccesses,
+      failureRate: total > 0 ? this.contextPrepFailures / total : 0
+    };
   }
 
   /**

@@ -10,6 +10,9 @@ import { HybridCompressor, createHybridCompressor, type HybridConfig } from './h
 import { SummarizeCompressor, createSummarizeCompressor, type SummarizeConfig } from './summarize.js';
 import { TruncateCompressor, createTruncateCompressor, type TruncateConfig } from './truncate.js';
 
+// Re-export ContextCompressor type
+export type { ContextCompressor };
+
 /**
  * Compressor type enum
  */
@@ -34,17 +37,11 @@ export function createCompressor(
 ): ContextCompressor {
   switch (type) {
     case CompressorType.TRUNCATE:
-    case 'truncate':
       return createTruncateCompressor(config as TruncateConfig);
-    
     case CompressorType.SUMMARIZE:
-    case 'summarize':
       return createSummarizeCompressor(config as SummarizeConfig, modelProvider);
-    
     case CompressorType.HYBRID:
-    case 'hybrid':
       return createHybridCompressor(config as HybridConfig);
-    
     default:
       throw new Error(`Unknown compressor type: ${type}`);
   }

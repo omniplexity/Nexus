@@ -23,5 +23,8 @@ export * from './node';
 // Memory contracts
 export * from './memory';
 
+// Context Engine contracts
+export * from './context-engine';
+
 // Model provider contracts
 export * from './model-provider';

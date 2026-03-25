@@ -181,4 +181,4 @@ export interface OrchestratorConfig {
 /**
  * Orchestrator factory function type
  */
-export type OrchestratorFactory = (config: OrchestratorConfig): Orchestrator => Orchestrator;
+export type OrchestratorFactory = (config: OrchestratorConfig) => Orchestrator;

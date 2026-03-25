@@ -101,7 +101,7 @@ export class DefaultContextEngineService implements ContextEngineService {
         tokenSavings: 0,
         adaptiveTokenBudget: 0,
         adaptiveConcurrency: 0,
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date()
       }
     };
   }
@@ -201,7 +201,7 @@ export class DefaultContextEngineService implements ContextEngineService {
       this.stats.optimization.compressionRatio = this.stats.compressionStats.averageRatio;
       this.stats.optimization.tokenSavings += Math.max(0, snapshot.totalTokens - slice.totalTokens);
       this.stats.optimization.adaptiveTokenBudget = maxTokens;
-      this.stats.optimization.updatedAt = new Date().toISOString();
+      this.stats.optimization.updatedAt = new Date();
       this.stats.averageContextSize = Math.round(
         (this.stats.averageContextSize * (totalCompressions - 1) + slice.totalTokens) / totalCompressions
       );
@@ -447,9 +447,9 @@ export class DefaultContextEngineService implements ContextEngineService {
       return [];
     }
 
-    const matchedIds = new Set(matches);
+    const matchedIds = new Set(matches.map(m => m.id));
     return matches
-      .map(id => entries.find(entry => entry.id === id))
+      .map(match => entries.find(entry => entry.id === match.id))
       .filter((entry): entry is MemoryEntry => entry !== undefined && matchedIds.has(entry.id));
   }
 

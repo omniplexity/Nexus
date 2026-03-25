@@ -6,6 +6,7 @@
  */
 
 import type { Memory, MemorySnapshot, ContextSlice, MemoryIndex } from './memory';
+import { OptimizationMode, type OptimizationConfig, type OptimizationTelemetry } from './optimization';
 
 /**
  * Compression strategy types
@@ -88,6 +89,23 @@ export interface ContextEngineConfig {
     frequency: number;
     diversity: number;
   };
+
+  /**
+   * Shared optimization controls.
+   */
+  optimization?: OptimizationConfig;
+
+  /**
+   * Optional response cache configuration.
+   */
+  cache?: {
+    enabled?: boolean;
+    maxSize?: number;
+    maxTokens?: number;
+    ttl?: number;
+    invalidateOnUpdate?: boolean;
+    trackTokens?: boolean;
+  };
 }
 
 /**
@@ -114,6 +132,23 @@ export const DEFAULT_CONTEXT_ENGINE_CONFIG: Required<ContextEngineConfig> = {
     relevance: 0.25,
     frequency: 0.1,
     diversity: 0.1
+  },
+  optimization: {
+    mode: OptimizationMode.BALANCED,
+    enableAdaptiveBudgets: true,
+    enableAdaptiveConcurrency: false,
+    tokenBudgetMultiplier: 1,
+    concurrencyMultiplier: 1,
+    targetCacheHitRate: 0.6,
+    compressionPreference: 'auto'
+  },
+  cache: {
+    enabled: true,
+    maxSize: 100,
+    maxTokens: 50000,
+    ttl: 3600000,
+    invalidateOnUpdate: true,
+    trackTokens: true
   }
 };
 
@@ -202,6 +237,11 @@ export interface ContextEngineStats {
     totalCompressedTokens: number;
     averageRatio: number;
   };
+
+  /**
+   * Optimization telemetry.
+   */
+  optimization: OptimizationTelemetry;
 }
 
 /**

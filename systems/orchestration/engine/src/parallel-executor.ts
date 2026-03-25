@@ -70,6 +70,7 @@ export interface ParallelExecutionResult {
     totalExecutionTimeMs: number;
     averageConcurrency: number;
     peakConcurrency: number;
+    cacheHits: number;
   };
 }
 
@@ -88,6 +89,7 @@ export class ParallelExecutor {
   private _peakConcurrency = 0;
   private _totalConcurrencyTime = 0;
   private _lastConcurrencyUpdate = Date.now();
+  private activeMaxConcurrency: number;
 
   constructor(config: ParallelExecutorConfig) {
     // Merge worker pool config with defaults
@@ -114,6 +116,7 @@ export class ParallelExecutor {
     };
     
     this.workerPool = new BaseWorkerPool(this.config.workerPool);
+    this.activeMaxConcurrency = this.config.maxGlobalConcurrency ?? 10;
   }
 
   /**
@@ -148,6 +151,8 @@ export class ParallelExecutor {
     const nodeOutputs: Record<string, ExecutionResult> = {};
     const executedNodes = new Set<string>();
     const failedNodes = new Set<string>();
+    const effectiveMaxConcurrency = this.resolveEffectiveMaxConcurrency(dag);
+    this.activeMaxConcurrency = effectiveMaxConcurrency;
 
     try {
       // Get execution layers if optimization is enabled
@@ -212,7 +217,8 @@ export class ParallelExecutor {
           failedNodes: failedNodes.size,
           totalExecutionTimeMs,
           averageConcurrency,
-          peakConcurrency: this.config.maxGlobalConcurrency ?? 10
+          peakConcurrency: Math.min(this._peakConcurrency, effectiveMaxConcurrency),
+          cacheHits: this.countCacheHits(nodeOutputs)
         }
       };
     } catch (error) {
@@ -227,7 +233,8 @@ export class ParallelExecutor {
           failedNodes: Object.keys(dag.nodes).length - Object.keys(nodeOutputs).length,
           totalExecutionTimeMs: endTime - startTime,
           averageConcurrency: 0,
-          peakConcurrency: 0
+          peakConcurrency: 0,
+          cacheHits: this.countCacheHits(nodeOutputs)
         }
       };
     }
@@ -380,7 +387,7 @@ export class ParallelExecutor {
    */
   private async waitForConcurrencySlot(): Promise<void> {
     // Wait if we're at max concurrency
-    const maxConcurrency = this.config.maxGlobalConcurrency ?? 10;
+    const maxConcurrency = this.activeMaxConcurrency;
     while (this._currentConcurrency >= maxConcurrency) {
       await new Promise(resolve => setTimeout(resolve, 10));
     }
@@ -407,6 +414,29 @@ export class ParallelExecutor {
     }
     
     this._lastConcurrencyUpdate = now;
+  }
+
+  /**
+   * Resolve adaptive concurrency for the current DAG.
+   */
+  private resolveEffectiveMaxConcurrency(dag: EnhancedDAG): number {
+    const baseLimit = this.config.maxGlobalConcurrency ?? 10;
+    if (!this.config.enableLayerOptimization) {
+      return baseLimit;
+    }
+
+    const nodeCount = Object.keys(dag.nodes).length;
+    const layerCount = DAGUtils.createExecutionLayers(dag).length;
+    const workerPoolLimit = this.config.workerPool.poolSize;
+
+    return Math.max(1, Math.min(baseLimit, workerPoolLimit, nodeCount, Math.max(1, layerCount * 2)));
+  }
+
+  /**
+   * Count cache hits from node execution results.
+   */
+  private countCacheHits(nodeOutputs: Record<string, ExecutionResult>): number {
+    return Object.values(nodeOutputs).reduce((count, result) => count + (result.metrics?.cacheHits ?? 0), 0);
   }
 
   /**
@@ -451,7 +481,7 @@ export class ParallelExecutor {
             totalTokens: output.metadata?.tokensUsed ?? 0,
             totalLatencyMs: output.metadata?.endTime ? 
               (output.metadata.endTime.getTime() - output.metadata.startTime.getTime()) : 0,
-            cacheHits: 0
+            cacheHits: output.metadata?.cacheHit ? 1 : 0
           },
           nodeOutputs: {}
         };

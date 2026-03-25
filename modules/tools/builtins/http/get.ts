@@ -109,7 +109,8 @@ export class HttpGetTool extends BaseTool {
       config: {
         timeout: policy.timeoutMs,
         retries: 0,
-        cache: true
+        cache: true,
+        cacheTtlMs: 10000
       },
       inputSchema: createInputSchema(
         {

@@ -81,6 +81,7 @@ export interface ToolConfig {
   timeout?: number;
   retries?: number;
   cache?: boolean;
+  cacheTtlMs?: number;
   sandboxed?: boolean;
 }
 

@@ -24,7 +24,8 @@ export class ListDirectoryTool extends BaseTool {
       config: {
         timeout: 5000,
         retries: 0,
-        cache: true
+        cache: true,
+        cacheTtlMs: 15000
       },
       inputSchema: createInputSchema(
         {

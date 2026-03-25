@@ -328,6 +328,17 @@ describe('ResponseCache', () => {
       expect(cache.has('session-1', 1000, { filter: 'recent' })).toBe(true);
       expect(cache.has('session-1', 1000, { filter: 'all' })).toBe(true);
     });
+
+    it('should normalize option key order when generating keys', () => {
+      const snapshot = createMemorySnapshot(1, 0, 0);
+      const firstOptions = { filter: 'recent', strategy: 'hybrid' };
+      const secondOptions = { strategy: 'hybrid', filter: 'recent' };
+
+      cache.set('session-1', 1000, snapshot, firstOptions);
+
+      expect(cache.has('session-1', 1000, secondOptions)).toBe(true);
+      expect(cache.get('session-1', 1000, secondOptions)).not.toBeNull();
+    });
   });
 
   describe('eviction', () => {

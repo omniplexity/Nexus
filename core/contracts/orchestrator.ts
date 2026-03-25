@@ -18,6 +18,7 @@
 // Full tool capabilities are defined in modules/tools/contracts/tool.ts
 import type { MemorySnapshot } from './memory';
 import type { Node, NodeOutput } from './node';
+import type { OptimizationConfig } from './optimization';
 import type { CapabilitySet } from './tool';
 
 /**
@@ -170,6 +171,7 @@ export interface OrchestratorConfig {
   defaultTimeout?: number;
   enableCaching?: boolean;
   enableMetrics?: boolean;
+  optimization?: OptimizationConfig;
   retryConfig?: {
     maxAttempts: number;
     backoffMs: number;

@@ -23,6 +23,7 @@ import type {
   MemoryIndex,
   MemoryEntry
 } from '../../../../core/contracts/memory';
+import { createResponseCache, type ResponseCache } from '../cache/index.js';
 import { createCompressor, CompressorType } from '../compressor/index.js';
 import { ContextPrioritizer, createPrioritizer, type ScorerConfig } from '../prioritizer/index.js';
 import { ContextRouter, createContextRouter, type RouterConfig } from '../router/index.js';
@@ -38,6 +39,7 @@ export class DefaultContextEngineService implements ContextEngineService {
   private vectorIndex: MemoryIndex | null;
   private router!: ContextRouter;
   private prioritizer!: ContextPrioritizer;
+  private responseCache: ResponseCache | null;
   private config: Required<ContextEngineConfig>;
   private stats: ContextEngineStats;
 
@@ -58,8 +60,22 @@ export class DefaultContextEngineService implements ContextEngineService {
       prioritizer: {
         ...DEFAULT_CONTEXT_ENGINE_CONFIG.prioritizer,
         ...config.prioritizer
+      },
+      optimization: {
+        ...DEFAULT_CONTEXT_ENGINE_CONFIG.optimization,
+        ...config.optimization
       }
     } as Required<ContextEngineConfig>;
+
+    this.responseCache = this.config.cache?.enabled === false
+      ? null
+      : createResponseCache({
+        maxSize: this.config.cache?.maxSize ?? 100,
+        maxTokens: this.config.cache?.maxTokens ?? 50000,
+        ttl: this.config.cache?.ttl ?? 3600000,
+        invalidateOnUpdate: this.config.cache?.invalidateOnUpdate ?? true,
+        trackTokens: this.config.cache?.trackTokens ?? true
+      });
 
     this.rebuildComponents();
 
@@ -78,6 +94,14 @@ export class DefaultContextEngineService implements ContextEngineService {
         totalOriginalTokens: 0,
         totalCompressedTokens: 0,
         averageRatio: 0
+      },
+      optimization: {
+        cacheHitRate: 0,
+        compressionRatio: 0,
+        tokenSavings: 0,
+        adaptiveTokenBudget: 0,
+        adaptiveConcurrency: 0,
+        updatedAt: new Date().toISOString()
       }
     };
   }
@@ -98,7 +122,8 @@ export class DefaultContextEngineService implements ContextEngineService {
 
     // Route the request to determine processing pipeline
     const routing = this.router.route(query);
-    const maxTokens = request.maxTokens ?? routing.tokenBudget;
+    const requestedTokenBudget = request.maxTokens ?? routing.tokenBudget;
+    const maxTokens = this.resolveTokenBudget(request, requestedTokenBudget);
     query.limit = this.config.maxEntriesPerSession * Math.max(1, request.sessionIds?.length ?? 1);
     
     // Track query type for statistics
@@ -110,10 +135,15 @@ export class DefaultContextEngineService implements ContextEngineService {
     const requiresRetrievedEntries =
       Boolean(request.embedding && this.vectorIndex) ||
       Boolean(request.filters);
+    const cacheKey = this.createSnapshotCacheKey(request, requestedTokenBudget, routing.queryType);
+    const cachedSnapshot = this.responseCache?.get(cacheKey.sessionId, cacheKey.maxTokens, cacheKey.options);
 
     // Get memory snapshot based on the request shape
-    if (routing.requiresMultiSession) {
-      snapshot = await this.aggregateMultiSession(request, maxTokens);
+    if (cachedSnapshot) {
+      this.stats.cacheHits++;
+      snapshot = cachedSnapshot;
+    } else if (routing.requiresMultiSession) {
+      snapshot = await this.aggregateMultiSession(request, requestedTokenBudget);
       if (request.embedding && this.vectorIndex) {
         snapshot = await this.filterSnapshotByVectorMatches(snapshot, request.embedding);
       }
@@ -127,7 +157,11 @@ export class DefaultContextEngineService implements ContextEngineService {
         : retrieved.entries;
       snapshot = this.snapshotFromEntries(filteredEntries);
     } else {
-      snapshot = await this.memory.getSnapshot(request.sessionId, maxTokens);
+      snapshot = await this.memory.getSnapshot(request.sessionId, requestedTokenBudget);
+    }
+
+    if (!cachedSnapshot && this.responseCache) {
+      this.responseCache.set(cacheKey.sessionId, cacheKey.maxTokens, snapshot, cacheKey.options);
     }
 
       // Apply prioritization if needed
@@ -144,8 +178,11 @@ export class DefaultContextEngineService implements ContextEngineService {
         snapshot = this.rebuildSnapshot(prioritizedEntries, maxTokens);
       }
 
+      const compressorStrategy = this.resolveCompressionStrategy(request, this.config.compressionStrategy);
+      const compressor = createCompressor(this.strategyToCompressorType(compressorStrategy));
+
       // Compress the snapshot to fit token budget
-      const slice = await routing.compressor.compress(snapshot, maxTokens);
+      const slice = await compressor.compress(snapshot, maxTokens);
 
       // Update statistics
       this.stats.totalPreparations++;
@@ -158,6 +195,13 @@ export class DefaultContextEngineService implements ContextEngineService {
       this.stats.compressionStats.averageRatio = totalOriginal > 0 
         ? totalCompressed / totalOriginal 
         : 1;
+      this.stats.optimization.cacheHitRate = this.stats.totalPreparations > 0
+        ? this.stats.cacheHits / this.stats.totalPreparations
+        : 0;
+      this.stats.optimization.compressionRatio = this.stats.compressionStats.averageRatio;
+      this.stats.optimization.tokenSavings += Math.max(0, snapshot.totalTokens - slice.totalTokens);
+      this.stats.optimization.adaptiveTokenBudget = maxTokens;
+      this.stats.optimization.updatedAt = new Date().toISOString();
       this.stats.averageContextSize = Math.round(
         (this.stats.averageContextSize * (totalCompressions - 1) + slice.totalTokens) / totalCompressions
       );
@@ -232,8 +276,24 @@ export class DefaultContextEngineService implements ContextEngineService {
         : this.config.router,
       prioritizer: config.prioritizer
         ? { ...this.config.prioritizer!, ...config.prioritizer }
-        : this.config.prioritizer
+        : this.config.prioritizer,
+      optimization: config.optimization
+        ? { ...this.config.optimization!, ...config.optimization }
+        : this.config.optimization,
+      cache: config.cache
+        ? { ...this.config.cache!, ...config.cache }
+        : this.config.cache
     } as Required<ContextEngineConfig>;
+
+    this.responseCache = this.config.cache?.enabled === false
+      ? null
+      : createResponseCache({
+        maxSize: this.config.cache?.maxSize ?? 100,
+        maxTokens: this.config.cache?.maxTokens ?? 50000,
+        ttl: this.config.cache?.ttl ?? 3600000,
+        invalidateOnUpdate: this.config.cache?.invalidateOnUpdate ?? true,
+        trackTokens: this.config.cache?.trackTokens ?? true
+      });
 
     this.rebuildComponents();
   }
@@ -498,6 +558,134 @@ export class DefaultContextEngineService implements ContextEngineService {
       derived,
       totalTokens: sessionTokens + persistentTokens + derivedTokens
     };
+  }
+
+  /**
+   * Build a stable cache key for snapshot reuse.
+   */
+  private createSnapshotCacheKey(
+    request: ContextRequest,
+    maxTokens: number,
+    queryType: string
+  ): { sessionId: string; maxTokens: number; options?: Record<string, unknown> } {
+    const sessionId = request.sessionIds && request.sessionIds.length > 0
+      ? request.sessionIds.slice().sort().join('|')
+      : request.sessionId;
+
+    return {
+      sessionId,
+      maxTokens,
+      options: {
+        queryType,
+        userId: request.userId ?? null,
+        sessionIds: request.sessionIds ? [...request.sessionIds].sort() : [],
+        hasEmbedding: Boolean(request.embedding),
+        embeddingSignature: request.embedding
+          ? `${request.embedding.length}:${request.embedding.slice(0, 8).join(',')}`
+          : undefined,
+        filters: request.filters ? {
+          tags: request.filters.tags ? [...request.filters.tags].sort() : [],
+          memoryTypes: request.filters.memoryTypes ? [...request.filters.memoryTypes].sort() : [],
+          minImportance: request.filters.minImportance ?? null,
+          dateRange: request.filters.dateRange
+            ? {
+              start: request.filters.dateRange.start.toISOString(),
+              end: request.filters.dateRange.end.toISOString()
+            }
+            : null
+        } : null,
+        compressionStrategy: request.compressionStrategy ?? null
+      }
+    };
+  }
+
+  /**
+   * Resolve the token budget using request shape and optimization policy.
+   */
+  private resolveTokenBudget(request: ContextRequest, routedBudget: number): number {
+    const optimization = this.config.optimization;
+    const sessionCount = Math.max(1, request.sessionIds?.length ?? 1);
+    const requestBudget = request.maxTokens ?? routedBudget;
+
+    let budget = Math.min(
+      requestBudget,
+      routedBudget,
+      this.config.complexTokenBudget,
+      this.config.maxTokensPerSession * sessionCount
+    );
+
+    if (optimization?.enableAdaptiveBudgets !== false) {
+      let multiplier = optimization?.tokenBudgetMultiplier ?? 1;
+
+      if (sessionCount > 1) {
+        multiplier += Math.min(0.25, 0.05 * (sessionCount - 1));
+      }
+
+      if (request.embedding || request.filters) {
+        multiplier += 0.1;
+      }
+
+      const cacheHitRate = this.stats.totalPreparations > 0
+        ? this.stats.cacheHits / this.stats.totalPreparations
+        : 0;
+
+      if (cacheHitRate >= (optimization?.targetCacheHitRate ?? 0.6)) {
+        multiplier *= 0.9;
+      }
+
+      if (this.stats.compressionStats.averageRatio > 0.8 && this.stats.totalPreparations > 0) {
+        multiplier *= 0.95;
+      }
+
+      budget = Math.round(budget * multiplier);
+    }
+
+    return Math.max(256, budget);
+  }
+
+  /**
+   * Resolve the compression strategy for the current request.
+   */
+  private resolveCompressionStrategy(
+    request: ContextRequest,
+    fallback: CompressionStrategy
+  ): CompressionStrategy {
+    if (request.compressionStrategy) {
+      return request.compressionStrategy;
+    }
+
+    const preference = this.config.optimization?.compressionPreference ?? 'auto';
+    if (preference !== 'auto') {
+      return this.preferenceToCompressionStrategy(preference);
+    }
+
+    if (request.sessionIds && request.sessionIds.length > 1) {
+      return CompressionStrategy.HYBRID;
+    }
+
+    if (request.embedding || request.filters) {
+      return CompressionStrategy.SUMMARIZE;
+    }
+
+    return fallback;
+  }
+
+  /**
+   * Convert an optimization preference to a compression strategy.
+   */
+  private preferenceToCompressionStrategy(
+    preference: NonNullable<NonNullable<ContextEngineConfig['optimization']>['compressionPreference']>
+  ): CompressionStrategy {
+    switch (preference) {
+      case 'truncate':
+        return CompressionStrategy.TRUNCATE;
+      case 'summarize':
+        return CompressionStrategy.SUMMARIZE;
+      case 'hybrid':
+        return CompressionStrategy.HYBRID;
+      default:
+        return CompressionStrategy.TRUNCATE;
+    }
   }
 
   /**

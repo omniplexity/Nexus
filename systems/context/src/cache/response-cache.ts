@@ -74,6 +74,25 @@ export interface CacheStats {
   hitRate: number;
 }
 
+function stableStringify(value: unknown): string {
+  if (value === undefined) {
+    return 'undefined';
+  }
+
+  if (value === null || typeof value !== 'object') {
+    return JSON.stringify(value) ?? 'undefined';
+  }
+
+  if (Array.isArray(value)) {
+    return `[${value.map((item) => stableStringify(item)).join(',')}]`;
+  }
+
+  const objectValue = value as Record<string, unknown>;
+  const keys = Object.keys(objectValue).sort();
+  const entries = keys.map((key) => `${JSON.stringify(key)}:${stableStringify(objectValue[key])}`);
+  return `{${entries.join(',')}}`;
+}
+
 /**
  * LRU Cache for context snapshots
  */
@@ -101,7 +120,7 @@ export class ResponseCache {
   private generateKey(sessionId: string, maxTokens: number, options?: Record<string, unknown>): string {
     const parts = [sessionId, maxTokens.toString()];
     if (options) {
-      parts.push(JSON.stringify(options));
+      parts.push(stableStringify(options));
     }
     return parts.join(':');
   }

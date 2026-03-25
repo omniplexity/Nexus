@@ -156,11 +156,12 @@ Each layer has strict boundaries:
 - Live WebSocket transport and workspace state hub
 - Execution visualization, logs, metrics, and settings panels
 
-### Phase 7: Optimization Layer (Planned)
+### Phase 7: Optimization Layer ✅ Complete
 
-- Caching
-- Token reduction
-- Parallel execution tuning
+- Shared optimization contracts
+- Adaptive context budgets and snapshot reuse
+- Cache-key normalization for context and tools
+- Cache-aware orchestration metrics and concurrency tuning
 
 ---
 
@@ -264,7 +265,7 @@ enum EventNamespace {
 
 ## 8. Forward References
 
-### Planned Features (Phase 2-7)
+### Phase Mapping Summary
 
 | Feature | Phase | Description |
 |---------|-------|-------------|
@@ -273,7 +274,7 @@ enum EventNamespace {
 | Tool Registry | 5 | Dynamic tool discovery and execution |
 | Multi-Provider | 5 | OpenAI, Anthropic, local model support |
 | Web UI | 6 | Execution visualization and control |
-| Caching Layer | 7 | Response caching and token optimization |
+| Optimization Layer | 7 | Adaptive caching, token budgeting, and concurrency tuning |
 
 ---
 

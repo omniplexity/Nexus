@@ -58,10 +58,10 @@ Nexus is built on a layered architecture with clear separation of concerns. Each
 - Built-in tools: `filesystem.read_file`, `filesystem.list_directory`, `http.get`
 - Orchestrator integration through injected tool runtime
 
-### Future Phases
-Implementation of systems beyond the control surface will proceed in subsequent phases:
-
-- **Phase 7**: Optimization Layer
+### Phase 7: Optimization Layer (Complete)
+- Shared optimization contracts
+- Adaptive context caching and token budgeting
+- Cache-aware orchestration metrics and concurrency tuning
 
 See [ARCHITECTURE](../architecture/OVERVIEW.md) for full phase details.
 

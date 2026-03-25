@@ -28,16 +28,34 @@ interface ActiveExecution {
   info: RunningExecution;
 }
 
+function stableStringify(value: unknown): string {
+  if (value === undefined) {
+    return 'undefined';
+  }
+
+  if (value === null || typeof value !== 'object') {
+    return JSON.stringify(value) ?? 'undefined';
+  }
+
+  if (Array.isArray(value)) {
+    return `[${value.map((item) => stableStringify(item)).join(',')}]`;
+  }
+
+  const objectValue = value as Record<string, unknown>;
+  const keys = Object.keys(objectValue).sort();
+  return `{${keys.map(key => `${JSON.stringify(key)}:${stableStringify(objectValue[key])}`).join(',')}}`;
+}
+
 function isToolRetryable(errorCode?: string): boolean {
   return errorCode !== ErrorCode.TOL_001 && errorCode !== ErrorCode.TOL_004 && errorCode !== ErrorCode.TOL_005;
 }
 
 function serializeCacheKey(toolId: string, input: unknown): string {
-  return `${toolId}:${JSON.stringify(input)}`;
+  return `${toolId}:${stableStringify(input)}`;
 }
 
 function serializeCapabilityScope(context: ToolExecutionContext): string {
-  return JSON.stringify({
+  return stableStringify({
     sessionId: context.sessionId,
     userId: context.userId,
     capabilities: context.capabilities,
@@ -239,7 +257,7 @@ export class DefaultToolExecutor implements ToolExecutor {
         };
 
         if (cacheKey && this.cache) {
-          this.cache.set(cacheKey, finalResult);
+          this.cache.set(cacheKey, finalResult, tool.config.cacheTtlMs);
         }
 
         return finalResult;

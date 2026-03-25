@@ -15,6 +15,15 @@ The context engine provides:
 
 The Context Engine has been fully implemented in Phase 4. The following sections document the new interfaces, implementations, and integration flows.
 
+## Phase 7 Optimization Additions
+
+Phase 7 tightened the existing context engine with additive optimization behavior:
+
+- adaptive token budgets based on request shape and cache state
+- snapshot reuse through normalized cache keys
+- explicit optimization telemetry for cache hit rate, compression ratio, and token savings
+- stable configuration hooks for cache, optimization, router, and prioritizer tuning
+
 ## Contracts
 
 The context engine is defined by contracts in [`core/contracts/context-engine.ts`](../core/contracts/context-engine.ts):

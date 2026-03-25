@@ -171,6 +171,30 @@ describe('tool runtime', () => {
     expect(stats.mostUsed[0]?.toolId).toBe('test.echo');
   });
 
+  it('expires cached tool results according to the configured ttl', async () => {
+    const registry = createToolRegistry();
+    const cache = createToolCache({ maxEntries: 10 });
+    const echoTool = new EchoTool();
+    echoTool.config.cache = true;
+    echoTool.config.cacheTtlMs = 1;
+
+    registry.register(echoTool);
+
+    const executor = createToolExecutor(registry, { cache });
+
+    const firstResult = await executor.execute('test.echo', { value: 'ttl-check' }, createExecutionContext());
+    expect(firstResult.success).toBe(true);
+    expect(firstResult.metadata.cacheHit).toBe(false);
+
+    await new Promise((resolve) => setTimeout(resolve, 10));
+
+    const secondResult = await executor.execute('test.echo', { value: 'ttl-check' }, createExecutionContext());
+    expect(secondResult.success).toBe(true);
+    expect(secondResult.metadata.cacheHit).toBe(false);
+    expect(cache.getStats().hits).toBe(0);
+    expect(cache.getStats().misses).toBeGreaterThanOrEqual(2);
+  });
+
   it('returns structured failures for missing tools, invalid input, invalid output, and unavailable tools', async () => {
     const registry = createToolRegistry();
     const echoTool = new EchoTool();

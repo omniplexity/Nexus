@@ -24,7 +24,7 @@ Nexus is currently at the end of Phase 6.
 | Phase 4 | Complete | Context engine, memory, prioritization, routing, compression |
 | Phase 5 | Complete | Capability fabric, tool runtime, policy, and orchestration integration |
 | Phase 6 | Complete | UI control surface, websocket live stream, web and desktop shells |
-| Phase 7 | Planned | Optimization layer |
+| Phase 7 | Complete | Optimization layer, adaptive budgets, normalized caches |
 
 ## What Phase 5 Added
 
@@ -48,6 +48,16 @@ Phase 6 exposed the backend through a real control surface.
 - Desktop launcher in `apps/desktop/`
 - CLI `inspect` and `watch` commands for the workspace control surface
 - Shared workspace state hub in `interfaces/api/src/workspace.ts`
+
+## What Phase 7 Added
+
+Phase 7 tightened the runtime without changing user-facing behavior.
+
+- Shared optimization contracts in `core/contracts/optimization.ts`
+- Adaptive context token budgeting and snapshot reuse
+- Stable cache-key normalization for context and tool caches
+- Explicit tool cache TTLs for read-only built-ins
+- Cache-aware orchestration metrics and adaptive concurrency limits
 
 ## Repository Layout
 

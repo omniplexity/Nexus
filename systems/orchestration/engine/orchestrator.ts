@@ -362,7 +362,7 @@ export class MinimalOrchestrator implements Orchestrator {
           failedNodes: parallelResult.metrics.failedNodes,
           totalTokens: 0, // Would need to extract from node outputs
           totalLatencyMs: parallelResult.metrics.totalExecutionTimeMs,
-          cacheHits: 0
+          cacheHits: parallelResult.metrics.cacheHits
         },
         nodeOutputs: parallelResult.nodeOutputs as unknown as Record<string, NodeOutput>
       };
@@ -744,7 +744,10 @@ export class MinimalOrchestrator implements Orchestrator {
       failedNodes,
       totalTokens,
       totalLatencyMs: Date.now() - startTime,
-      cacheHits: 0,
+      cacheHits: Array.from(this.nodeOutputs.values()).reduce(
+        (count, output) => count + (output.metadata.cacheHit ? 1 : 0),
+        0
+      ),
     };
   }
 

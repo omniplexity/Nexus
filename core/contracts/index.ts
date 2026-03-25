@@ -11,6 +11,9 @@ export * from './errors';
 // Event contracts
 export * from './events';
 
+// Optimization contracts
+export * from './optimization';
+
 // Tool contracts (minimal)
 export * from './tool';
 

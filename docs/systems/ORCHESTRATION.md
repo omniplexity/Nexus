@@ -80,6 +80,15 @@ interface ExecutionContext {
 // }
 ```
 
+## Phase 7 Optimization Additions
+
+Phase 7 extends orchestration with optimization-aware execution data without changing task semantics:
+
+- cache hits are counted in execution metrics
+- parallel execution adapts to DAG size and worker-pool capacity
+- node-level cache metadata is preserved through orchestration metrics
+- optimization config can be threaded through orchestrator settings
+
 ## Contracts
 
 ### Core Interfaces

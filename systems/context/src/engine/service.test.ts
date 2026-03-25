@@ -145,4 +145,49 @@ describe('DefaultContextEngineService', () => {
 
     expect(capturedMaxTokens).toBe(1234);
   });
+
+  it('reuses cached snapshots for repeated requests', async () => {
+    const getSnapshot = vi.fn().mockResolvedValue(createSnapshot([
+      createMemoryEntry('entry-1', 'Cached content', 'session-1')
+    ]));
+
+    const memory: Memory = {
+      retrieve: vi.fn().mockResolvedValue({ entries: [], total: 0, query: {} }),
+      store: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+      clear: vi.fn(),
+      getSnapshot,
+      archive: vi.fn(),
+      getStats: vi.fn().mockResolvedValue({
+        totalEntries: 1,
+        byType: {
+          [MemoryType.EPHEMERAL]: 0,
+          [MemoryType.SESSION]: 1,
+          [MemoryType.PERSISTENT]: 0,
+          [MemoryType.DERIVED]: 0
+        },
+        totalTokens: 4,
+        averageEntrySize: 4,
+        sessionsActive: 1
+      })
+    };
+
+    const service = new DefaultContextEngineService(memory);
+    const request: ContextRequest = {
+      sessionId: 'session-1',
+      userId: 'user-1'
+    };
+
+    const first = await service.prepareContext(request);
+    const second = await service.prepareContext(request);
+    const stats = service.getStats();
+
+    expect(first.totalTokens).toBeGreaterThan(0);
+    expect(second.totalTokens).toBeGreaterThan(0);
+    expect(getSnapshot).toHaveBeenCalledTimes(1);
+    expect(stats.cacheHits).toBe(1);
+    expect(stats.optimization.cacheHitRate).toBeCloseTo(0.5, 5);
+    expect(stats.optimization.tokenSavings).toBeGreaterThanOrEqual(0);
+  });
 });

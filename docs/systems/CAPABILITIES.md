@@ -14,6 +14,12 @@ Phase 5 provides:
 - built-in read-only filesystem and HTTP tools
 - orchestration integration through `ToolInvoker`
 
+Phase 7 tightened those runtime paths with:
+
+- explicit cache TTLs on read-only tools
+- stable cache-key normalization for tool execution
+- cache-aware execution metrics and reuse policy
+
 ## Contracts
 
 ### Core Contracts
@@ -118,7 +124,7 @@ Phase 5 defaults to least-privilege behavior.
 | Core tool contracts | ✅ Complete | Includes `ToolInvoker` execution boundary |
 | Tool module contracts | ✅ Complete | Tool, registry, schema, and policy contracts |
 | Registry runtime | ✅ Complete | In-memory registry with usage stats |
-| Executor runtime | ✅ Complete | Validation, policy, timeout, retry, cancel, and cache |
+| Executor runtime | ✅ Complete | Validation, policy, timeout, retry, cancel, cache, and TTL-aware reuse |
 | Built-in tools | ✅ Complete | `filesystem.read_file`, `filesystem.list_directory`, `http.get` |
 | Orchestration integration | ✅ Complete | Real ToolNode execution through injected invoker |
 | Plugin discovery/loading | ✗ Deferred | Beyond Phase 5 |

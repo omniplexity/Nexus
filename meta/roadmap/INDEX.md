@@ -6,16 +6,16 @@ Navigation index for the Nexus development roadmap.
 
 ## Overview
 
-| Phase | Name | Status | Next |
-|-------|------|--------|------|
-| 0 | [Structure Initialization](./ROADMAP.md#phase-0--structure-initialization) | ✅ Complete | Phase 1 |
-| 1 | [Core Contracts](./ROADMAP.md#phase-1--core-contracts) | ✅ Complete | Phase 2 |
-| 2 | [Minimal Vertical Slice](./ROADMAP.md#phase-2--minimal-vertical-slice) | 🔄 Next | — |
-| 3 | [Graph Execution Engine](./ROADMAP.md#phase-3--graph-execution-engine) | 📋 Planned | — |
-| 4 | [Context Engine](./ROADMAP.md#phase-4--context-engine) | 📋 Planned | — |
-| 5 | [Capability Fabric](./ROADMAP.md#phase-5--capability-fabric) | 📋 Planned | — |
-| 6 | [UI Control Surface](./ROADMAP.md#phase-6--ui-control-surface) | 📋 Planned | — |
-| 7 | [Optimization Layer](./ROADMAP.md#phase-7--optimization-layer) | 📋 Planned | — |
+| Phase | Name | Status | Notes |
+|-------|------|--------|-------|
+| 0 | [Structure Initialization](./ROADMAP.md#phase-0--structure-initialization) | ✅ Complete | Repository structure and architecture foundation |
+| 1 | [Core Contracts](./ROADMAP.md#phase-1--core-contracts) | ✅ Complete | Contract layer and interface definitions |
+| 2 | [Minimal Vertical Slice](./ROADMAP.md#phase-2--minimal-vertical-slice) | ✅ Complete | Working end-to-end task execution |
+| 3 | [Graph Execution Engine](./ROADMAP.md#phase-3--graph-execution-engine) | ✅ Complete | DAG engine, scheduler, and node execution |
+| 4 | [Context Engine](./ROADMAP.md#phase-4--context-engine) | ✅ Complete | Memory, routing, prioritization, and compression |
+| 5 | [Capability Fabric](./ROADMAP.md#phase-5--capability-fabric) | ✅ Complete | Tool runtime, policy, and built-ins |
+| 6 | [UI Control Surface](./ROADMAP.md#phase-6--ui-control-surface) | ✅ Complete | API, WebSocket, web, desktop, and CLI surfaces |
+| 7 | [Optimization Layer](./ROADMAP.md#phase-7--optimization-layer) | ✅ Complete | Adaptive budgets, cache reuse, and concurrency tuning |
 
 ---
 
@@ -25,18 +25,16 @@ Navigation index for the Nexus development roadmap.
 
 - **[Phase 0: Structure Initialization](./ROADMAP.md#phase-0--structure-initialization)** - Directory structure and architecture foundation
 - **[Phase 1: Core Contracts](./ROADMAP.md#phase-1--core-contracts)** - All contract interfaces defined
-
-### Current Phase
-
 - **[Phase 2: Minimal Vertical Slice](./ROADMAP.md#phase-2--minimal-vertical-slice)** - Working end-to-end system
-
-### Upcoming Phases
-
 - **[Phase 3: Graph Execution Engine](./ROADMAP.md#phase-3--graph-execution-engine)** - DAG engine and scheduler
 - **[Phase 4: Context Engine](./ROADMAP.md#phase-4--context-engine)** - Memory and context management
 - **[Phase 5: Capability Fabric](./ROADMAP.md#phase-5--capability-fabric)** - Tool system implementation
 - **[Phase 6: UI Control Surface](./ROADMAP.md#phase-6--ui-control-surface)** - User interface
 - **[Phase 7: Optimization Layer](./ROADMAP.md#phase-7--optimization-layer)** - Performance tuning
+
+### Continuation
+
+The phase roadmap is complete. New work should be introduced as a new roadmap rather than extending the completed sequence.
 
 ---
 
@@ -73,9 +71,9 @@ Navigation index for the Nexus development roadmap.
 | Symbol | Meaning |
 |--------|---------|
 | ✅ | Complete |
-| 🔄 | In Progress / Next |
-| 📋 | Planned |
+| 🔄 | Active continuation |
+| 📋 | Historical / reference only |
 
 ---
 
-**Last Updated**: 2026-03-21
+**Last Updated**: 2026-03-24

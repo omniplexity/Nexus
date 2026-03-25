@@ -1,8 +1,8 @@
-# Phase 7: Optimization Layer Implementation Plan
+# Phase 7: Optimization Layer Implementation Record
 
 ## Overview
 
-Phase 7 completes the optimization layer for Nexus. It improves latency, token usage, cache efficiency, and concurrency tuning across the existing context, orchestration, and tool runtime systems without adding new user-facing capabilities.
+Phase 7 completed the optimization layer for Nexus. It improved latency, token usage, cache efficiency, and concurrency tuning across the existing context, orchestration, and tool runtime systems without adding new user-facing capabilities.
 
 ## Current State Analysis
 
@@ -13,30 +13,30 @@ Phase 7 completes the optimization layer for Nexus. It improves latency, token u
 | Capability Fabric | ✅ Complete | Tool registry, executor, cache, policy, and built-ins already exist |
 | Orchestration Engine | ✅ Complete | DAG execution, parallel execution, retry, and worker-pool tuning already exist |
 
-## Implementation Changes
+## Implemented Changes
 
-- Add shared optimization contracts in `core/contracts/` for adaptive tuning and telemetry.
-- Make context processing adaptive:
+- Shared optimization contracts were added in `core/contracts/` for adaptive tuning and telemetry.
+- Context processing was made adaptive:
   - reuse cached snapshots with normalized cache keys
   - choose compression strategy and token budget from request shape and cache state
   - expose cache hit rate, compression ratio, and token savings in stats
-- Make orchestration execution cache-aware:
+- Orchestration execution became cache-aware:
   - count cache hits in execution metrics
   - adapt concurrency to DAG size and worker-pool capacity
-- Tighten tool-runtime efficiency:
+- Tool-runtime efficiency was tightened:
   - make read-only tool cache TTLs explicit
   - normalize tool cache keys for stable reuse
 
-## Test Plan
+## Validation
 
-- Context optimization:
+- Context optimization coverage:
   - cached snapshot reuse
   - token budget adaptation
   - compression ratio and token savings telemetry
-- Orchestration optimization:
+- Orchestration optimization coverage:
   - adaptive concurrency reporting
   - cache-hit accounting in execution metrics
-- Tool optimization:
+- Tool optimization coverage:
   - cache TTL expiry
   - stable cache-key normalization
 - Repo validation:
@@ -46,7 +46,7 @@ Phase 7 completes the optimization layer for Nexus. It improves latency, token u
 
 ## Assumptions
 
-- Phase 7 remains additive and non-breaking.
-- No new UI, transport, agent, or plugin work is part of Phase 7.
-- No distributed runtime or persistence layer is introduced here.
-- Existing optimization primitives are reused rather than replaced.
+- Phase 7 remained additive and non-breaking.
+- No new UI, transport, agent, or plugin work was introduced.
+- No distributed runtime or persistence layer was added here.
+- Existing optimization primitives were reused rather than replaced.

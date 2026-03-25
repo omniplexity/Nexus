@@ -6,6 +6,8 @@ Welcome to the Nexus development guides. These documents provide practical guida
 
 Nexus is a cognitive operating system for AI orchestration, built with a layered architecture and contract-first development approach. These guides help you understand how to develop, test, and maintain Nexus effectively.
 
+The repository is currently at the post-Phase-7 continuation point. The guides describe the implemented stack and the conventions for extending it without reopening the completed phase sequence.
+
 ## Available Guides
 
 ### Getting Started
@@ -91,4 +93,4 @@ npm run lint
 
 ---
 
-*Last updated: March 2024*
+*Last updated: March 24, 2026*

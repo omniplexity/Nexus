@@ -6,16 +6,18 @@ This directory contains detailed documentation for each major system in the Nexu
 
 Nexus is built on a layered architecture with clear separation of concerns. Each system has well-defined responsibilities and communicates through contracts defined in [`core/contracts/`](../core/contracts/).
 
+The system docs now reflect the Phase 7 implementation state. Core runtime systems are complete, and future work will be documented separately when a new roadmap is defined.
+
 ## Systems Index
 
 | System | Description | Status |
 |--------|-------------|--------|
-| [ORCHESTRATION.md](ORCHESTRATION.md) | DAG-based task orchestration and workflow execution with Context Engine and Capability Fabric integration | Phase 5 |
-| [CONTEXT.md](CONTEXT.md) | Context management, compression, prioritization, and routing (ContextEngineService) | Phase 4 |
+| [ORCHESTRATION.md](ORCHESTRATION.md) | DAG-based task orchestration and workflow execution with Context Engine and Capability Fabric integration | Complete |
+| [CONTEXT.md](CONTEXT.md) | Context management, compression, prioritization, and routing (ContextEngineService) | Complete |
 | [MODELS.md](MODELS.md) | Multi-provider model abstraction and routing | Phase 1 |
-| [CAPABILITIES.md](CAPABILITIES.md) | Tool capability fabric, runtime execution, policy enforcement, and built-in tools | Phase 5 |
+| [CAPABILITIES.md](CAPABILITIES.md) | Tool capability fabric, runtime execution, policy enforcement, and built-in tools | Complete |
 | [COGNITIVE.md](COGNITIVE.md) | Intent recognition, planning, and strategy systems | Future |
-| [MEMORY.md](MEMORY.md) | Persistent and ephemeral memory management with Vector Index | Phase 4 |
+| [MEMORY.md](MEMORY.md) | Persistent and ephemeral memory management with Vector Index | Complete |
 | [EXECUTION.md](EXECUTION.md) | Runtime execution engine and sandboxing | Future |
 
 ## Phase Status

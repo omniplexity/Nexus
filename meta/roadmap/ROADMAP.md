@@ -1,6 +1,6 @@
 # Nexus Roadmap
 
-This document outlines the comprehensive development roadmap for Nexus, organized into 7 discrete phases as defined in [AGENTS.md](../AGENTS.md).
+This document records the original Nexus phase program and the implementation state that now exists in the repository. The seven-phase sequence is complete; future work should be tracked in a new roadmap rather than appended as if the earlier phases were still open.
 
 ---
 
@@ -173,11 +173,11 @@ apps → interfaces → orchestration → models
 
 ## Phase 3: Graph Execution Engine
 
-**Status**: 📋 Planned
+**Status**: ✅ Complete
 
 ### Overview
 
-Phase 3 builds the full DAG-based execution engine with advanced scheduling, node execution logic, and parallel execution support.
+Phase 3 delivered the DAG-based execution engine, node implementations, scheduling, and retry/circuit-breaker support.
 
 ### Goals
 
@@ -210,11 +210,11 @@ Phase 3 builds the full DAG-based execution engine with advanced scheduling, nod
 
 ## Phase 4: Context Engine
 
-**Status**: 📋 Planned
+**Status**: ✅ Complete
 
 ### Overview
 
-Phase 4 implements the memory abstraction, retrieval system, and basic context compression for token optimization.
+Phase 4 delivered the memory abstraction, retrieval system, context routing, prioritization, and compression stack.
 
 ### Goals
 
@@ -246,11 +246,11 @@ Phase 4 implements the memory abstraction, retrieval system, and basic context c
 
 ## Phase 5: Capability Fabric
 
-**Status**: 📋 Planned
+**Status**: ✅ Complete
 
 ### Overview
 
-Phase 5 implements the tool interface, tool registry, and execution chaining capabilities.
+Phase 5 delivered the tool runtime, registry, validation, policy enforcement, and built-in tools.
 
 ### Goals
 
@@ -289,11 +289,11 @@ Phase 5 implements the tool interface, tool registry, and execution chaining cap
 
 ## Phase 6: UI Control Surface
 
-**Status**: 📋 Planned
+**Status**: ✅ Complete
 
 ### Overview
 
-Phase 6 builds the workspace layout and execution visualization for the user interface.
+Phase 6 delivered the web, desktop, API, and WebSocket control surfaces for workspace visibility.
 
 ### Goals
 
@@ -331,11 +331,11 @@ Phase 6 builds the workspace layout and execution visualization for the user int
 
 ## Phase 7: Optimization Layer
 
-**Status**: 📋 Planned
+**Status**: ✅ Complete
 
 ### Overview
 
-Phase 7 adds performance optimizations including caching, token reduction, and parallel execution tuning.
+Phase 7 tightened the runtime with adaptive budgets, normalized cache keys, cache-aware metrics, and concurrency tuning.
 
 ### Goals
 
@@ -400,4 +400,10 @@ Each phase is complete when:
 
 ---
 
-**Last Updated**: 2026-03-21
+## Continuation State
+
+The completed phases define the current implementation baseline. Future work should start from this state and be documented in a new roadmap when scope is defined.
+
+---
+
+**Last Updated**: 2026-03-24

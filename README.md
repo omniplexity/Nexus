@@ -13,7 +13,7 @@ Nexus is a TypeScript monorepo for building a local-first orchestration system a
 
 ## Current Status
 
-Nexus is currently at the end of Phase 6.
+Nexus has completed Phase 7 and is now in the post-roadmap continuation state.
 
 | Phase | Status | Notes |
 |---|---:|---|
@@ -24,7 +24,7 @@ Nexus is currently at the end of Phase 6.
 | Phase 4 | Complete | Context engine, memory, prioritization, routing, compression |
 | Phase 5 | Complete | Capability fabric, tool runtime, policy, and orchestration integration |
 | Phase 6 | Complete | UI control surface, websocket live stream, web and desktop shells |
-| Phase 7 | Complete | Optimization layer, adaptive budgets, normalized caches |
+| Phase 7 | Complete | Optimization layer, adaptive budgets, normalized caches, cache-aware metrics |
 
 ## What Phase 5 Added
 
@@ -58,6 +58,14 @@ Phase 7 tightened the runtime without changing user-facing behavior.
 - Stable cache-key normalization for context and tool caches
 - Explicit tool cache TTLs for read-only built-ins
 - Cache-aware orchestration metrics and adaptive concurrency limits
+
+## Continuation
+
+The original 0-7 phase sequence is complete. Future work will be tracked as a new continuation stream instead of extending the completed phase roadmap.
+
+- Phase docs remain as the historical record of what was implemented
+- New work should be added as separate roadmap entries when it is defined
+- The current codebase is stable enough to continue from without reopening prior phases
 
 ## Repository Layout
 

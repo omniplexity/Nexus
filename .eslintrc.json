@@ -65,6 +65,16 @@
       "rules": {
         "no-undef": "off"
       }
+    },
+    {
+      "files": ["**/*.js"],
+      "env": {
+        "node": true
+      },
+      "rules": {
+        "no-undef": "off",
+        "no-empty": "off"
+      }
     }
   ]
 }

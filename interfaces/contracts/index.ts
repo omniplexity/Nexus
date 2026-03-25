@@ -7,6 +7,9 @@
 // API contracts
 export * from './api';
 
+// Chat contracts
+export * from './chat';
+
 // WebSocket contracts
 export * from './websocket';
 

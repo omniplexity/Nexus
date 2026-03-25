@@ -133,6 +133,27 @@ Workspace build scripts exist, but the current clean validation baseline for the
 npm run build
 ```
 
+### Manual Launchers
+
+For manual testing and UI design work, use the root launchers:
+
+```bash
+npm run launch -- api
+npm run launch -- web
+npm run launch -- desktop
+npm run launch -- cli status
+npm run launch -- cli run "What should the first screen show?"
+```
+
+The launchers do the following:
+
+- `api` starts the API server alone
+- `web` starts the API server plus the browser workspace shell from source
+- `desktop` starts the API server plus the desktop shell from source
+- `cli` starts the API server and runs the CLI command you pass in from source
+
+If you need task execution through `nexus run`, set `OPENAI_API_KEY` before launching the API server.
+
 ### Workspace Commands
 
 The repo uses npm workspaces. You can also run package-level commands directly:

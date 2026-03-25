@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { defaultCapabilityCatalog } from './capabilities';
 import { renderWorkspaceMarkup } from './render';
 
 describe('renderWorkspaceMarkup', () => {
@@ -33,10 +34,21 @@ describe('renderWorkspaceMarkup', () => {
       wsUrl: 'ws://localhost:3000/ws',
       connectionStatus: 'connected',
       lastMessage: 'Snapshot hydrated',
+      capabilities: defaultCapabilityCatalog,
+      selectedCapabilityId: 'workspace.audit',
+      message: defaultCapabilityCatalog.capabilities[0].example,
+      modelId: 'gpt-4o-mini',
+      temperature: '0.3',
+      submissionState: 'idle',
+      drawerOpen: true,
+      conversationId: 'conversation-1',
     });
 
     expect(markup).toContain('Nexus Workspace');
     expect(markup).toContain('Snapshot hydrated');
-    expect(markup).toContain('graph-1');
+    expect(markup).toContain('Master chat');
+    expect(markup).toContain('Ask Nexus anything');
+    expect(markup).toContain('Workspace Audit');
+    expect(markup).toContain('composer-drawer');
   });
 });

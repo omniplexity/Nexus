@@ -1,422 +1,334 @@
-# AGENTS.md — Nexus Autonomous Development Protocol
+# AGENTS.md v2 — Nexus Cognitive Operating System
+
+## Purpose
+
+This document defines the **operational contract** for any LLM/agent contributing to the Nexus codebase. It enforces:
+
+- Deterministic execution
+- Low hallucination behavior
+- Strict architectural compliance
+- Incremental, verifiable progress
+
+Agents MUST treat this document as **binding**.
 
 ---
 
-# 0. PURPOSE
+# 1. Core Principles
 
-This document defines the **operational rules, constraints, and execution methodology** for any LLM agent contributing to the Nexus codebase.
+## 1.1 Contract-First Development
+- NEVER implement before defining interfaces
+- ALL systems must have explicit TypeScript contracts
+- Contracts live in `/interfaces`
 
-The agent must function as:
+## 1.2 DAG-First Execution
+- ALL execution must compile into DAGs
+- NO direct tool/model execution outside orchestrator
+- Orchestrator is the single execution authority
 
-* A **deterministic system builder**
-* A **strict architectural enforcer**
-* A **low-hallucination executor**
+## 1.3 Determinism Over Intelligence
+- Prefer predictable systems over "smart" ones
+- Avoid hidden reasoning paths
+- Ensure replayability of all executions
 
----
-
-# 1. PRIMARY DIRECTIVE
-
-> Build Nexus incrementally, correctly, and verifiably — never assume, never skip structure, never break system integrity.
-
----
-
-# 2. GLOBAL RULES (NON-NEGOTIABLE)
-
-## 2.1 No Hallucination Policy
-
-The agent MUST:
-
-* Never invent files, APIs, or behaviors
-* Never assume undocumented structure
-* Never fabricate dependencies
-
-If uncertain:
-
-* STOP
-* State uncertainty explicitly
-* Request clarification or define a minimal placeholder
-
----
-
-## 2.2 Structure First Policy
-
-Before writing ANY code:
-
-1. Ensure directory exists
-2. Ensure correct domain placement
-3. Ensure alignment with architecture
-
----
-
-## 2.3 Contract-First Development
-
-All systems must begin with:
-
-* Interfaces
-* Type definitions
-* Input/output schemas
-
-No implementation before contracts.
-
----
-
-## 2.4 Single Responsibility Enforcement
-
-Each file/module must:
-
-* Do one thing only
-* Be independently testable
-* Avoid side effects unless explicitly required
-
----
-
-## 2.5 No Cross-Layer Violations
-
-Strict dependency direction:
+## 1.4 Strict Layer Separation
 
 ```
 apps → interfaces → systems → core
-                ↓
-             modules
-                ↓
-              data
-                ↓
-             runtime
 ```
 
-Violations are not allowed.
+Rules:
+- apps: no business logic
+- interfaces: types only
+- systems: implementation
+- core: primitives/utilities only
 
 ---
 
-# 3. EXECUTION METHODOLOGY
+# 2. Agent Operating Rules
+
+## 2.1 Execution Protocol (MANDATORY)
+
+For EVERY task, agents MUST:
+
+### Phase A — Scope
+- Identify system being modified
+- List affected files
+- Define objective in 1–2 sentences
+
+### Phase B — Contracts
+- Define or update interfaces FIRST
+- Validate compatibility with existing systems
+
+### Phase C — Implementation
+- Implement minimal viable logic
+- Follow existing patterns exactly
+
+### Phase D — Validation
+- Add/adjust tests if applicable
+- Verify type safety
+- Check for edge cases
+
+### Phase E — Output
+Agents MUST output:
+
+1. File tree (touched files only)
+2. Full file contents OR minimal diffs
+3. Commands to run/test
 
 ---
 
-# 3.1 PHASE-BASED DEVELOPMENT
+## 2.2 Forbidden Behaviors
 
-The agent MUST operate in discrete phases.
+Agents MUST NOT:
 
----
-
-## Phase 0 — Structure Initialization
-
-### Tasks
-
-* Create full directory tree
-* Validate structure matches specification
-* Do NOT create logic files
-
-### Output
-
-* Directory snapshot
-* Confirmation of structure integrity
+- Invent APIs or functions not defined in contracts
+- Bypass orchestrator (no direct tool/model calls)
+- Introduce global state
+- Use `any` unless explicitly justified
+- Modify unrelated files
+- Perform large, multi-system refactors in one step
 
 ---
 
-## Phase 1 — Core Contracts
+## 2.3 Incremental Development
 
-### Tasks
-
-Define interfaces in `/core/contracts`:
-
-* Orchestrator
-* Node
-* Tool
-* Memory
-* Model Provider
-
-### Requirements
-
-* Typed
-* Minimal
-* Extensible
+- Each change must be **small and reversible**
+- Max scope: one system or sub-system
+- If complexity grows → split into phases
 
 ---
 
-## Phase 2 — Minimal Vertical Slice
+# 3. System-Specific Rules
 
-### Goal
+## 3.1 Orchestrator
 
-Working system with minimal capability.
+- Only system allowed to execute DAGs
+- Must support:
+  - Parallel execution
+  - Retry strategies
+  - Error propagation
 
-### Path
+Agents MUST NOT:
+- Embed business logic in nodes
+
+---
+
+## 3.2 Agents System
+
+Agents are NOT executors.
+
+They MUST:
+- Produce `ExecutionPlan`
+- Compile into DAG
+- Delegate execution to orchestrator
+
+---
+
+## 3.3 Context Engine
+
+- All context must pass through:
+  - prioritizer
+  - compressor
+  - router
+
+Agents MUST NOT:
+- Inject raw context into model calls
+
+---
+
+## 3.4 Tool System
+
+- All tools must:
+  - Be registered
+  - Be policy-validated
+  - Be observable
+
+No direct tool invocation allowed.
+
+---
+
+## 3.5 Memory System
+
+- Must support:
+  - indexing
+  - retrieval
+  - TTL
+
+Future compatibility:
+- persistence layer abstraction REQUIRED
+
+---
+
+## 3.6 Integration Layer
+
+- Adapters must be stateless
+- Authentication must be externalized
+
+---
+
+# 4. Coding Standards
+
+## 4.1 TypeScript
+
+- Strict mode ON
+- No implicit any
+- Explicit return types required
+
+## 4.2 File Structure
+
+Each system:
 
 ```
-apps → interfaces → orchestration → models
-```
-
-### Constraints
-
-* No memory
-* No tools
-* No advanced UI
-
----
-
-## Phase 3 — Graph Execution Engine
-
-### Tasks
-
-* DAG structure
-* Node execution logic
-* Scheduler
-
----
-
-## Phase 4 — Context Engine
-
-### Tasks
-
-* Memory abstraction
-* Retrieval system
-* Context compression (basic)
-
----
-
-## Phase 5 — Capability Fabric
-
-### Tasks
-
-* Tool interface implementation
-* Tool registry
-* Execution chaining
-
----
-
-## Phase 6 — UI Control Surface
-
-### Tasks
-
-* Workspace layout
-* Execution visualization
-
----
-
-## Phase 7 — Optimization Layer
-
-### Tasks
-
-* Caching
-* Token reduction
-* Parallel execution tuning
-
----
-
-# 4. TASK EXECUTION FORMAT
-
-For EVERY task, the agent MUST output:
-
----
-
-## 4.1 FILE TREE (CHANGES ONLY)
-
-```bash
-/path/to/file
+system/
+  index.ts
+  *.ts (modular files)
+  __tests__/
 ```
 
 ---
 
-## 4.2 FILE CONTENTS
+## 4.3 Error Handling
 
-* Full file content OR
-* Minimal diff (preferred when updating)
-
----
-
-## 4.3 RATIONALE
-
-* Why this change exists
-* What system it supports
+- Use centralized error system
+- No raw `throw new Error()`
+- Always include error codes
 
 ---
 
-## 4.4 VALIDATION
+## 4.4 Logging
 
-* How to test
-* Expected behavior
-
----
-
-## 4.5 EDGE CASES
-
-* Failure modes
-* Constraints
+- Structured logs only
+- No console.log in production code
 
 ---
 
-# 5. CODING STANDARDS
+# 5. Testing Requirements
+
+Agents MUST:
+
+- Add tests for new logic
+- Avoid brittle tests
+- Test:
+  - edge cases
+  - failure paths
+  - concurrency (if applicable)
 
 ---
 
-## 5.1 General
+# 6. Performance Constraints
 
-* Explicit over implicit
-* No magic values
-* No hidden state
-* No side-effect-heavy logic
+Agents MUST consider:
 
----
+- DAG execution cost
+- memory usage
+- caching opportunities
 
-## 5.2 Interfaces
-
-* Must be versionable
-* Must not depend on implementation
+Avoid:
+- redundant model calls
+- unbounded loops
 
 ---
 
-## 5.3 Error Handling
+# 7. Security Constraints
 
-All systems must:
-
-* Return structured errors
-* Avoid throwing unhandled exceptions
-
----
-
-## 5.4 Logging
-
-Every critical system must include:
-
-* Input logging
-* Output logging
-* Error logging
+- All tools require policy validation
+- No execution of arbitrary code without sandbox
+- No credential storage in code
 
 ---
 
-# 6. SYSTEM-SPECIFIC RULES
+# 8. Cognitive Layer Rules (Future-Proofing)
+
+When implementing cognitive systems:
+
+- Intent must be structured
+- Planner must output deterministic plans
+- Strategy must be explicit and selectable
 
 ---
 
-## 6.1 Orchestration
+# 9. Output Format (STRICT)
 
-* Must be deterministic
-* No hidden execution paths
-* All steps traceable
+Agents MUST always output in this structure:
 
----
+```
+## Phase X — <Name>
 
-## 6.2 Context Engine
+### Files
+- path/to/file.ts
 
-* Never inject full memory blindly
-* Always filter + prioritize
-* Minimize token usage
+### Code
+```ts
+// code here
+```
 
----
-
-## 6.3 Tool System
-
-* Tools must be pure where possible
-* Must define strict schemas
-* Must fail safely
+### Run
+npm test
+```
 
 ---
 
-## 6.4 Model Layer
+# 10. Failure Handling
 
-* No direct model calls outside provider layer
-* Must support multiple providers
+If uncertain:
 
----
+Agents MUST:
+- Choose minimal safe implementation
+- Document assumptions
 
-# 7. VALIDATION FRAMEWORK
-
----
-
-## 7.1 Before Completing Any Task
-
-Agent MUST verify:
-
-* [ ] Structure is correct
-* [ ] No dependency violations
-* [ ] Contracts are respected
-* [ ] System compiles (if applicable)
+Agents MUST NOT:
+- Guess complex logic
 
 ---
 
-## 7.2 Continuous Validation
+# 11. Definition of Done
 
-Each phase must:
+A task is complete ONLY if:
 
-* Run independently
-* Be testable
-* Be observable
-
----
-
-# 8. FAILURE HANDLING
+- Types compile
+- Tests pass
+- No architectural violations
+- Output format followed
 
 ---
 
-## 8.1 If Blocked
+# 12. Priority Order
 
-Agent must:
+When making decisions:
 
-1. Stop execution
-2. Output blocking issue
-3. Propose minimal resolution
-
----
-
-## 8.2 If Ambiguous
-
-Agent must:
-
-* Choose the simplest valid interpretation
-* Clearly document assumption
+1. Architecture integrity
+2. Determinism
+3. Type safety
+4. Performance
+5. Developer convenience
 
 ---
 
-# 9. ANTI-PATTERNS
+# 13. Anti-Hallucination Enforcement
+
+Agents MUST:
+
+- Only use known files
+- Only use defined contracts
+- Avoid speculative implementations
+
+If missing dependency:
+- Create minimal contract FIRST
 
 ---
 
-Agent MUST NOT:
+# 14. Execution Philosophy
 
-* Create monolithic files
-* Mix concerns across systems
-* Skip contracts
-* Implement before planning
-* Over-engineer prematurely
+Nexus is NOT:
+- a chatbot
+- a thin wrapper over LLMs
 
----
+Nexus IS:
+- a deterministic cognitive execution system
 
-# 10. PROGRESSION RULE
-
-> Do not move to the next phase until the current phase is:
-
-* Complete
-* Functional
-* Validated
+Agents must reinforce this direction in all implementations.
 
 ---
 
-# 11. OUTPUT DISCIPLINE
+# END OF FILE
 
-Agent responses must be:
-
-* Structured
-* Minimal but complete
-* Free of speculation
-* Directly actionable
-
----
-
-# 12. SUCCESS CRITERIA
-
-The agent is successful when:
-
-* The system builds incrementally
-* No rewrites are required
-* Each subsystem is independently valid
-* Architecture remains intact over time
-
----
-
-# 13. FINAL PRINCIPLE
-
-> Build the system as if it must scale forever,
-> but validate it as if it must work immediately.
-
----
-
-**END OF AGENTS.md**

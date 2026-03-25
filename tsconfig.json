@@ -29,6 +29,8 @@
       "@nexus/core/*": ["./core/*"],
       "@nexus/tools": ["./modules/tools"],
       "@nexus/tools/*": ["./modules/tools/*"],
+      "@nexus/models": ["./systems/models/src/index.ts"],
+      "@nexus/models/*": ["./systems/models/src/*"],
       "@nexus/websocket": ["./interfaces/websocket/src/index.ts"],
       "@nexus/websocket/*": ["./interfaces/websocket/src/*"],
       "@nexus/web": ["./apps/web/src/index.ts"],

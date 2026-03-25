@@ -210,7 +210,7 @@ export interface MemoryIndex {
   /**
    * Search by embedding similarity
    */
-  search(embedding: number[], limit: number): Promise<string[]>;
+  search(embedding: number[], limit: number): Promise<MemoryEntry[]>;
   
   /**
    * Search by text/keywords

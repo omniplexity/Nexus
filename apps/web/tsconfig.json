@@ -3,6 +3,12 @@
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "@nexus/websocket": ["../../interfaces/websocket/dist/index.d.ts"],
+      "@nexus/websocket/*": ["../../interfaces/websocket/dist/*"],
+      "@nexus/interfaces/contracts/websocket": ["../../interfaces/contracts/websocket.d.ts"]
+    },
     "declaration": true,
     "declarationMap": true
   },

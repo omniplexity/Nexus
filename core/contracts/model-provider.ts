@@ -265,6 +265,9 @@ export interface ModelCache {
   
   /**
    * Store response in cache
+   * @param key - Cache key
+   * @param response - Model response to cache
+   * @param ttl - Time to live in seconds
    */
   set(key: string, response: ModelResponse, ttl?: number): Promise<void>;
   

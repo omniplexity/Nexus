@@ -47,5 +47,5 @@ export interface OptimizationTelemetry {
   tokenSavings: number;
   adaptiveTokenBudget: number;
   adaptiveConcurrency: number;
-  updatedAt: string;
+  updatedAt: Date;
 }

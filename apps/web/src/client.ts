@@ -1,6 +1,8 @@
+import type { ChatResponse } from '@nexus/interfaces/contracts/chat';
 import type { WorkspaceServerMessage, WorkspaceSnapshot } from '@nexus/websocket';
 
-import { renderWorkspaceMarkup } from './render';
+import { defaultCapabilityCatalog, type CapabilityCatalog, getCapabilityById } from './capabilities.js';
+import { renderWorkspaceMarkup } from './render.js';
 
 type WorkspaceClientConfig = {
   title: string;
@@ -8,11 +10,24 @@ type WorkspaceClientConfig = {
   wsUrl: string;
 };
 
+type ComposerState = {
+  message: string;
+  modelId: string;
+  temperature: string;
+  selectedCapabilityId: string;
+  drawerOpen: boolean;
+};
+
 type WorkspaceUiState = {
   snapshot: WorkspaceSnapshot | null;
   connectionStatus: 'connecting' | 'connected' | 'disconnected' | 'error';
   lastMessage?: string;
   error?: string;
+  capabilities: CapabilityCatalog;
+  composer: ComposerState;
+  conversationId: string;
+  submissionState: 'idle' | 'sending' | 'success' | 'error';
+  submissionMessage?: string;
 };
 
 declare global {
@@ -27,9 +42,23 @@ const defaultConfig: WorkspaceClientConfig = {
   wsUrl: 'ws://localhost:3000/ws',
 };
 
+function createConversationId(): string {
+  return globalThis.crypto?.randomUUID?.() ?? `conversation-${Date.now()}`;
+}
+
 const state: WorkspaceUiState = {
   snapshot: null,
   connectionStatus: 'connecting',
+  capabilities: defaultCapabilityCatalog,
+  composer: {
+    message: defaultCapabilityCatalog.capabilities[0]?.example ?? '',
+    modelId: 'gpt-4o-mini',
+    temperature: '0.3',
+    selectedCapabilityId: defaultCapabilityCatalog.defaultCapabilityId,
+    drawerOpen: false,
+  },
+  conversationId: createConversationId(),
+  submissionState: 'idle',
 };
 
 let websocket: WebSocket | null = null;
@@ -46,10 +75,8 @@ function appRoot(): HTMLElement {
   return root;
 }
 
-function render(): void {
-  const config = getConfig();
-  const root = appRoot();
-  const snapshot: WorkspaceSnapshot = state.snapshot ?? {
+function currentSnapshot(): WorkspaceSnapshot {
+  return state.snapshot ?? {
     version: '0.0.1',
     generatedAt: new Date().toISOString(),
     status: {
@@ -63,9 +90,33 @@ function render(): void {
     graph: { id: 'workspace-graph', nodes: [], edges: [], activeTaskId: null },
     logs: [],
     models: [],
-    metrics: { totalTasks: 0, runningTasks: 0, completedTasks: 0, failedTasks: 0, totalLogs: 0, activeConnections: 0 },
+    metrics: {
+      totalTasks: 0,
+      runningTasks: 0,
+      completedTasks: 0,
+      failedTasks: 0,
+      totalLogs: 0,
+      activeConnections: 0,
+    },
     connections: { active: 0 },
   };
+}
+
+function currentCapabilityId(): string {
+  return getCapabilityById(state.capabilities, state.composer.selectedCapabilityId)?.id
+    ?? state.capabilities.defaultCapabilityId;
+}
+
+function render(): void {
+  const config = getConfig();
+  const root = appRoot();
+  const snapshot = currentSnapshot();
+  const selectedCapability = getCapabilityById(state.capabilities, currentCapabilityId())
+    ?? state.capabilities.capabilities[0];
+
+  if (!selectedCapability) {
+    throw new Error('No capability catalog available');
+  }
 
   root.innerHTML = renderWorkspaceMarkup(snapshot, {
     title: config.title,
@@ -74,12 +125,111 @@ function render(): void {
     connectionStatus: state.connectionStatus,
     lastMessage: state.lastMessage,
     error: state.error,
+    capabilities: state.capabilities,
+    selectedCapabilityId: selectedCapability.id,
+    message: state.composer.message,
+    modelId: state.composer.modelId,
+    temperature: state.composer.temperature,
+    submissionState: state.submissionState,
+    drawerOpen: state.composer.drawerOpen,
+    conversationId: state.conversationId,
+    submissionMessage: state.submissionMessage,
   });
 
   const refreshButton = root.querySelector<HTMLButtonElement>('[data-action="refresh"]');
   refreshButton?.addEventListener('click', () => {
     void refreshSnapshot();
   });
+
+  const newChatButton = root.querySelector<HTMLButtonElement>('[data-action="new-chat"]');
+  newChatButton?.addEventListener('click', () => {
+    resetComposer();
+  });
+
+  const toggleToolsButton = root.querySelector<HTMLButtonElement>('[data-action="toggle-tools"]');
+  toggleToolsButton?.addEventListener('click', () => {
+    state.composer.drawerOpen = !state.composer.drawerOpen;
+    render();
+  });
+
+  const taskForm = root.querySelector<HTMLFormElement>('[data-form="chat-composer"]');
+  taskForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    void queueChatFromForm(taskForm);
+  });
+
+  const messageField = root.querySelector<HTMLTextAreaElement>('textarea[name="message"]');
+  messageField?.addEventListener('input', () => {
+    state.composer.message = messageField.value;
+  });
+
+  const modelSelect = root.querySelector<HTMLSelectElement>('select[name="modelId"]');
+  modelSelect?.addEventListener('change', () => {
+    state.composer.modelId = modelSelect.value;
+  });
+
+  const temperatureInput = root.querySelector<HTMLInputElement>('input[name="temperature"]');
+  temperatureInput?.addEventListener('input', () => {
+    state.composer.temperature = temperatureInput.value;
+  });
+
+  root.querySelectorAll<HTMLButtonElement>('[data-action="load-capability"]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const capabilityId = button.dataset.capabilityId;
+      if (capabilityId) {
+        applyCapability(capabilityId, true);
+      }
+    });
+  });
+}
+
+function applyCapability(capabilityId: string, replaceMessage: boolean): void {
+  const capability = getCapabilityById(state.capabilities, capabilityId);
+  if (!capability) {
+    return;
+  }
+
+  state.composer.selectedCapabilityId = capability.id;
+  if (replaceMessage || state.composer.message.trim().length === 0) {
+    state.composer.message = capability.example;
+  }
+  state.composer.drawerOpen = true;
+  render();
+}
+
+function resetComposer(): void {
+  state.composer.message = '';
+  state.composer.drawerOpen = false;
+  state.submissionState = 'idle';
+  state.submissionMessage = undefined;
+  state.error = undefined;
+  state.conversationId = createConversationId();
+  render();
+}
+
+async function refreshCapabilities(): Promise<void> {
+  const config = getConfig();
+
+  try {
+    const response = await fetch(`${config.apiBaseUrl}/api/capabilities`);
+    if (!response.ok) {
+      throw new Error(`Capabilities request failed with ${response.status}`);
+    }
+
+    state.capabilities = (await response.json()) as CapabilityCatalog;
+    state.composer.selectedCapabilityId = getCapabilityById(state.capabilities, state.composer.selectedCapabilityId)?.id
+      ?? state.capabilities.defaultCapabilityId;
+    if (state.composer.message.trim().length === 0) {
+      state.composer.message = getCapabilityById(state.capabilities, state.composer.selectedCapabilityId)?.example
+        ?? state.capabilities.capabilities[0]?.example
+        ?? '';
+    }
+    state.error = undefined;
+    render();
+  } catch (error) {
+    state.error = error instanceof Error ? error.message : String(error);
+    render();
+  }
 }
 
 async function refreshSnapshot(): Promise<void> {
@@ -102,24 +252,66 @@ async function refreshSnapshot(): Promise<void> {
   }
 }
 
-function handleServerMessage(message: WorkspaceServerMessage): void {
-  state.lastMessage = message.event;
+async function queueChatFromForm(form: HTMLFormElement): Promise<void> {
+  const formData = new FormData(form);
+  const message = String(formData.get('message') ?? '').trim();
+  const modelId = String(formData.get('modelId') ?? state.composer.modelId);
+  const temperatureValue = Number.parseFloat(String(formData.get('temperature') ?? state.composer.temperature));
 
-  if (message.event === 'workspace:snapshot' && message.data) {
-    state.snapshot = message.data as WorkspaceSnapshot;
-    state.error = undefined;
+  state.composer.message = message;
+  state.composer.modelId = modelId;
+  state.composer.temperature = Number.isFinite(temperatureValue) ? String(temperatureValue) : state.composer.temperature;
+
+  if (!message) {
+    state.submissionState = 'error';
+    state.submissionMessage = 'Enter a message before sending.';
     render();
     return;
   }
 
-  if (message.event === 'workspace:pong') {
-    return;
-  }
+  const config = getConfig();
 
-  void refreshSnapshot();
+  state.submissionState = 'sending';
+  state.submissionMessage = 'Sending master chat request…';
+  render();
+
+  try {
+    const response = await fetch(`${config.apiBaseUrl}/api/chat`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message,
+        model: modelId,
+        temperature: Number.isFinite(temperatureValue) ? temperatureValue : undefined,
+        conversationId: state.conversationId,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || `Chat request failed with ${response.status}`);
+    }
+
+    const result = await response.json() as ChatResponse;
+    state.conversationId = result.conversationId ?? state.conversationId;
+    state.composer.drawerOpen = false;
+    state.submissionState = 'success';
+    state.submissionMessage = result.message;
+    state.lastMessage = 'Chat submitted';
+    state.error = undefined;
+    await refreshSnapshot();
+    await refreshCapabilities();
+  } catch (error) {
+    state.submissionState = 'error';
+    state.submissionMessage = error instanceof Error ? error.message : String(error);
+    state.error = state.submissionMessage;
+    render();
+  }
 }
 
-function connectWebSocket(): void {
+async function connectWebSocket(): Promise<void> {
   const config = getConfig();
 
   try {
@@ -163,11 +355,30 @@ function connectWebSocket(): void {
   }
 }
 
-function boot(): void {
-  render();
-  void refreshSnapshot().finally(() => {
-    connectWebSocket();
-  });
+function handleServerMessage(message: WorkspaceServerMessage): void {
+  state.lastMessage = message.event;
+
+  if (message.event === 'workspace:snapshot' && message.data) {
+    state.snapshot = message.data as WorkspaceSnapshot;
+    state.error = undefined;
+    render();
+    return;
+  }
+
+  if (message.event === 'workspace:pong') {
+    return;
+  }
+
+  void refreshSnapshot();
 }
 
-window.addEventListener('DOMContentLoaded', boot);
+async function boot(): Promise<void> {
+  render();
+  await refreshCapabilities();
+  await refreshSnapshot();
+  void connectWebSocket();
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  void boot();
+});

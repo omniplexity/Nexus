@@ -11,6 +11,8 @@ import express, { Express, Request, Response, NextFunction, json, urlencoded } f
 import helmet from 'helmet';
 import { v4 as uuidv4 } from 'uuid';
 
+import { capabilitiesRouter } from './routes/capabilities';
+import { chatRouter } from './routes/chat';
 import { modelsRouter } from './routes/models';
 import { statusRouter } from './routes/status';
 import { tasksRouter } from './routes/tasks';
@@ -44,8 +46,10 @@ app.get(`${API_PREFIX}/health`, (_req: Request, res: Response) => {
 
 // API Routes
 app.use(`${API_PREFIX}/tasks`, tasksRouter);
+app.use(`${API_PREFIX}/chat`, chatRouter);
 app.use(`${API_PREFIX}/status`, statusRouter);
 app.use(`${API_PREFIX}/models`, modelsRouter);
+app.use(`${API_PREFIX}/capabilities`, capabilitiesRouter);
 app.use(`${API_PREFIX}/workspace`, workspaceRouter);
 
 // 404 handler
@@ -80,10 +84,12 @@ const server = app.listen(PORT, () => {
 │                                          │
 │  Endpoints:                               │
 │  • GET  /api/health         Health check │
+│  • POST ${API_PREFIX}/chat             Master chat  │
 │  • POST ${API_PREFIX}/tasks            Create task │
 │  • GET  ${API_PREFIX}/tasks/:id        Get task    │
 │  • GET  ${API_PREFIX}/status           System info │
 │  • GET  ${API_PREFIX}/models           List models  │
+│  • GET  ${API_PREFIX}/capabilities     Capability deck │
 │  • GET  ${API_PREFIX}/workspace        Workspace UI │
 ╰──────────────────────────────────────────╯
   `);
